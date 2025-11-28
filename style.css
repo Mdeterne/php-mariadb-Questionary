@@ -1,0 +1,884 @@
+/* ===== Variables & base ===== */
+:root {
+  --bg: #f8f9fa;
+  --topbar-bg: #252525;
+  --topbar-ink: #ffffff;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --btn-dark: #252525;
+  --btn-dark-hover: #252525;
+  --ink: #252525;
+  --muted: #70757a;
+  --card: #ffffff;
+  --card-border: #e6e6e6;
+  --red: #b52424;
+  --red-press: #9e1f1f;
+  --radius-xl: 18px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 64px;
+  padding: 0 clamp(16px, 4vw, 36px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--topbar-bg);
+  color: var(--topbar-ink); 
+}
+
+.topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.appicon {
+  font-size: 0;
+  color: transparent;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url('ressources/appicon.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  filter: brightness(0) invert(1);
+}
+
+.apptitle {
+  font-size: clamp(20px, 2.4vw, 28px);
+}
+
+
+a.topbar__logo,
+a.topbar__logo:hover {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar__create-link {
+  color: var(--topbar-ink);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.topbar__create-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit; 
+  font-weight: 600;
+}
+
+.uni-badge {
+  font-size: 0;
+  color: transparent;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url('ressources/unicon.png'); 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  border-radius: 4px;
+}
+
+.uni-text {
+  font-size: 15px;
+}
+
+/* ===== Main Content ===== */
+.center {
+  min-height: calc(100dvh - 64px - 58px); 
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 4vw, 48px);
+}
+
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 6vw, 100px);
+  align-items: center;
+  width: min(1200px, 90vw);
+  margin: 0 auto;
+}
+
+.card {
+  z-index: 2;
+  position: relative;
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+} 
+
+.description h1 {
+  font-size: clamp(28px, 3.2vw, 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.description p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+
+
+/* ===== Input ===== */
+.input-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.input-label {
+  position: absolute;
+  top: 8px;
+  left: 17px;
+  font-size: 12px;
+  color: var(--muted);
+  z-index: 1;
+  pointer-events: none;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  height: 52px; 
+  padding: 22px 44px 8px 16px;
+  border: 1px solid #cfd3d7;
+  border-radius: 12px;
+  background: #eef0f1;
+  outline: none;
+  font-size: 16px;
+  color: var(--ink);
+  transition: border-color .2s, background .2s, box-shadow .2s;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  background: #fff;
+  border-color: var(--red);
+  box-shadow: 0 0 0 4px rgba(181, 36, 36, 0.1);
+  text-align: left;
+}
+
+.clear {
+  position: absolute;
+  right: 8px;
+  bottom: 11px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #767b80;
+}
+
+.clear:hover {
+  background: #e0e2e7;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  appearance: none;
+  border: none;
+  width: 100%;
+  height: 52px;
+  display: block;
+  text-align: center;
+  line-height: 52px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: .02em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .05s ease, filter .2s ease, background .2s ease, box-shadow .2s;
+}
+
+.btn:active {
+  transform: translateY(1px) scale(.998);
+}
+
+.btn-primary {
+  background: var(--btn-dark);
+  color: #fff;
+  margin-top: 15px;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:hover {
+  filter: none;
+  background: var(--btn-dark-hover);
+}
+
+.btn-primary:active {
+  background: var(--btn-dark);
+}
+
+
+.btn-secondary {
+  background: var(--red);
+  color: #fff;
+  margin-top: -10px;
+  box-shadow: 0 10px 18px rgba(181, 36, 36, 0.25);
+}
+
+.btn-secondary:hover {
+  filter: brightness(1.03);
+}
+
+.btn-secondary:active {
+  background: var(--red-press);
+}
+
+.card form {
+  width: 100%;
+}
+
+
+/* ===== Footer ===== */
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.footer__links {
+  pointer-events: auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.footer__links a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer__links a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Accessibilité ===== */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== Responsif fin ===== */
+@media (max-width: 900px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    width: min(560px, 90vw);
+  }
+
+  .description {
+    text-align: center;
+    order: -1;
+  }
+
+}
+
+@media (max-width: 520px) {
+  .topbar__right .uni-text {
+    display: none;
+  }
+
+  .topbar__create-link {
+    display: none;
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  .btn {
+    height: 50px;
+  }
+
+  .content-grid {
+    width: 95vw;
+  }
+
+  .center {
+    padding: 24px 12px;
+  }
+
+  .footer {
+    position: static;
+    padding: 24px 0;
+  }
+
+  .center {
+    min-height: calc(100dvh - 64px);
+  }
+}
+
+/*espace createur*/
+
+/* --- LAYOUT (Sidebar + Main) --- */
+.app-container {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 60px); /* Reste de la hauteur */
+}
+
+/* --- SIDEBAR (Gauche) --- */
+.sidebar {
+  width: 260px;
+  background-color: #252525; /* Fond gris foncé */
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #252525;
+}
+
+/* La boite blanche "Résultats" */
+.sidebar-header-box {
+    background-color: white;
+  color: #252525;
+    font-weight: bold;
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+.sidebar-nav {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-btn {
+    width: 100%;
+    background-color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px; /* Arrondi comme sur l'image */
+    text-align: left;
+    font-weight: bold;
+  color: #252525;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.sidebar-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* --- MAIN CONTENT (Droite) --- */
+.main-content {
+    flex: 1;
+    background-color: white;
+    padding: 30px 50px;
+    overflow-y: auto; /* Scroll vertical si ça déborde */
+}
+
+
+
+/* --- TITRES DE SECTION --- */
+.section-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  color: #252525;
+}
+
+/* --- SECTION CREATION (Les 2 grandes cartes) --- */
+.create-section {
+    display: flex;
+    gap: 40px; /* Espace entre les cartes */
+    margin-bottom: 50px;
+}
+
+.card-create {
+    width: 220px;
+    height: 300px; /* Cartes hautes */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.card-create:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.btn-plus {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #252525;
+}
+
+.btn-import {
+    padding: 10px 25px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  color: #252525;
+}
+
+/* --- GRILLE QUESTIONNAIRES --- */
+.questionnaire-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    /* Utilisation de Grid si tu veux être strict 4 par ligne, sinon Flex wrap fonctionne aussi */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes exactes */
+}
+
+.card-q {
+    border: 1px solid #888; /* Bordure un peu plus foncée comme l'image */
+    border-radius: 6px;
+    height: 100px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+
+.card-q-title {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.card-q-qr {
+    font-size: 2.5rem; /* Taille du QR Code */
+  color: #252525;
+}
+
+
+/* --- BARRE D'OUTILS DU HAUT (Recherche + Profil) --- */
+.top-tools {
+    display: flex;
+    justify-content: space-between; /* Sépare la recherche du profil */
+    align-items: center;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+/* Conteneur qui centre la barre de recherche */
+.search-bar-container {
+    flex: 1; /* Prend tout l'espace disponible */
+    display: flex;
+    justify-content: center; /* Centre la barre horizontalement */
+    padding: 0 40px; /* Marges pour ne pas coller au profil */
+}
+
+/* L'enveloppe de l'input et de l'icône */
+.search-wrapper {
+    position: relative; /* Nécessaire pour positionner l'icône en absolu */
+    width: 100%;
+    max-width: 600px; /* Largeur maximale pour ressembler à la maquette */
+}
+
+
+/* L'icône loupe (Positionnée à DROITE maintenant) */
+.search-icon {
+  position: absolute;
+  right: 20px; /* Collée à droite */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #252525;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.user-profile {
+  font-size: 2.5rem;
+  color: #ccc;
+  cursor: pointer;
+  flex-shrink: 0; /* Empêche l'icône de s'écraser */
+}
+
+/* Menu déroulant du profil */
+/* Fond sombre qui couvre tout l'écran derrière la modale */
+/* L'overlay est maintenant transparent et permet de fermer au clic extérieur */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; /* Juste en dessous du menu */
+  background-color: transparent; /* Fond invisible */
+  cursor: default;
+}
+
+/* La carte du menu positionnée sous l'icône */
+.user-modal-card {
+    position: absolute; /* Se place par rapport à .top-tools */
+  top: 150px;          /* Décale sous le header */
+  right: clamp(16px, 4vw, 36px); /* Positionne sous l'icône profil */
+    z-index: 1001;      /* Au dessus de l'overlay */
+    
+    width: 300px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+    
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    animation: fadeIn 0.2s ease-out;
+
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Contenu du menu --- */
+.modal-close-btn {
+    display: none; /* Pas besoin de croix */
+}
+
+.modal-avatar {
+    width: 60px;
+    height: 60px;
+    background-color: #f1f3f4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    color: #5f6368;
+    font-size: 1.8rem;
+}
+
+.modal-username {
+    margin: 5px 0 20px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #202124;
+}
+
+.modal-logout-btn {
+    background-color: #fff;
+    border: 1px solid #dadce0;
+    color: #3c4043;
+    text-decoration: none;
+    padding: 8px 24px;
+    border-radius: 100px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+    transition: background 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-logout-btn:hover {
+    background-color: #f8f9fa;
+    border-color: #dadce0;
+}
+
+.modal-footer {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: #70757a;
+    border-top: 1px solid #f1f3f4;
+    padding-top: 15px;
+    width: 100%;
+}
+
+.modal-footer a {
+    color: #70757a;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+/* Responsive : Si l'écran est petit, on passe à moins de colonnes */
+@media (max-width: 1200px) {
+    .questionnaire-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* creation_questionnaire */
+
+/* --- LAYOUT ÉDITEUR --- */
+.editor-container {
+    display: flex;
+    height: calc(100vh - 60px); /* Toute la hauteur moins le header */
+    background-color: #fff;
+}
+
+/* 1. BOÎTE À OUTILS (GAUCHE) */
+.editor-toolbox {
+    width: 250px;
+    background-color: #444; /* Fond gris foncé */
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espace entre les boutons */
+}
+
+.tool-item {
+    background-color: #fff;
+    padding: 12px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 0.9rem;
+    cursor: grab; /* Curseur "main" pour dire qu'on peut attraper */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: transform 0.1s;
+}
+
+.tool-item:active {
+    transform: scale(0.98); /* Petit effet au clic */
+}
+
+/* 2. ESPACE DE TRAVAIL (CENTRE) */
+.editor-workspace {
+    flex: 1; /* Prend toute la place disponible au milieu */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre les éléments horizontalement */
+    padding-top: 80px; /* Espace depuis le haut */
+    gap: 40px; /* Espace entre les inputs */
+}
+
+.form-group {
+    width: 100%;
+    max-width: 600px; /* Largeur des champs comme sur l'image */
+}
+
+.input-field {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #777;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    font-family: inherit;
+    outline: none;
+    background-color: #fff;
+}
+
+.area-drop {
+    height: 100px; /* Plus haut pour la zone "Glisser élément" */
+    resize: none; /* Empêche de redimensionner manuellement */
+}
+
+/* Bouton central "Ajouter une question" */
+.btn-add-question {
+    background-color: #444;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* 3. BOUTONS D'ACTION (DROITE) */
+.editor-actions {
+    width: 250px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Aligne les boutons vers la droite si besoin, ou stretch */
+    gap: 15px;
+}
+
+.btn-action {
+    width: 100%; /* Boutons pleine largeur dans la colonne de droite */
+    background-color: #444;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.btn-action:hover, .btn-add-question:hover {
+    background-color: #555; /* Légèrement plus clair au survol */
+}
+
+/* ===== Modale d'Importation (avec flou) ===== */
+
+/* L'arrière-plan qui couvre tout l'écran */
+.modal-blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000; /* Au-dessus de tout, même du menu profil */
+    background-color: rgba(0, 0, 0, 0.4); /* Fond noir semi-transparent */
+    backdrop-filter: blur(5px); /* C'est ici que se fait le flou léger */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+/* La boîte blanche au centre */
+.import-card {
+    background-color: #fff;
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 18px; /* Même arrondi que tes autres cartes */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+.import-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #252525;
+}
+
+.import-desc {
+    color: #666;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* Style spécifique pour l'input dans la modale */
+.input-import {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #eef0f1;
+    border-radius: 12px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-import:focus {
+    border-color: #252525;
+}
+
+/* Zone des boutons (Annuler / Importer) */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.btn-cancel:hover {
+    background: #f0f0f0;
+}
+
+.btn-confirm-import {
+    background: #252525;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.btn-confirm-import:hover {
+    background: #444;
+}
+
+.btn-confirm-import:active {
+    transform: scale(0.98);
+}

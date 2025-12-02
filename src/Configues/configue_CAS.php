@@ -16,4 +16,6 @@ phpCAS::setNoCasServerValidation();
 
 phpCAS::forceAuthentication();
 
+$infoSESION = phpCAS::getAttributes();
+var_dump($infoSESION);
 ?>

@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 //require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Configues".DIRECTORY_SEPARATOR."configue_CAS.php";
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."homeControleur.php";
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."connexionControleur.php";
@@ -28,17 +30,17 @@ switch ($controleur){
     }
   break;
 
-  case 'connexion':
-    $connexionControleur = new connexionControleur();
-    switch ($action){
-      case 'index':
-        $connexionControleur->index();
-      break;
+  //case 'connexion':
+  //  $connexionControleur = new connexionControleur();
+  //  switch ($action){
+  //    case 'index':
+  //      $connexionControleur->index();
+  //    break;
 
-      case 'connexion':
-        $connexionControleur->connexion();
-      break;
-    }break;
+  //    case 'connexion':
+  //      $connexionControleur->connexion();
+  //    break;
+  //  }break;
   
   // case 'creerUnCompte':
   //   $creerUnCompteControleur = new creerUnCompteControleur();

@@ -18,7 +18,7 @@
         <span class="appicon" aria-hidden="true"></span>
         <span class="apptitle">QUESTIONARY</span>
       </a>
-      <a class="topbar__create-link" href="?c=connexion&a=index">Créer un questionnaire</a>
+      <a class="topbar__create-link" href="?c=espacePerso&a=index">Créer un questionnaire</a>
     </div>
     
     <div class="topbar__right" aria-label="Université de Limoges">

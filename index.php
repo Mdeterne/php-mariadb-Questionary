@@ -30,29 +30,6 @@ switch ($controleur){
     }
   break;
 
-  //case 'connexion':
-  //  $connexionControleur = new connexionControleur();
-  //  switch ($action){
-  //    case 'index':
-  //      $connexionControleur->index();
-  //    break;
-
-  //    case 'connexion':
-  //      $connexionControleur->connexion();
-  //    break;
-  //  }break;
-  
-  // case 'creerUnCompte':
-  //   $creerUnCompteControleur = new creerUnCompteControleur();
-  //   switch ($action){
-  //     case 'index':
-  //       $creerUnCompteControleur->index();
-
-  //     case 'creerUnCompte':
-  //       $creerUnCompteControleur->creerCompte();
-  //     break;
-  //   }break;
-
   case 'espacePerso':
   $espacePersoControleur = new espacePersoControleur();
   switch ($action){

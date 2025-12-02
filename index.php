@@ -4,9 +4,8 @@ session_start();
 
 //require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Configues".DIRECTORY_SEPARATOR."configue_CAS.php";
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."homeControleur.php";
-require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."createurControleur.php";
 
-require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."espacePersoControleur.php";
+require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."tableauDeBordControlleur.php";
 
 
 $controleur = isset($_GET['c'])? $_GET['c'] : 'home';
@@ -28,32 +27,32 @@ switch ($controleur){
     }
   break;
 
-  case 'espacePerso':
-  $espacePersoControleur = new espacePersoControleur();
+  case 'tableauDeBord':
+  $tableauDeBordControlleur = new tableauDeBordControlleur();
   switch ($action){
           
     case 'index':
-      $espacePersoControleur->index();
+      $tableauDeBordControlleur->index();
     break;
           
     case 'getMesQuestionnaires':
-      $espacePersoControleur->getMesQuestionnaires();
+      $tableauDeBordControlleur->getMesQuestionnaires();
     break;
 
     case 'creerNouveau':
-      $espacePersoControleur->creerNouveau();
+      $tableauDeBordControlleur->creerNouveau();
     break;
         
     case 'supprimer':
-      $espacePersoControleur->supprimer();
+      $tableauDeBordControlleur->supprimer();
     break;
 
     case 'conditionGenerales':
-      $espacePersoControleur->conditionGenerales();
+      $tableauDeBordControlleur->conditionGenerales();
     break;
 
     case 'confidentialite':
-      $espacePersoControleur->confidentialite();
+      $tableauDeBordControlleur->confidentialite();
     break;
 
   }break;

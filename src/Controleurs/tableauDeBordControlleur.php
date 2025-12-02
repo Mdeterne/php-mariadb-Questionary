@@ -1,6 +1,6 @@
 <?php
 
-class espacePersoControleur {
+class tableauDeBordControlleur {
 
     function index() {
         require_once(__DIR__.'/../Views/espace_perso/dashboard.php');

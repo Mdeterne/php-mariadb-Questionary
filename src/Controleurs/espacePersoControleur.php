@@ -30,4 +30,12 @@ class espacePersoControleur {
         echo json_encode(['status' => 'success_mock']);
         exit;
     }
+
+    function conditionGenerales() {
+        require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'legal'.DIRECTORY_SEPARATOR.'conditionsGenerales.php';
+    }
+
+    function confidentialite() {
+        require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'legal'.DIRECTORY_SEPARATOR.'confidentialite.php';
+    }
 }

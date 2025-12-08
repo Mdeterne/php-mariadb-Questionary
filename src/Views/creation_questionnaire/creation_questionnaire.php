@@ -15,7 +15,7 @@
 
     <header class="topbar">
         <div class="topbar__left">
-            <a href="" class="topbar__logo">
+            <a href="?c=tableauDeBord" class="topbar__logo">
                 <span class="appicon" aria-hidden="true"></span>
                 <span class="apptitle">QUESTIONARY</span>
             </a>

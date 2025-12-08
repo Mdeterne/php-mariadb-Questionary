@@ -1153,28 +1153,32 @@ input[type="range"]::-moz-range-thumb {
 .btn-action.settings {
   background-color: transparent;
   color: var(--ink);
-  border: 1px solid #e5e7eb;
-  box-shadow: none;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .btn-action.settings:hover {
   background-color: #f9fafb;
-  border-color: #d1d5db;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
 }
 
 /* TERTIARY / DANGER : Quitter */
 .btn-action.quit {
-  background-color: transparent;
-  color: var(--muted);
-  border: 1px solid transparent;
-  box-shadow: none;
+  background-color: #333;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   font-size: 0.9rem;
   margin-top: auto;
 }
 
 .btn-action.quit:hover {
-  color: var(--ink);
-  background-color: #f3f4f6;
+  background-color: var(--topbar-bg);
+  /* Slightly lighter than #252525 */
+  color: #fff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
 }
 
 /* ===== Modale d'Importation (avec flou) ===== */

@@ -2,7 +2,7 @@
 // http://localhost/Web-app-questionary/migrate.php --> les gars executer ce fichier pour faire les migrations
 $host = "localhost";
 $user = "root";
-$pass = "";
+$pass = "root";
 $db   = "form";
 
 

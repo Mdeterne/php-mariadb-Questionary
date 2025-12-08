@@ -1280,3 +1280,232 @@ input[type="range"]::-moz-range-thumb {
 .btn-confirm-import:active {
   transform: scale(0.98);
 }
+
+/* parametre */
+
+/* --- Main Layout (`main` styling kept for layout structure of settings page) --- */
+
+
+/* --- Main Layout --- */
+/* --- Main Layout --- */
+.settings-main {
+  flex: 1;
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-title-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  align-items: baseline;
+}
+
+.page-title-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.page-title-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* --- Sections & Cards --- */
+.section {
+  margin-bottom: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #222;
+}
+
+.card-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: white;
+  margin-bottom: 15px;
+}
+
+/* --- Form Elements --- */
+label.sub-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* Correction pour l'alignement flex du champ de partage */
+.input-group input {
+  flex: 1;
+  /* On laisse le style global gérer l'apparence (bordures, padding, etc.) */
+}
+
+button.btn-copy {
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #999;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+button.btn-copy:hover {
+  background-color: #e0e0e0;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-row label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+/* Switch Style */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: var(--red);
+}
+
+input:checked+.slider:before {
+  transform: translateX(24px);
+}
+
+.date-row {
+  display: flex;
+  gap: 20px;
+}
+
+.date-col {
+  flex: 1;
+}
+
+/* --- Zone des boutons d'action --- */
+.action-buttons {
+  /* Largeur identique aux cartes au-dessus */
+  max-width: 600px;
+  width: 100%;
+
+  /* Centrage de la zone */
+  margin: 30px auto 50px auto;
+
+  /* Flexbox pour aligner les boutons/liens */
+  display: flex;
+
+  /* Espacement modéré entre les boutons */
+  gap: 10px;
+}
+
+/* Le lien (qui entoure le bouton Save) doit aussi se comporter comme un item flex */
+.action-buttons a {
+  flex: 1;
+  text-decoration: none;
+  display: flex;
+  /* Pour que le bouton à l'intérieur remplisse le lien */
+}
+
+/* Style commun aux deux boutons (Scopé uniquement pour cette zone) */
+.action-buttons .btn {
+  /* Pour le bouton Delete (direct enfant) ou Save (enfant de a) */
+  flex: 1;
+  width: 100%;
+  /* S'assure qu'il remplit le parent (notamment le <a>) */
+
+  padding: 15px 0;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s;
+
+  /* Centrage du texte */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  /* Coins arrondis pour chaque bouton */
+  border-radius: 8px;
+}
+
+/* --- Bouton Gauche (Supprimer) - Devenu Primaire (Rouge) --- */
+.action-buttons .btn-delete {
+  background-color: var(--red);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(181, 36, 36, 0.3);
+}
+
+.action-buttons .btn-delete:hover {
+  background-color: var(--red-press);
+  box-shadow: 0 6px 15px rgba(181, 36, 36, 0.4);
+  transform: translateY(-1px);
+}
+
+/* --- Bouton Droite (Enregistrer) - Devenu Secondaire (Transparent) --- */
+.action-buttons .btn-save {
+  background-color: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+}
+
+.action-buttons .btn-save:hover {
+  color: var(--ink);
+  background-color: #f3f4f6;
+}

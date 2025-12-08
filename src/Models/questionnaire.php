@@ -1,15 +1,17 @@
 <?php
 
-require_once __DIR__.DIRECTORY_SEPARATOR.'Database.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Database.php';
 
-class questionnaire {
+class questionnaire
+{
 
     private $conn;
 
-    function __construct() {
+    function __construct()
+    {
         $database = new Database();
         // Récupère l'objet PDO de la classe Database
-        $this->conn = $database->getConnection(); 
+        $this->conn = $database->getConnection();
     }
 
     /**
@@ -17,7 +19,11 @@ class questionnaire {
      * @param string $pin Le code PIN à vérifier.
      * @return array|false Les données de base du questionnaire si trouvé, false sinon.
      */
-    function exists($pin) {
+    function exists($pin)
+    {
+        if ($this->conn === null) {
+            return false;
+        }
         $req = $this->conn->prepare("
             SELECT id, title, description 
             FROM surveys 
@@ -33,10 +39,11 @@ class questionnaire {
      * @param string $pin Le code PIN du questionnaire.
      * @return array|false Les données complètes du questionnaire (y compris questions et options), ou false si non trouvé.
      */
-    function listerLesQuestions($pin) {
+    function listerLesQuestions($pin)
+    {
         // 1. Récupérer les informations de base du questionnaire (ID et statut)
         $survey = $this->exists($pin);
-        
+
         if (!$survey) {
             return false;
         }
@@ -44,6 +51,9 @@ class questionnaire {
         $surveyId = $survey['id'];
 
         // 2. Récupérer toutes les questions pour cet ID
+        if ($this->conn === null) {
+            return false;
+        }
         $reqQuestions = $this->conn->prepare("
             SELECT id, type, label, order_index, is_required 
             FROM questions 
@@ -73,7 +83,11 @@ class questionnaire {
      * @param int $questionId L'ID de la question.
      * @return array La liste des options.
      */
-    private function getOptionsByQuestionId($questionId) {
+    private function getOptionsByQuestionId($questionId)
+    {
+        if ($this->conn === null) {
+            return [];
+        }
         $req = $this->conn->prepare("
             SELECT id, label, order_index, is_open_ended 
             FROM question_options 
@@ -89,8 +103,12 @@ class questionnaire {
      * Liste les 5 premiers questionnaires actifs ou les plus récents (pour la page d'accueil ou une liste publique).
      * @return array La liste des questionnaires.
      */
-    function listerLesQuestionnaires() {
+    function listerLesQuestionnaires()
+    {
         // Cette fonction n'est pas strictement requise par les maquettes, mais peut servir à l'administration.
+        if ($this->conn === null) {
+            return [];
+        }
         $req = $this->conn->prepare("
             SELECT id, title, status, created_at
             FROM surveys

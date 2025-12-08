@@ -43,11 +43,12 @@
 
         <main class="editor-workspace">
 
+            
             <div class="question-card form-title-card">
-                <input type="text" class="input-field title-input" v-model="formTitle"
-                    placeholder="Titre du formulaire">
+                <input type="text" class="input-field title-input" placeholder="Titre du formulaire">
                 <input type="text" class="input-field desc-input" placeholder="Description du formulaire">
             </div>
+            
 
             <!-- Drop Zone / Canvas -->
             <draggable class="zone-depot" v-model="questions" group="questions" item-key="id" handle=".drag-handle"

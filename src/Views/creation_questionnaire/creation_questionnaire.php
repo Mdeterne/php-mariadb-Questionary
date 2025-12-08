@@ -67,7 +67,7 @@
 
         <aside class="editor-actions">
             <button class="btn-action save">Sauvegarder le questionnaire</button>
-            <a href ="?c=espacePerso&a=index">
+            <a href ="?c=tableauDeBord">
                 <button class="btn-action quit" onclick="window.location.href='index.html'">Quitter</button>
             </a>
             <button class="btn-action settings">Paramètres</button>

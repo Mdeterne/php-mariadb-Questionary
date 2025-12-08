@@ -468,7 +468,13 @@ input.search-input {
   display: flex;
   gap: 40px;
   /* Espace entre les cartes */
+  /* Espace entre les cartes */
   margin-bottom: 50px;
+}
+
+.create-section a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .card-create {
@@ -817,7 +823,13 @@ input.search-input {
   flex-direction: column;
   align-items: flex-end;
   /* Aligne les boutons vers la droite si besoin, ou stretch */
+  /* Aligne les boutons vers la droite si besoin, ou stretch */
   gap: 15px;
+}
+
+.editor-actions a {
+  width: 100%;
+  text-decoration: none;
 }
 
 .btn-action {

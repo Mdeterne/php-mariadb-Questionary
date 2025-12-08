@@ -33,7 +33,7 @@
         }
 
         .btn-home {
-            background-color: var(--primary);
+            background-color: #252525;
             color: white;
             padding: 12px 24px;
             border-radius: 8px;
@@ -50,15 +50,22 @@
 </head>
 
 <body>
+
+
     <header class="topbar">
         <div class="topbar__left">
             <a href="index.php" class="topbar__logo">
                 <span class="appicon" aria-hidden="true"></span>
                 <span class="apptitle">QUESTIONARY</span>
             </a>
+
+        </div>
+
+        <div class="topbar__right" aria-label="Université de Limoges">
+            <span class="uni-badge" aria-hidden="true">uℓ</span>
+            <span class="uni-text">Université de Limoges</span>
         </div>
     </header>
-
     <div class="app-container" style="justify-content: center; align-items: center;">
         <main class="main-content" style="max-width: 600px; width: 100%;">
 

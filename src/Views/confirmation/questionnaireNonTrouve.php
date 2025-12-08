@@ -44,7 +44,7 @@
 
         .btn-home:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 4px 12px rgba(19, 19, 19, 0.4);
         }
     </style>
 </head>

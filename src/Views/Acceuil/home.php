@@ -60,7 +60,7 @@
           <span aria-hidden="true">|</span>
           <a href="?c=tableauDeBord&a=confidentialite" title="Confidentialité">Confidentialité</a>
           <span aria-hidden="true">|</span>
-          <a href="#" title="Utilisation des cookies">Utilisation des cookies</a>
+          <a href="index.php?c=tableauDeBord&a=utilisationCookie" title="Utilisation des cookies">Utilisation des cookies</a>
         </nav>
       </footer>
 

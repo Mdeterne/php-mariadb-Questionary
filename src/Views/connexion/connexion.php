@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,6 +12,7 @@
 
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <!-- Topbar -->
   <header class="topbar">
@@ -21,82 +23,71 @@
       </a>
     </div>
     <div class="topbar__right" aria-label="Université de Limoges">
-      <span class="uni-badge" aria-hidden="true">uℓ</span> 
+      <span class="uni-badge" aria-hidden="true">uℓ</span>
       <span class="uni-text">Université de Limoges</span>
     </div>
   </header>
 
   <!-- Contenu principal -->
-<main class="center">
-  <section class="card" role="region" aria-labelledby="cardTitle">
+  <main class="center">
+    <section class="card" role="region" aria-labelledby="cardTitle">
 
-    <form method="POST" action="?c=connexion&a=connexion">
-        
+      <form method="POST" action="?c=connexion&a=connexion">
+
         <div class="input-wrap">
-            <label for="username" class="input-label">Nom d'utilisateur :</label>
-            <input 
-                id="username" 
-                name="nom_utilisateur" 
-                type="text" 
-                inputmode="text" placeholder="" 
-                autocomplete="username"
-                value="<?php echo $username_value ?? ''; ?>" />
-            <button class="clear" type="button" aria-label="Effacer le nom d'utilisateur">✕</button>
+          <label for="username" class="input-label">Nom d'utilisateur :</label>
+          <input id="username" name="nom_utilisateur" type="text" inputmode="text" placeholder=""
+            autocomplete="username" value="<?php echo $username_value ?? ''; ?>" />
+          <button class="clear" type="button" aria-label="Effacer le nom d'utilisateur">✕</button>
         </div>
 
         <div class="input-wrap">
-            <label for="password" class="input-label">Mot de passe :</label>
-            <input 
-                id="password" 
-                name="mot_de_passe" 
-                type="password" inputmode="text" placeholder="" 
-                autocomplete="current-password"
-                value="<?php echo $username_value ?? ''; ?>"
-                /> <button class="clear" type="button" aria-label="Effacer le mot de passe">✕</button>
+          <label for="password" class="input-label">Mot de passe :</label>
+          <input id="password" name="mot_de_passe" type="password" inputmode="text" placeholder=""
+            autocomplete="current-password" value="<?php echo $username_value ?? ''; ?>" /> <button class="clear"
+            type="button" aria-label="Effacer le mot de passe">✕</button>
         </div>
 
-        
+
         <button class="btn btn-primary" type="submit">Se connecter</button>
-    </form>
-    
-    <a href="?c=creerUnCompte&a=index" class="btn btn-secondary">Créer un compte</a>
-  </section>
-</main>
+      </form>
 
-  <!-- Pied de page -->
-  <footer class="footer">
-    <nav class="footer__links" aria-label="Liens légaux">
-      <a href="#" title="Conditions générales">Conditions générales</a>
-      <span aria-hidden="true">|</span>
-      <a href="#" title="Confidentialité">Confidentialité</a>
-      <span aria-hidden="true">|</span>
-      <a href="#" title="Utilisation des cookies">Utilisation des cookies</a>
-    </nav>
-  </footer>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      
-      const clearButtons = document.querySelectorAll('.clear');
+      <a href="?c=creerUnCompte&a=index" class="btn btn-secondary">Créer un compte</a>
 
-      clearButtons.forEach(button => {
-        button.addEventListener('click', function() {
+      <!-- Pied de page -->
+      <footer class="footer">
+        <nav class="footer__links" aria-label="Liens légaux">
+          <a href="?c=tableauDeBord&a=conditionGenerales" title="Conditions générales">Conditions générales</a>
+          <span aria-hidden="true">|</span>
+          <a href="?c=tableauDeBord&a=confidentialite" title="Confidentialité">Confidentialité</a>
+          <span aria-hidden="true">|</span>
+          <a href="#" title="Utilisation des cookies">Utilisation des cookies</a>
+        </nav>
+      </footer>
 
-          const inputWrapper = this.closest('.input-wrap');
-          
-          if (inputWrapper) {
-            const inputField = inputWrapper.querySelector('input');
-            
-            if (inputField) {
-              inputField.value = '';
-              inputField.focus();
-            }
-          }
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+          const clearButtons = document.querySelectorAll('.clear');
+
+          clearButtons.forEach(button => {
+            button.addEventListener('click', function () {
+
+              const inputWrapper = this.closest('.input-wrap');
+
+              if (inputWrapper) {
+                const inputField = inputWrapper.querySelector('input');
+
+                if (inputField) {
+                  inputField.value = '';
+                  inputField.focus();
+                }
+              }
+            });
+          });
         });
-      });
-    });
-  </script>
+      </script>
 
 </body>
-</html>
-</body>
+
 </html>

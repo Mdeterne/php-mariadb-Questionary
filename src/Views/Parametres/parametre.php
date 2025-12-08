@@ -95,14 +95,18 @@
         </div>
 
         <div class="action-buttons">
-            <button class="btn btn-delete" id="btn-delete">Supprimer le questionnaire</button>
+            <button class="btn btn-cancel" id="btn-cancel" onclick="window.history.back()">Annuler les modifications</button>
             <a href="index.php?c=createur&a=index&id=99">
                 <button class="btn btn-save" id="btn-save">Enregistrer les modifications</button>
             </a>
+        </div>
+
+        <div class="delete-zone">
+            <button class="btn-delete-link" id="btn-delete">Supprimer le questionnaire</button>
         </div>
 
     </main>
 
     <script src="js/parametre.js"></script>
 </body>
-</html>     
+</html>

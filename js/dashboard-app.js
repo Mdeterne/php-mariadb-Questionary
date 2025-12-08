@@ -1,13 +1,12 @@
 import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
-// Assure-toi que le fichier mock-data.js existe ou commente cette ligne si tu n'en as pas besoin
-import { mockMesQuestionnaires } from './mock-data.js';
 
 createApp({
     data() {
         return {
-            questionnaires: [],
+            // Initialisation avec les données injectées par PHP (window.serverQuestionnaires)
+            questionnaires: (typeof window.serverQuestionnaires !== 'undefined') ? window.serverQuestionnaires : [],
             termeRecherche: '',
-            isLoading: true,
+            isLoading: false,
             showUserMenu: false, // IMPORTANT : Par défaut le menu est caché
 
             // --- NOUVEAUX CHAMPS POUR L'IMPORTATION ---
@@ -33,37 +32,6 @@ createApp({
         // IMPORTANT : La méthode appelée quand on clique sur l'image
         toggleUserMenu() {
             this.showUserMenu = !this.showUserMenu;
-        },
-
-        async loadQuestionnaires() {
-            this.isLoading = true;
-            console.log("[Front-End] Chargement des questionnaires depuis le serveur...");
-
-            try {
-                // FIXED: Route controller changed from 'espacePerso' to 'tableauDeBord'
-                const res = await fetch('?c=tableauDeBord&a=getMesQuestionnaires', {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                // Check content type to avoid parsing HTML error pages as JSON
-                const contentType = res.headers.get("content-type");
-                if (contentType && contentType.indexOf("application/json") !== -1) {
-                    const data = await res.json();
-                    this.questionnaires = Array.isArray(data) ? data : [];
-                    console.log('[Front-End] Données chargées depuis l\'API, count=', this.questionnaires.length);
-                } else {
-                    console.warn('[Front-End] Réponse non-JSON reçue (probablement erreur PHP ou 404), utilisation du mock.');
-                    throw new Error("Réponse non-JSON");
-                }
-
-            } catch (err) {
-                console.warn('[Front-End] Échec du chargement depuis l\'API, utilisation du mock en secours.', err);
-                // fallback : utiliser le mock si présent, sinon vide
-                this.questionnaires = (typeof mockMesQuestionnaires !== 'undefined') ? mockMesQuestionnaires : [];
-            } finally {
-                this.isLoading = false;
-            }
         },
 
         creerNouveau() {
@@ -123,7 +91,8 @@ createApp({
         }
     },
     mounted() {
-        this.loadQuestionnaires();
+        // Plus besoin de charger via AJAX au démarrage car les données sont injectées par PHP
+        console.log("Application montée. Données initiales :", this.questionnaires);
     }
 
 }).mount('#app-dashboard');

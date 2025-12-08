@@ -122,7 +122,9 @@
         </main>
 
         <aside class="editor-actions">
-            <button class="btn-action save" @click="saveForm">Sauvegarder</button>
+            <a href="?c=createur&a=save">
+                <button class="btn-action save">Sauvegarder</button>
+            </a>
            <a href="index.php?c=tableauDeBord&a=parametres">
                 <button class="btn-action settings">Paramètres</button>
             </a>

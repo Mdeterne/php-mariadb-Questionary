@@ -8,6 +8,9 @@ class User {
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
+        if ($this->conn === null) {
+            throw new Exception('Erreur de connexion à la base de données.');
+        }
     }
     
     function findbyEmail($email) {
@@ -31,10 +34,10 @@ class User {
         if ($existingUser) {
             return $existingUser['id'];
         } else {
-            $query = "INSERT INTO users (email, name) VALUES (:email, :name)";
+            $query = "INSERT INTO users (email, full_name) VALUES (:email, :full_name)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':full_name', $name);
             $stmt->execute();
             return $this->conn->lastInsertId();
         }

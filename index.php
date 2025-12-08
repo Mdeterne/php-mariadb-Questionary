@@ -70,12 +70,18 @@ switch ($controleur){
 
   case 'createur':
     $creationQuestionnaireControleur = new creationQuestionnaireControleur();
+
     switch ($action){
       case 'nouveauFormulaire':
         $creationQuestionnaireControleur->nouveauFormulaire();
       break;
+
       case 'index':
         $creationQuestionnaireControleur->index();
+      break;
+
+      case 'save':
+        $creationQuestionnaireControleur->save();
       break;
     }
   break;

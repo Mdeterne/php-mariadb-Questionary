@@ -4,118 +4,70 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'Database.php';
 
 class questionnaire
 {
-
     private $conn;
 
     function __construct()
     {
         $database = new Database();
-        // Récupère l'objet PDO de la classe Database
         $this->conn = $database->getConnection();
     }
 
-    /**
-     * Vérifie si un code PIN existe et si le questionnaire est actif.
-     * @param string $pin Le code PIN à vérifier.
-     * @return array|false Les données de base du questionnaire si trouvé, false sinon.
-     */
-    function exists($pin)
+    private function generateUuidV4()
     {
-        if ($this->conn === null) {
-            return false;
-        }
-        $req = $this->conn->prepare("
-            SELECT id, title, description 
-            FROM surveys 
-            WHERE access_pin = :pin AND status = 'active'
-        ");
-        $req->bindParam(':pin', $pin, PDO::PARAM_STR);
-        $req->execute();
-        return $req->fetch(PDO::FETCH_ASSOC);
+        $data = random_bytes(16);
+        $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
+        $data[8] = chr((ord($data[8]) & 0x3f) | 0x80);
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
-    /**
-     * Liste toutes les questions et leurs options pour un questionnaire donné par son PIN.
-     * @param string $pin Le code PIN du questionnaire.
-     * @return array|false Les données complètes du questionnaire (y compris questions et options), ou false si non trouvé.
-     */
-    function listerLesQuestions($pin)
+    function createNewSurvey($userId, $title)
     {
-        // 1. Récupérer les informations de base du questionnaire (ID et statut)
-        $survey = $this->exists($pin);
-
-        if (!$survey) {
-            return false;
-        }
-
-        $surveyId = $survey['id'];
-
-        // 2. Récupérer toutes les questions pour cet ID
-        if ($this->conn === null) {
-            return false;
-        }
-        $reqQuestions = $this->conn->prepare("
-            SELECT id, type, label, order_index, is_required 
-            FROM questions 
-            WHERE survey_id = :surveyId 
-            ORDER BY order_index ASC
-        ");
-        $reqQuestions->bindParam(':surveyId', $surveyId, PDO::PARAM_STR);
-        $reqQuestions->execute();
-        $questions = $reqQuestions->fetchAll(PDO::FETCH_ASSOC);
-
-        // 3. Ajouter les options pour les questions à choix
-        foreach ($questions as &$question) {
-            if (in_array($question['type'], ['single_choice', 'multiple_choice'])) {
-                $question['options'] = $this->getOptionsByQuestionId($question['id']);
-            } else {
-                $question['options'] = [];
-            }
-        }
-        unset($question);
-
-        $survey['questions'] = $questions;
-        return $survey;
+        if ($this->conn === null) return false;
+        $accessPin = substr(strtoupper(bin2hex(random_bytes(3))), 0, 6);
+        $surveyId = $this->generateUuidV4();
+        $req = $this->conn->prepare("INSERT INTO surveys (id, user_id, title, access_pin, status) VALUES (:id, :user_id, :title, :access_pin, 'draft')");
+        $req->execute([':id' => $surveyId, ':user_id' => (int)$userId, ':title' => $title, ':access_pin' => $accessPin]);
+        return $req->rowCount() ? $surveyId : false;
     }
 
-    /**
-     * Fonction utilitaire pour récupérer les options d'une question.
-     * @param int $questionId L'ID de la question.
-     * @return array La liste des options.
-     */
-    private function getOptionsByQuestionId($questionId)
+    public function saveSurvey($data)
     {
-        if ($this->conn === null) {
-            return [];
-        }
-        $req = $this->conn->prepare("
-            SELECT id, label, order_index, is_open_ended 
-            FROM question_options 
-            WHERE question_id = :questionId 
-            ORDER BY order_index ASC
-        ");
-        $req->bindParam(':questionId', $questionId, PDO::PARAM_INT);
-        $req->execute();
-        return $req->fetchAll(PDO::FETCH_ASSOC);
-    }
+        if ($this->conn === null) return false;
 
-    /**
-     * Liste les 5 premiers questionnaires actifs ou les plus récents (pour la page d'accueil ou une liste publique).
-     * @return array La liste des questionnaires.
-     */
-    function listerLesQuestionnaires()
-    {
-        // Cette fonction n'est pas strictement requise par les maquettes, mais peut servir à l'administration.
-        if ($this->conn === null) {
-            return [];
+        $id = isset($data['id']) && $data['id'] ? $data['id'] : null;
+        $userId = isset($data['user_id']) ? (int)$data['user_id'] : null;
+        $title = isset($data['title']) ? $data['title'] : '';
+        $description = isset($data['description']) ? $data['description'] : null;
+        $accessPin = isset($data['access_pin']) ? $data['access_pin'] : null;
+        $qrToken = isset($data['qr_code_token']) ? $data['qr_code_token'] : null;
+
+        if ($id) {
+            $req = $this->conn->prepare(
+                "UPDATE surveys SET user_id = :user_id, title = :title, description = :description, access_pin = :access_pin, qr_code_token = :qr_code_token WHERE id = :id"
+            );
+            $ok = $req->execute([
+                ':user_id' => $userId,
+                ':title' => $title,
+                ':description' => $description,
+                ':access_pin' => $accessPin,
+                ':qr_code_token' => $qrToken,
+                ':id' => $id
+            ]);
+            return $ok ? $id : false;
+        } else {
+            $newId = $this->generateUuidV4();
+            $req = $this->conn->prepare(
+                "INSERT INTO surveys (id, user_id, title, description, access_pin, qr_code_token) VALUES (:id, :user_id, :title, :description, :access_pin, :qr_code_token)"
+            );
+            $ok = $req->execute([
+                ':id' => $newId,
+                ':user_id' => $userId,
+                ':title' => $title,
+                ':description' => $description,
+                ':access_pin' => $accessPin,
+                ':qr_code_token' => $qrToken
+            ]);
+            return $ok ? $newId : false;
         }
-        $req = $this->conn->prepare("
-            SELECT id, title, status, created_at
-            FROM surveys
-            ORDER BY created_at DESC
-            LIMIT 5
-        ");
-        $req->execute();
-        return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 }

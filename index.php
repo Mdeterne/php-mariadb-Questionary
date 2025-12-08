@@ -61,6 +61,10 @@ switch ($controleur){
       $tableauDeBordControlleur->parametres();
     break;
 
+    case 'utilisationCookie':
+      $tableauDeBordControlleur->utilisationCookie();
+    break;
+
   }
   break;
 

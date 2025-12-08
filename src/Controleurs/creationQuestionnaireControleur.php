@@ -15,7 +15,7 @@ class creationQuestionnaireControleur
 
     function save(){
         $modelQuestionnaire = new questionnaire();
-        $titre = $_POST['title'];
+        $titre = $_POST['titre'];
         $description = $_POST['description'];
         $user_id = $_SESSION['user_id'];
         $access_pin = rand(100000, 999999);

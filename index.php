@@ -57,6 +57,10 @@ switch ($controleur){
       $tableauDeBordControlleur->confidentialite();
     break;
 
+    case 'parametres':
+      $tableauDeBordControlleur->parametres();
+    break;
+
   }
   break;
 
@@ -70,5 +74,10 @@ switch ($controleur){
         $creationQuestionnaireControleur->index();
       break;
     }
+  break;
+
+  case 'parametre':
+    $tableauDeBordControlleur = new tableauDeBordControlleur();
+    $tableauDeBordControlleur->parametres();
   break;
 }

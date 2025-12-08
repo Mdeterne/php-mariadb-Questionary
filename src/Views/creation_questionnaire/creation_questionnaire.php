@@ -125,7 +125,9 @@
             <a href="?c=tableauDeBord">
                 <button class="btn-action quit">Quitter</button>
             </a>
-            <button class="btn-action settings">Paramètres</button>
+            <a href="index.php?c=tableauDeBord&a=parametres">
+                <button class="btn-action settings">Paramètres</button>
+            </a>
         </aside>
 
     </div>

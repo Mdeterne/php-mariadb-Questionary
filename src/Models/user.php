@@ -3,46 +3,40 @@
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Database.php';
 
 class User {
-    private $bdd;
+    private $conn;
 
     public function __construct() {
         $database = new Database();
-        $this->bdd = $database->getConnection();
+        $this->conn = $database->getConnection();
     }
-    public function getUserByCredentials($email, $password) {
-        $req = $this->bdd->prepare("SELECT id, email, password_hash, full_name FROM users WHERE email = :email");
-        $req->bindParam(':email', $email, PDO::PARAM_STR);
-        $req->execute();
-        $user = $req->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($password, $user['password_hash'])) {
-            unset($user['password_hash']);
-            return $user;
-        }
-        return null;
+    
+    function findbyEmail($email) {
+        $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createNewUser($email, $password, $fullName) {
-        $req = $this->bdd->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
-        $req->bindParam(':email', $email, PDO::PARAM_STR);
-        $req->execute();
-        if ($req->fetchColumn() > 0) {
-            return false;
-        }
+    function findById($id) {
+        $query = "SELECT * FROM users WHERE id = :id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        
-        $req = $this->bdd->prepare("
-            INSERT INTO users (email, password_hash, full_name) 
-            VALUES (:email, :password_hash, :full_name)
-        ");
-        $req->bindParam(':email', $email, PDO::PARAM_STR);
-        $req->bindParam(':password_hash', $passwordHash, PDO::PARAM_STR);
-        $req->bindParam(':full_name', $fullName, PDO::PARAM_STR);
-
-        if ($req->execute()) {
-            return $this->bdd->lastInsertId();
+    function createUserIfNotExists($email, $name) {
+        $existingUser = $this->findbyEmail($email);
+        if ($existingUser) {
+            return $existingUser['id'];
+        } else {
+            $query = "INSERT INTO users (email, name) VALUES (:email, :name)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':name', $name);
+            $stmt->execute();
+            return $this->conn->lastInsertId();
         }
-        return false;
     }
 }

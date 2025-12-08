@@ -1,6 +1,7 @@
 /* ===== Variables & base ===== */
 :root {
-  --bg: #f8f9fa;
+  --bg: #F9FAFB;
+  /* Lighter, more modern background */
   --topbar-bg: #252525;
   --topbar-ink: #ffffff;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
@@ -186,7 +187,9 @@ input[type="text"],
 input[type="password"] {
   width: 100%;
   height: 52px;
-  padding: 22px 44px 8px 16px;
+  /* Balanced padding for vertical centering */
+  padding: 0 16px;
+  line-height: 50px;
   border: 1px solid #cfd3d7;
   border-radius: 12px;
   background: #eef0f1;
@@ -399,11 +402,11 @@ input.search-input {
 /* --- SIDEBAR (Gauche) --- */
 .sidebar {
   width: 260px;
-  background-color: #252525;
-  /* Fond gris foncé */
+  background-color: #fff;
+  /* White sidebar like toolbox */
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #252525;
+  border-right: 1px solid var(--card-border);
 }
 
 /* La boite blanche "Résultats" */
@@ -447,10 +450,10 @@ input.search-input {
 /* --- MAIN CONTENT (Droite) --- */
 .main-content {
   flex: 1;
-  background-color: white;
-  padding: 30px 50px;
+  background-color: var(--bg);
+  /* Light grey bg */
+  padding: 30px 40px;
   overflow-y: auto;
-  /* Scroll vertical si ça déborde */
 }
 
 
@@ -480,14 +483,16 @@ input.search-input {
 .card-create {
   width: 220px;
   height: 300px;
-  /* Cartes hautes */
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  background: #fff;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  /* Modern radius */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s, transform 0.2s;
 }
 
 .card-create:hover {
@@ -526,15 +531,22 @@ input.search-input {
 }
 
 .card-q {
-  border: 1px solid #888;
-  /* Bordure un peu plus foncée comme l'image */
-  border-radius: 6px;
-  height: 100px;
-  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  /* Modern radius */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  height: 120px;
+  padding: 0 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-q:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .card-q-title {
@@ -597,7 +609,6 @@ input.search-input {
   color: #ccc;
   cursor: pointer;
   flex-shrink: 0;
-  /* Empêche l'icône de s'écraser */
 }
 
 /* Menu déroulant du profil */
@@ -736,71 +747,348 @@ input.search-input {
 
 /* 1. BOÎTE À OUTILS (GAUCHE) */
 .editor-toolbox {
-  width: 250px;
-  background-color: #444;
-  /* Fond gris foncé */
+  width: 260px;
+  background-color: #fff;
+  border-right: 1px solid var(--card-border);
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  /* Espace entre les boutons */
+  gap: 12px;
 }
 
 .tool-item {
-  background-color: #fff;
-  padding: 12px 15px;
-  border-radius: 5px;
-  font-weight: bold;
-  color: #333;
-  font-size: 0.9rem;
+  background-color: transparent;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: var(--ink);
+  font-size: 0.95rem;
   cursor: grab;
-  /* Curseur "main" pour dire qu'on peut attraper */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.1s;
+  /* Flat design, no shadow by default */
+  box-shadow: none;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tool-item:hover {
+  background-color: #f3f4f6;
+  /* Subtle hover */
+  transform: translateX(2px);
+  color: var(--red);
+}
+
+.tool-item i {
+  color: var(--muted);
+  font-size: 1.1em;
+  transition: color 0.2s;
+}
+
+.tool-item:hover i {
+  color: var(--red);
 }
 
 .tool-item:active {
   transform: scale(0.98);
-  /* Petit effet au clic */
+  cursor: grabbing;
 }
 
 /* 2. ESPACE DE TRAVAIL (CENTRE) */
 .editor-workspace {
   flex: 1;
-  /* Prend toute la place disponible au milieu */
+  background-color: var(--bg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Centre les éléments horizontalement */
-  padding-top: 80px;
-  /* Espace depuis le haut */
-  gap: 40px;
-  /* Espace entre les inputs */
+  padding-top: 60px;
+  padding-top: 60px;
+  padding-bottom: 100px;
+  gap: 12px;
+  overflow-y: auto;
 }
 
-.form-group {
+.form-title-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group,
+.question-card,
+.form-title-card {
   width: 100%;
-  max-width: 600px;
-  /* Largeur des champs comme sur l'image */
+  max-width: 900px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid transparent;
+  position: relative;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.question-card.active-card {
+  box-shadow: 0 8px 30px rgba(181, 36, 36, 0.08);
+  /* Red tint shadow */
+  border-left: 4px solid var(--red);
+  z-index: 5;
+}
+
+/* Header de la question */
+.question-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  color: var(--muted);
+  transition: opacity 0.2s;
+}
+
+.drag-handle {
+  cursor: grab;
+  padding: 8px;
+  font-size: 1.2rem;
+  color: var(--muted);
+  opacity: 0;
+  /* Hidden by default */
+  transition: opacity 0.2s;
+}
+
+.question-card:hover .drag-handle {
+  opacity: 1;
+  /* Show on hover */
+}
+
+.question-type-badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--red);
+  background: rgba(181, 36, 36, 0.08);
+  /* Red wash */
+  padding: 4px 12px;
+  border-radius: 100px;
+  /* Pill shape */
+}
+
+.btn-icon.delete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--muted);
+  transition: color 0.2s;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.btn-icon.delete:hover {
+  color: var(--red);
+  background: rgba(181, 36, 36, 0.05);
 }
 
 .input-field {
   width: 100%;
-  padding: 15px;
-  border: 1px solid #777;
-  border-radius: 5px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   font-size: 1rem;
-  color: #333;
+  color: #111;
   font-family: inherit;
   outline: none;
   background-color: #fff;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.input-field:focus {
+  background: #fff;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(181, 36, 36, 0.1);
+  text-align: left;
+}
+
+/* --- Options (Cases à cocher / Choix multiples) --- */
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.option-row input {
+  text-align: left;
+}
+
+/* --- Options (Cases à cocher / Choix multiples) --- */
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.option-row i {
+  color: #d1d5db;
+  font-size: 1.2rem;
+}
+
+.option-row .btn-icon {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.6;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-row .btn-icon:hover {
+  background: #fee2e2;
+  color: var(--red);
+  opacity: 1;
+}
+
+.btn-text {
+  background: transparent;
+  border: none;
+  color: var(--red);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 8px 0;
+  border-radius: 6px;
+  margin-top: 5px;
+  transition: opacity 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-text:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.title-input {
+  font-size: 2rem;
+  font-weight: 800;
+  border: 1px solid transparent;
+  padding: 10px 16px;
+}
+
+.title-input:hover {
+  background: #f9fafb;
+}
+
+.title-input:focus {
+  background: #fff;
+  border-color: #e5e7eb;
+  border-bottom: 2px solid var(--red);
+  box-shadow: none;
+}
+
+.question-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: 1px solid #f3f4f6;
+  background: #f9f9f9;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.question-title:focus {
+  background: #fff;
+  border-color: var(--red);
 }
 
 .area-drop {
-  height: 100px;
-  /* Plus haut pour la zone "Glisser élément" */
-  resize: none;
-  /* Empêche de redimensionner manuellement */
+  height: 120px;
+  resize: vertical;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #cfd3d7;
+  border-radius: 12px;
+  background-color: #eef0f1;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #111;
+  outline: none;
+  transition: all 0.2s;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.area-drop:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(181, 36, 36, 0.1);
+}
+
+/* --- Range Input / Jauge --- */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 10px 0;
+  background: transparent;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+/* Webkit Track */
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: #eef0f1;
+  border-radius: 6px;
+  border: 1px solid #cfd3d7;
+}
+
+/* Webkit Thumb */
+input[type="range"]::-webkit-slider-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--red);
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -7px;
+  /* (height - track_height) / 2 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 2px solid #fff;
+}
+
+/* Firefox Track */
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: #eef0f1;
+  border-radius: 6px;
+  border: 1px solid #cfd3d7;
+}
+
+/* Firefox Thumb */
+input[type="range"]::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--red);
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Bouton central "Ajouter une question" */
@@ -821,10 +1109,9 @@ input.search-input {
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  /* Aligne les boutons vers la droite si besoin, ou stretch */
-  /* Aligne les boutons vers la droite si besoin, ou stretch */
-  gap: 15px;
+  background: #fff;
+  border-left: 1px solid var(--card-border);
+  gap: 12px;
 }
 
 .editor-actions a {
@@ -832,29 +1119,73 @@ input.search-input {
   text-decoration: none;
 }
 
+/* Base button action */
 .btn-action {
   width: 100%;
-  /* Boutons pleine largeur dans la colonne de droite */
-  background-color: #444;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  font-size: 0.9rem;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
   text-align: center;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
-.btn-action:hover,
-.btn-add-question:hover {
-  background-color: #555;
-  /* Légèrement plus clair au survol */
+/* PRIMARY: Sauvegarder */
+.btn-action.save {
+  background-color: var(--red);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 10px rgba(181, 36, 36, 0.3);
+}
+
+.btn-action.save:hover {
+  background-color: var(--red-press);
+  box-shadow: 0 6px 15px rgba(181, 36, 36, 0.4);
+  transform: translateY(-1px);
+}
+
+/* SECONDARY: Paramètres */
+.btn-action.settings {
+  background-color: transparent;
+  color: var(--ink);
+  border: 1px solid #e5e7eb;
+  box-shadow: none;
+}
+
+.btn-action.settings:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* TERTIARY / DANGER : Quitter */
+.btn-action.quit {
+  background-color: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+  box-shadow: none;
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+.btn-action.quit:hover {
+  color: var(--ink);
+  background-color: #f3f4f6;
 }
 
 /* ===== Modale d'Importation (avec flou) ===== */
+.zone-depot {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-/* L'arrière-plan qui couvre tout l'écran */
 .modal-blur-overlay {
   position: fixed;
   top: 0;
@@ -862,25 +1193,20 @@ input.search-input {
   width: 100%;
   height: 100%;
   z-index: 2000;
-  /* Au-dessus de tout, même du menu profil */
   background-color: rgba(0, 0, 0, 0.4);
-  /* Fond noir semi-transparent */
   backdrop-filter: blur(5px);
-  /* C'est ici que se fait le flou léger */
   display: flex;
   justify-content: center;
   align-items: center;
   animation: fadeIn 0.3s ease;
 }
 
-/* La boîte blanche au centre */
 .import-card {
   background-color: #fff;
   width: 90%;
   max-width: 500px;
   padding: 30px;
   border-radius: 18px;
-  /* Même arrondi que tes autres cartes */
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -901,7 +1227,6 @@ input.search-input {
   font-size: 0.95rem;
 }
 
-/* Style spécifique pour l'input dans la modale */
 .input-import {
   width: 100%;
   padding: 15px;
@@ -916,7 +1241,6 @@ input.search-input {
   border-color: #252525;
 }
 
-/* Zone des boutons (Annuler / Importer) */
 .modal-actions {
   display: flex;
   justify-content: flex-end;

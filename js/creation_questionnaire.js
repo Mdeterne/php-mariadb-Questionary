@@ -1,91 +1,87 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 1. SÉLECTION DES ÉLÉMENTS ---
-    const draggables = document.querySelectorAll('.tool-item');
-    const dropZone = document.getElementById('zone-depot');
-    const placeholder = document.querySelector('.placeholder-text');
+const { createApp } = Vue;
+const draggable = window.vuedraggable;
 
-    // --- 2. GESTION DU DÉBUT DU GLISSER (Côté Outils) ---
-    draggables.forEach(draggable => {
-        draggable.addEventListener('dragstart', (e) => {
-            draggable.classList.add('dragging');
-            // On stocke le type de question et l'icône dans le transfert de données
-            // On utilise .dataset pour récupérer les attributs data-type et data-icon
-            e.dataTransfer.setData('type', draggable.dataset.type);
-            e.dataTransfer.setData('icon', draggable.dataset.icon);
-        });
+const app = createApp({
+    components: {
+        draggable: draggable
+    },
+    data() {
+        return {
+            formTitle: '',
+            questions: [],
+            toolItems: [
+                { type: 'Réponse courte', label: 'Réponse Courte', icon: 'fa-pen' },
+                { type: 'Paragraphe', label: 'Paragraphe', icon: 'fa-align-left' },
+                { type: 'Cases à cocher', label: 'Cases à cocher', icon: 'fa-square-check' },
+                { type: 'Choix multiples', label: 'Choix multiples', icon: 'fa-circle-dot' },
+                { type: 'Jauge', label: 'Jauge', icon: 'fa-sliders' }
+            ],
+            activeQuestionIndex: null
+        };
+    },
+    methods: {
+        addQuestion(type) {
+            // Logic for manual add button if needed (though drag n drop is primary)
+            this.questions.push(this.createQuestionObject(type));
+        },
+        createQuestionObject(type) {
+            return {
+                id: Date.now() + Math.random(),
+                type: type,
+                title: '',
+                options: ['Cases à cocher', 'Choix multiples'].includes(type) ? [{ label: 'Option 1' }] : [],
+                required: false
+            };
+        },
+        removeQuestion(index) {
+            this.questions.splice(index, 1);
+        },
+        addOption(question) {
+            question.options.push({ label: `Option ${question.options.length + 1}` });
+        },
+        removeOption(question, index) {
+            question.options.splice(index, 1);
+        },
+        saveForm() {
+            const formData = {
+                title: this.formTitle,
+                questions: this.questions
+            };
+            console.log('Saving form:', formData);
 
-        draggable.addEventListener('dragend', () => {
-            draggable.classList.remove('dragging');
-        });
-    });
-
-    // --- 3. GESTION DE LA ZONE DE DÉPÔT (Drop Zone) ---
-    
-    // Quand un élément survole la zone
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault(); // OBLIGATOIRE pour autoriser le drop
-        dropZone.classList.add('hover'); // Ajoute l'effet visuel (pointillés)
-    });
-
-    // Quand l'élément quitte la zone sans être lâché
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('hover');
-    });
-
-    // Quand on lâche l'élément (DROP)
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('hover');
-
-        // Masquer le texte "Glisser un élément ici"
-        if (placeholder) placeholder.style.display = 'none';
-
-        // Récupérer les données
-        const type = e.dataTransfer.getData('type');
-        const iconClass = e.dataTransfer.getData('icon');
-
-        // Si on a bien récupéré un type, on crée la question
-        if (type) {
-            creerNouvelleQuestion(type, iconClass);
+            // Send to PHP backend
+            fetch('?c=questionnaire&a=save', { // Placeholder URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Questionnaire sauvegardé (Simulation)');
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Sauvegarde simulée');
+                });
+        },
+        // Clone event for drag and drop
+        onClone(evt) {
+            const origEl = evt.item;
+            // The clone operation is handled by VueDraggable's :group="{ pull: 'clone' }"
+            // But we need to ensure the data pushed to 'questions' is a new object, not a reference to toolItems
+            // VueDraggable handles this nicely usually, but lets verify if we need a custom clone function.
+            // Yes, usually :clone="cloneDog" prop is needed on the source draggable.
+        },
+        cloneQuestion(toolItem) {
+            // This function is called by draggable when cloning from toolbox
+            return this.createQuestionObject(toolItem.type);
+        },
+        setActive(index) {
+            this.activeQuestionIndex = index;
         }
-    });
-
-
-    // --- 4. FONCTION POUR CRÉER LE HTML DE LA QUESTION ---
-    function creerNouvelleQuestion(titre, iconClass) {
-        // Création de la div conteneur
-        const div = document.createElement('div');
-        div.classList.add('dropped-item');
-
-        // Contenu HTML de la question
-        div.innerHTML = `
-            <div class="item-header">
-                <span class="item-title"><i class="fa-solid ${iconClass}"></i> ${titre}</span>
-                <button class="btn-delete" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
-            </div>
-            <div class="item-body">
-                <input type="text" class="input-question" placeholder="Posez votre question ici...">
-                </div>
-        `;
-
-        // Ajout de l'événement de suppression sur le bouton poubelle
-        const btnDelete = div.querySelector('.btn-delete');
-        btnDelete.addEventListener('click', () => {
-            div.remove();
-            
-            // Si c'était le dernier élément, on réaffiche le placeholder
-            // (On vérifie s'il reste des éléments 'dropped-item' dans la zone)
-            const restants = dropZone.querySelectorAll('.dropped-item');
-            if (restants.length === 0 && placeholder) {
-                placeholder.style.display = 'block';
-            }
-        });
-
-        // Ajout de l'élément à la zone de dépôt
-        dropZone.appendChild(div);
-
-        
     }
-
 });
+
+app.mount('#app');

@@ -15,7 +15,9 @@
   --radius-xl: 18px;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   height: 100%;
@@ -37,7 +39,7 @@ body {
   align-items: center;
   justify-content: space-between;
   background: var(--topbar-bg);
-  color: var(--topbar-ink); 
+  color: var(--topbar-ink);
 }
 
 .topbar__left {
@@ -91,7 +93,7 @@ a.topbar__logo:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: inherit; 
+  color: inherit;
   font-weight: 600;
 }
 
@@ -101,7 +103,7 @@ a.topbar__logo:hover {
   display: inline-block;
   width: 24px;
   height: 24px;
-  background-image: url('ressources/unicon.png'); 
+  background-image: url('ressources/unicon.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
@@ -114,7 +116,7 @@ a.topbar__logo:hover {
 
 /* ===== Main Content ===== */
 .center {
-  min-height: calc(100dvh - 64px - 58px); 
+  min-height: calc(100dvh - 64px - 58px);
   display: grid;
   place-items: center;
   padding: clamp(24px, 4vw, 48px);
@@ -142,7 +144,7 @@ a.topbar__logo:hover {
   display: flex;
   flex-direction: column;
   gap: 16px;
-} 
+}
 
 .description h1 {
   font-size: clamp(28px, 3.2vw, 40px);
@@ -183,7 +185,7 @@ a.topbar__logo:hover {
 input[type="text"],
 input[type="password"] {
   width: 100%;
-  height: 52px; 
+  height: 52px;
   padding: 22px 44px 8px 16px;
   border: 1px solid #cfd3d7;
   border-radius: 12px;
@@ -201,6 +203,15 @@ input[type="password"]:focus {
   border-color: var(--red);
   box-shadow: 0 0 0 4px rgba(181, 36, 36, 0.1);
   text-align: left;
+}
+
+/* Fix vertical alignment for inputs without checking labels (placeholder only) */
+#pin,
+input.search-input {
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 52px;
+  /* Centers text vertically */
 }
 
 .clear {
@@ -379,15 +390,17 @@ input[type="password"]:focus {
 
 /* --- LAYOUT (Sidebar + Main) --- */
 .app-container {
-    display: flex;
-    flex: 1;
-    height: calc(100vh - 60px); /* Reste de la hauteur */
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 60px);
+  /* Reste de la hauteur */
 }
 
 /* --- SIDEBAR (Gauche) --- */
 .sidebar {
   width: 260px;
-  background-color: #252525; /* Fond gris foncé */
+  background-color: #252525;
+  /* Fond gris foncé */
   display: flex;
   flex-direction: column;
   border-right: 1px solid #252525;
@@ -395,163 +408,177 @@ input[type="password"]:focus {
 
 /* La boite blanche "Résultats" */
 .sidebar-header-box {
-    background-color: white;
+  background-color: white;
   color: #252525;
-    font-weight: bold;
-    padding: 15px 20px;
-    text-align: left;
-    border-bottom: 1px solid #ccc;
+  font-weight: bold;
+  padding: 15px 20px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
 }
 
 .sidebar-nav {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .sidebar-btn {
-    width: 100%;
-    background-color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 20px; /* Arrondi comme sur l'image */
-    text-align: left;
-    font-weight: bold;
+  width: 100%;
+  background-color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  /* Arrondi comme sur l'image */
+  text-align: left;
+  font-weight: bold;
   color: #252525;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.2s;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s;
 }
 
 .sidebar-btn:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 /* --- MAIN CONTENT (Droite) --- */
 .main-content {
-    flex: 1;
-    background-color: white;
-    padding: 30px 50px;
-    overflow-y: auto; /* Scroll vertical si ça déborde */
+  flex: 1;
+  background-color: white;
+  padding: 30px 50px;
+  overflow-y: auto;
+  /* Scroll vertical si ça déborde */
 }
 
 
 
 /* --- TITRES DE SECTION --- */
 .section-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
   color: #252525;
 }
 
 /* --- SECTION CREATION (Les 2 grandes cartes) --- */
 .create-section {
-    display: flex;
-    gap: 40px; /* Espace entre les cartes */
-    margin-bottom: 50px;
+  display: flex;
+  gap: 40px;
+  /* Espace entre les cartes */
+  margin-bottom: 50px;
 }
 
 .card-create {
-    width: 220px;
-    height: 300px; /* Cartes hautes */
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: box-shadow 0.3s;
+  width: 220px;
+  height: 300px;
+  /* Cartes hautes */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
 }
 
 .card-create:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .btn-plus {
-    width: 60px;
-    height: 60px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #252525;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #252525;
 }
 
 .btn-import {
-    padding: 10px 25px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
+  padding: 10px 25px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
   color: #252525;
 }
 
 /* --- GRILLE QUESTIONNAIRES --- */
 .questionnaire-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    /* Utilisation de Grid si tu veux être strict 4 par ligne, sinon Flex wrap fonctionne aussi */
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 colonnes exactes */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  /* Utilisation de Grid si tu veux être strict 4 par ligne, sinon Flex wrap fonctionne aussi */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 colonnes exactes */
 }
 
 .card-q {
-    border: 1px solid #888; /* Bordure un peu plus foncée comme l'image */
-    border-radius: 6px;
-    height: 100px;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
+  border: 1px solid #888;
+  /* Bordure un peu plus foncée comme l'image */
+  border-radius: 6px;
+  height: 100px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
 }
 
 .card-q-title {
-    font-weight: bold;
-    font-size: 0.95rem;
+  font-weight: bold;
+  font-size: 0.95rem;
 }
 
 .card-q-qr {
-    font-size: 2.5rem; /* Taille du QR Code */
+  font-size: 2.5rem;
+  /* Taille du QR Code */
   color: #252525;
 }
 
 
 /* --- BARRE D'OUTILS DU HAUT (Recherche + Profil) --- */
 .top-tools {
-    display: flex;
-    justify-content: space-between; /* Sépare la recherche du profil */
-    align-items: center;
-    margin-bottom: 40px;
-    width: 100%;
+  display: flex;
+  justify-content: space-between;
+  /* Sépare la recherche du profil */
+  align-items: center;
+  margin-bottom: 40px;
+  width: 100%;
 }
 
 /* Conteneur qui centre la barre de recherche */
 .search-bar-container {
-    flex: 1; /* Prend tout l'espace disponible */
-    display: flex;
-    justify-content: center; /* Centre la barre horizontalement */
-    padding: 0 40px; /* Marges pour ne pas coller au profil */
+  flex: 1;
+  /* Prend tout l'espace disponible */
+  display: flex;
+  justify-content: center;
+  /* Centre la barre horizontalement */
+  padding: 0 40px;
+  /* Marges pour ne pas coller au profil */
 }
 
 /* L'enveloppe de l'input et de l'icône */
 .search-wrapper {
-    position: relative; /* Nécessaire pour positionner l'icône en absolu */
-    width: 100%;
-    max-width: 600px; /* Largeur maximale pour ressembler à la maquette */
+  position: relative;
+  /* Nécessaire pour positionner l'icône en absolu */
+  width: 100%;
+  max-width: 600px;
+  /* Largeur maximale pour ressembler à la maquette */
 }
 
 
 /* L'icône loupe (Positionnée à DROITE maintenant) */
 .search-icon {
   position: absolute;
-  right: 20px; /* Collée à droite */
+  right: 20px;
+  /* Collée à droite */
   top: 50%;
   transform: translateY(-50%);
   color: #252525;
@@ -563,7 +590,8 @@ input[type="password"]:focus {
   font-size: 2.5rem;
   color: #ccc;
   cursor: pointer;
-  flex-shrink: 0; /* Empêche l'icône de s'écraser */
+  flex-shrink: 0;
+  /* Empêche l'icône de s'écraser */
 }
 
 /* Menu déroulant du profil */
@@ -575,310 +603,344 @@ input[type="password"]:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000; /* Juste en dessous du menu */
-  background-color: transparent; /* Fond invisible */
+  z-index: 1000;
+  /* Juste en dessous du menu */
+  background-color: transparent;
+  /* Fond invisible */
   cursor: default;
 }
 
 /* La carte du menu positionnée sous l'icône */
 .user-modal-card {
-    position: absolute; /* Se place par rapport à .top-tools */
-  top: 150px;          /* Décale sous le header */
-  right: clamp(16px, 4vw, 36px); /* Positionne sous l'icône profil */
-    z-index: 1001;      /* Au dessus de l'overlay */
-    
-    width: 300px;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    border: 1px solid #e0e0e0;
-    
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    
-    animation: fadeIn 0.2s ease-out;
+  position: absolute;
+  /* Se place par rapport à .top-tools */
+  top: 150px;
+  /* Décale sous le header */
+  right: clamp(16px, 4vw, 36px);
+  /* Positionne sous l'icône profil */
+  z-index: 1001;
+  /* Au dessus de l'overlay */
+
+  width: 300px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  animation: fadeIn 0.2s ease-out;
 
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* --- Contenu du menu --- */
 .modal-close-btn {
-    display: none; /* Pas besoin de croix */
+  display: none;
+  /* Pas besoin de croix */
 }
 
 .modal-avatar {
-    width: 60px;
-    height: 60px;
-    background-color: #f1f3f4;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-    color: #5f6368;
-    font-size: 1.8rem;
+  width: 60px;
+  height: 60px;
+  background-color: #f1f3f4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  color: #5f6368;
+  font-size: 1.8rem;
 }
 
 .modal-username {
-    margin: 5px 0 20px 0;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #202124;
+  margin: 5px 0 20px 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #202124;
 }
 
 .modal-logout-btn {
-    background-color: #fff;
-    border: 1px solid #dadce0;
-    color: #3c4043;
-    text-decoration: none;
-    padding: 8px 24px;
-    border-radius: 100px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 15px;
-    transition: background 0.1s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  background-color: #fff;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+  text-decoration: none;
+  padding: 8px 24px;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+  transition: background 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .modal-logout-btn:hover {
-    background-color: #f8f9fa;
-    border-color: #dadce0;
+  background-color: #f8f9fa;
+  border-color: #dadce0;
 }
 
 .modal-footer {
-    margin-top: 10px;
-    font-size: 0.75rem;
-    color: #70757a;
-    border-top: 1px solid #f1f3f4;
-    padding-top: 15px;
-    width: 100%;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: #70757a;
+  border-top: 1px solid #f1f3f4;
+  padding-top: 15px;
+  width: 100%;
 }
 
 .modal-footer a {
-    color: #70757a;
-    text-decoration: none;
-    margin: 0 5px;
+  color: #70757a;
+  text-decoration: none;
+  margin: 0 5px;
 }
 
 /* Responsive : Si l'écran est petit, on passe à moins de colonnes */
 @media (max-width: 1200px) {
-    .questionnaire-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+  .questionnaire-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* creation_questionnaire */
 
 /* --- LAYOUT ÉDITEUR --- */
 .editor-container {
-    display: flex;
-    height: calc(100vh - 60px); /* Toute la hauteur moins le header */
-    background-color: #fff;
+  display: flex;
+  height: calc(100vh - 60px);
+  /* Toute la hauteur moins le header */
+  background-color: #fff;
 }
 
 /* 1. BOÎTE À OUTILS (GAUCHE) */
 .editor-toolbox {
-    width: 250px;
-    background-color: #444; /* Fond gris foncé */
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Espace entre les boutons */
+  width: 250px;
+  background-color: #444;
+  /* Fond gris foncé */
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* Espace entre les boutons */
 }
 
 .tool-item {
-    background-color: #fff;
-    padding: 12px 15px;
-    border-radius: 5px;
-    font-weight: bold;
-    color: #333;
-    font-size: 0.9rem;
-    cursor: grab; /* Curseur "main" pour dire qu'on peut attraper */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    transition: transform 0.1s;
+  background-color: #fff;
+  padding: 12px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: grab;
+  /* Curseur "main" pour dire qu'on peut attraper */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s;
 }
 
 .tool-item:active {
-    transform: scale(0.98); /* Petit effet au clic */
+  transform: scale(0.98);
+  /* Petit effet au clic */
 }
 
 /* 2. ESPACE DE TRAVAIL (CENTRE) */
 .editor-workspace {
-    flex: 1; /* Prend toute la place disponible au milieu */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centre les éléments horizontalement */
-    padding-top: 80px; /* Espace depuis le haut */
-    gap: 40px; /* Espace entre les inputs */
+  flex: 1;
+  /* Prend toute la place disponible au milieu */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Centre les éléments horizontalement */
+  padding-top: 80px;
+  /* Espace depuis le haut */
+  gap: 40px;
+  /* Espace entre les inputs */
 }
 
 .form-group {
-    width: 100%;
-    max-width: 600px; /* Largeur des champs comme sur l'image */
+  width: 100%;
+  max-width: 600px;
+  /* Largeur des champs comme sur l'image */
 }
 
 .input-field {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #777;
-    border-radius: 5px;
-    font-size: 1rem;
-    color: #333;
-    font-family: inherit;
-    outline: none;
-    background-color: #fff;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #777;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  font-family: inherit;
+  outline: none;
+  background-color: #fff;
 }
 
 .area-drop {
-    height: 100px; /* Plus haut pour la zone "Glisser élément" */
-    resize: none; /* Empêche de redimensionner manuellement */
+  height: 100px;
+  /* Plus haut pour la zone "Glisser élément" */
+  resize: none;
+  /* Empêche de redimensionner manuellement */
 }
 
 /* Bouton central "Ajouter une question" */
 .btn-add-question {
-    background-color: #444;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 20px;
+  background-color: #444;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
 /* 3. BOUTONS D'ACTION (DROITE) */
 .editor-actions {
-    width: 250px;
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; /* Aligne les boutons vers la droite si besoin, ou stretch */
-    gap: 15px;
+  width: 250px;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  /* Aligne les boutons vers la droite si besoin, ou stretch */
+  gap: 15px;
 }
 
 .btn-action {
-    width: 100%; /* Boutons pleine largeur dans la colonne de droite */
-    background-color: #444;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    text-align: center;
-    transition: background 0.2s;
+  width: 100%;
+  /* Boutons pleine largeur dans la colonne de droite */
+  background-color: #444;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s;
 }
 
-.btn-action:hover, .btn-add-question:hover {
-    background-color: #555; /* Légèrement plus clair au survol */
+.btn-action:hover,
+.btn-add-question:hover {
+  background-color: #555;
+  /* Légèrement plus clair au survol */
 }
 
 /* ===== Modale d'Importation (avec flou) ===== */
 
 /* L'arrière-plan qui couvre tout l'écran */
 .modal-blur-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2000; /* Au-dessus de tout, même du menu profil */
-    background-color: rgba(0, 0, 0, 0.4); /* Fond noir semi-transparent */
-    backdrop-filter: blur(5px); /* C'est ici que se fait le flou léger */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+  /* Au-dessus de tout, même du menu profil */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Fond noir semi-transparent */
+  backdrop-filter: blur(5px);
+  /* C'est ici que se fait le flou léger */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
 }
 
 /* La boîte blanche au centre */
 .import-card {
-    background-color: #fff;
-    width: 90%;
-    max-width: 500px;
-    padding: 30px;
-    border-radius: 18px; /* Même arrondi que tes autres cartes */
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: relative;
+  background-color: #fff;
+  width: 90%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 18px;
+  /* Même arrondi que tes autres cartes */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
 }
 
 .import-title {
-    margin: 0;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #252525;
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #252525;
 }
 
 .import-desc {
-    color: #666;
-    margin: 0;
-    font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+  font-size: 0.95rem;
 }
 
 /* Style spécifique pour l'input dans la modale */
 .input-import {
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #eef0f1;
-    border-radius: 12px;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.2s;
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #eef0f1;
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
 .input-import:focus {
-    border-color: #252525;
+  border-color: #252525;
 }
 
 /* Zone des boutons (Annuler / Importer) */
 .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
 }
 
 .btn-cancel {
-    background: transparent;
-    border: none;
-    padding: 10px 20px;
-    font-weight: 600;
-    color: #666;
-    cursor: pointer;
-    border-radius: 8px;
+  background: transparent;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
 .btn-cancel:hover {
-    background: #f0f0f0;
+  background: #f0f0f0;
 }
 
 .btn-confirm-import {
-    background: #252525;
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.1s;
+  background: #252525;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s;
 }
 
 .btn-confirm-import:hover {
-    background: #444;
+  background: #444;
 }
 
 .btn-confirm-import:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }

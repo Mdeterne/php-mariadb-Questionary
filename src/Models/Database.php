@@ -2,10 +2,13 @@
 class Database
 {
 
-    private $host = "localhost";
-    private $db_name = "form";
+    private $host = "127.0.0.1";
+    //private $db_name = "form";
+    //private $username = "root";
+    //private $password = "root";
+    private $db_name = "mariadb";
     private $username = "root";
-    private $password = "root";
+    private $password = "mariadb";
     private $conn;
 
     public function getConnection()

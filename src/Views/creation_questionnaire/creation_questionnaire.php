@@ -113,8 +113,9 @@
                 </template>
 
                 <template #footer>
-                    <div v-if="questions.length === 0" class="empty-placeholder">
-                        <span class="placeholder-text">Glisser des éléments ici</span>
+                    <div class="empty-placeholder">
+                        <i class="fa-solid fa-cloud-arrow-down placeholder-icon"></i>
+                        <span class="placeholder-text">Glissez des éléments ici</span>
                     </div>
                 </template>
             </draggable>

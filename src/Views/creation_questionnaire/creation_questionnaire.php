@@ -131,7 +131,7 @@
             <a href="?c=tableauDeBord">
                 <button class="btn-action quit">Quitter</button>
             </a>
-            
+
         </aside>
 
     </div>

@@ -414,8 +414,11 @@ input.search-input {
 .sidebar-header-box {
   background-color: white;
   color: #252525;
+  font-size: 20px;
   font-weight: bold;
-  padding: 15px 20px;
+  padding-top: 23px;
+  padding-bottom: 15px;
+  padding-left: 30px;
   text-align: left;
   border-bottom: 1px solid #ccc;
 }
@@ -751,10 +754,18 @@ input.search-input {
   width: 260px;
   background-color: #fff;
   border-right: 1px solid var(--card-border);
-  padding: 30px 20px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  /* gap handled by children or removed */
+}
+
+/* Specific override for toolbox list to reduce gap */
+.toolbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* override sidebar-nav 10px */
 }
 
 .tool-item {
@@ -767,7 +778,7 @@ input.search-input {
   cursor: grab;
   /* Flat design, no shadow by default */
   box-shadow: none;
-  border: 1px solid transparent;
+  border: 1px solid var(--card-border);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -1569,4 +1580,188 @@ input:checked+.slider:before {
   background-color: var(--red-press);
   box-shadow: 0 6px 15px rgba(181, 36, 36, 0.4);
   transform: translateY(-1px);
+}
+
+
+/* analyse */
+
+:root {
+  --header-bg: #3c3c3c;
+  --bg-color: #ffffff;
+  --card-bg: #e6e6e6;
+  --univ-red: #c0392b;
+  --text-dark: #333;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+}
+
+/* --- Header --- */
+header {
+  background-color: var(--header-bg);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-box {
+  background-color: var(--univ-red);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.app-title {
+  font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.univ-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ul-logo-text {
+  font-family: serif;
+  color: #c0392b;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.univ-text {
+  text-align: right;
+  line-height: 1.2;
+  font-size: 14px;
+}
+
+.univ-text span {
+  display: block;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* --- Main Content --- */
+main {
+  padding: 40px;
+}
+
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #222;
+}
+
+.buttons-group {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background-color: #333;
+}
+
+.stats-box {
+  margin-top: 20px;
+  background-color: #e8e8e8;
+  padding: 15px 20px;
+  border-radius: 6px;
+  display: inline-block;
+  font-weight: 500;
+  min-width: 250px;
+}
+
+/* --- Grid Layout --- */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
+  margin-top: 40px;
+}
+
+/* --- Individual Card Style --- */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.10);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  background: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.response-box {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chart-container {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  height: 250px;
+  position: relative;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .top-controls {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
 }

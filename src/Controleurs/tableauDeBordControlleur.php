@@ -79,4 +79,8 @@ class tableauDeBordControlleur
     {
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'utilisationCookie.php';
     }
+    function analyse()
+    {
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'analyse' . DIRECTORY_SEPARATOR . 'analyse.php';
+    }
 }

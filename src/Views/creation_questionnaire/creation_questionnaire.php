@@ -30,8 +30,9 @@
     <div id="app" class="editor-container">
 
         <aside class="editor-toolbox">
+            <div class="sidebar-header-box">Éléments</div>
             <!-- Draggable Source Group -->
-            <draggable class="toolbox-list" :list="toolItems" :group="{ name: 'questions', pull: 'clone', put: false }"
+            <draggable class="toolbox-list sidebar-nav" :list="toolItems" :group="{ name: 'questions', pull: 'clone', put: false }"
                 :clone="cloneQuestion" :sort="false" item-key="type">
                 <template #item="{ element }">
                     <div class="tool-item" @click="addQuestion(element.type)">

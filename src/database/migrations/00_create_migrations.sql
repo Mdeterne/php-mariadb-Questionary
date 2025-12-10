@@ -1,3 +1,4 @@
+-- Active: 1758301938336@@localhost@3306@mariadb
 CREATE TABLE IF NOT EXISTS migrations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     migration VARCHAR(255) NOT NULL,

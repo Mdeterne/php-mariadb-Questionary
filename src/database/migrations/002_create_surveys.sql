@@ -1,5 +1,5 @@
 CREATE TABLE surveys (
-    id int serial PRIMARY KEY,
+    id int AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,

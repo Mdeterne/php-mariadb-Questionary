@@ -57,8 +57,8 @@ const app = createApp({
             })
                 .then(response => response.text())
                 .then(data => {
-                    alert('Questionnaire sauvegardé');
                     console.log(data); // For debugging
+                    window.location.href = '?c=tableauDeBord&a=index';
                 })
                 .catch((error) => {
                     console.error('Error:', error);

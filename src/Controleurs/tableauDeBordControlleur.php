@@ -5,14 +5,24 @@ class tableauDeBordControlleur
 
     function index()
     {
+        require_once(__DIR__ . '/../Models/questionnaire.php');
+        $questionnaireModel = new questionnaire();
+        // On suppose que l'ID utilisateur est en session
+        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1;
+        $mesQuestionnaires = $questionnaireModel->getSurveysByUserId($userId);
+
         require_once(__DIR__ . '/../Views/espace_perso/dashboard.php');
     }
 
     function getMesQuestionnaires()
     {
-        // //TODO (Back-End): Renvoyer les vraies données
+        require_once(__DIR__ . '/../Models/questionnaire.php');
+        $questionnaireModel = new questionnaire();
+        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+        $mesQuestionnaires = $questionnaireModel->getSurveysByUserId($userId);
+
         header('Content-Type: application/json');
-        echo json_encode([]); // Renvoie un tableau vide
+        echo json_encode($mesQuestionnaires);
         exit;
     }
 

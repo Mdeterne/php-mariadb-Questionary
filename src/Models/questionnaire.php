@@ -152,4 +152,24 @@ class questionnaire
         $req->execute();
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Supprime un questionnaire appartenant à un utilisateur.
+     * @param string $id L'ID du questionnaire.
+     * @param int $userId L'ID de l'utilisateur (pour sécurité).
+     * @return bool True si supprimé, False sinon.
+     */
+    public function deleteSurvey($id, $userId)
+    {
+        if ($this->conn === null) {
+            return false;
+        }
+        $query = "DELETE FROM surveys WHERE id = :id AND user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+        
+        return $stmt->rowCount() > 0;
+    }
 }

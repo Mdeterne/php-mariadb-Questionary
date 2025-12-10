@@ -7,5 +7,6 @@ CREATE TABLE surveys (
     qr_code_token VARCHAR(64) UNIQUE,
     status ENUM('draft', 'active', 'closed') DEFAULT 'draft',
     settings JSON,
+    created_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

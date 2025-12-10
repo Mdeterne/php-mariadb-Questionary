@@ -126,6 +126,10 @@
         </aside>
 
     </div>
+    <script>
+        // Inject existing survey data if available
+        window.existingSurvey = <?php echo isset($existingSurvey) ? json_encode($existingSurvey) : 'null'; ?>;
+    </script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="https://unpkg.com/vuedraggable@4.1.0/dist/vuedraggable.umd.min.js"></script>

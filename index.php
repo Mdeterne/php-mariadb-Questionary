@@ -110,6 +110,10 @@ switch ($controleur){
       case 'save':
         $creationQuestionnaireControleur->save();
       break;
+
+      case 'editer':
+        $creationQuestionnaireControleur->editer();
+      break;
     }
   break;
 

@@ -87,6 +87,96 @@ class questionnaire
         }
     }
 
+    public function updateSurvey($id, $user_id, $titre, $description, $questions = [])
+    {
+        $settings = json_encode([
+            'description' => $description
+        ]);
+
+        try {
+            $this->conn->beginTransaction();
+
+            // 1. Update basic info
+            $query = "UPDATE surveys SET title = :title, description = :description, settings = :settings WHERE id = :id AND user_id = :user_id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':title', $titre);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':settings', $settings);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+
+            // 2. Delete existing questions (options cascade delete usually, or we delete them too)
+            // Assuming ON DELETE CASCADE on question_options, otherwise delete options first.
+            // Safest: Delete options first then questions
+            
+            // Get question IDs for this survey to clear options
+            $qIdsReq = $this->conn->prepare("SELECT id FROM questions WHERE survey_id = :survey_id");
+            $qIdsReq->execute([':survey_id' => $id]);
+            $qIds = $qIdsReq->fetchAll(PDO::FETCH_COLUMN);
+
+            if (!empty($qIds)) {
+                $placeholders = implode(',', array_fill(0, count($qIds), '?'));
+                $delOpt = $this->conn->prepare("DELETE FROM question_options WHERE question_id IN ($placeholders)");
+                $delOpt->execute($qIds);
+            }
+
+            $delQ = $this->conn->prepare("DELETE FROM questions WHERE survey_id = :survey_id");
+            $delQ->execute([':survey_id' => $id]);
+
+            // 3. Re-insert questions (same logic as saveSurvey)
+             if (!empty($questions)) {
+                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required) VALUES (:survey_id, :type, :label, :order_index, :is_required)";
+                $stmtQ = $this->conn->prepare($sqlQ);
+
+                $sqlOpt = "INSERT INTO question_options (question_id, label, order_index) VALUES (:question_id, :label, :order_index)";
+                $stmtOpt = $this->conn->prepare($sqlOpt);
+
+                foreach ($questions as $index => $q) {
+                    $type = $q['type'];
+                    $label = $q['title'] ?? 'Question sans titre';
+                    if (trim($label) === '') $label = 'Question sans titre';
+                    $isRequired = isset($q['required']) && $q['required'] ? 1 : 0;
+
+                    // Mapping types
+                    $dbType = 'text';
+                    if ($type === 'Réponse courte') $dbType = 'short_text';
+                    elseif ($type === 'Paragraphe') $dbType = 'long_text';
+                    elseif ($type === 'Cases à cocher') $dbType = 'multiple_choice';
+                    elseif ($type === 'Choix multiples') $dbType = 'single_choice';
+                    elseif ($type === 'Jauge') $dbType = 'scale';
+
+                    $stmtQ->execute([
+                        ':survey_id' => $id,
+                        ':type' => $dbType,
+                        ':label' => $label,
+                        ':order_index' => $index,
+                        ':is_required' => $isRequired
+                    ]);
+
+                    $questionId = $this->conn->lastInsertId();
+
+                    // Insert Options
+                    if (in_array($type, ['Cases à cocher', 'Choix multiples']) && !empty($q['options'])) {
+                        foreach ($q['options'] as $optIndex => $opt) {
+                            $optLabel = $opt['label'];
+                            $stmtOpt->execute([
+                                ':question_id' => $questionId,
+                                ':label' => $optLabel,
+                                ':order_index' => $optIndex
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            $this->conn->commit();
+        } catch (PDOException $e) {
+            $this->conn->rollBack();
+            throw $e;
+        }
+    }
+
     /**
      * Vérifie si un code PIN existe et si le questionnaire est actif.
      * @param string $pin Le code PIN à vérifier.

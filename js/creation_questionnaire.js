@@ -9,6 +9,7 @@ const app = createApp({
         return {
             formTitle: '',
             formDescription: '',
+            surveyId: null,
             questions: [],
             toolItems: [
                 { type: 'Réponse courte', label: 'Réponse Courte', icon: 'fa-pen' },
@@ -19,6 +20,34 @@ const app = createApp({
             ],
             activeQuestionIndex: null
         };
+    },
+    mounted() {
+        if (window.existingSurvey) {
+            const s = window.existingSurvey;
+            this.surveyId = s.id;
+            this.formTitle = s.title;
+            this.formDescription = s.description;
+
+            // Map backend questions to frontend
+            if (s.questions && s.questions.length > 0) {
+                this.questions = s.questions.map(q => {
+                    let type = 'Réponse courte';
+                    if (q.type === 'short_text') type = 'Réponse courte';
+                    else if (q.type === 'long_text') type = 'Paragraphe';
+                    else if (q.type === 'multiple_choice') type = 'Cases à cocher';
+                    else if (q.type === 'single_choice') type = 'Choix multiples';
+                    else if (q.type === 'scale') type = 'Jauge';
+
+                    return {
+                        id: Date.now() + Math.random(), // New temporary ID for vue loop
+                        type: type,
+                        title: q.label,
+                        required: q.is_required == 1,
+                        options: q.options ? q.options.map(o => ({ label: o.label })) : []
+                    };
+                });
+            }
+        }
     },
     methods: {
         addQuestion(type) {
@@ -45,6 +74,9 @@ const app = createApp({
         },
         saveForm() {
             const formData = new FormData();
+            if (this.surveyId) {
+                formData.append('id', this.surveyId);
+            }
             formData.append('titre', this.formTitle);
             formData.append('description', this.formDescription);
             formData.append('questions', JSON.stringify(this.questions));

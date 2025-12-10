@@ -97,13 +97,17 @@
                     Vous n'avez pas encore créé de questionnaire.
                 </div>
 
-                <div v-for="q in questionnairesFiltres" :key="q.id" class="card-q">
-                    <div class="card-q-title">{{ q.titre }}</div>
-                    <div class="card-q-qr">
-                        <i class="fa-solid fa-qrcode"></i>
-                    </div>
+                <div v-for="q in questionnairesFiltres" :key="q.id" style="position: relative;">
+                    <a :href="'?c=createur&a=editer&id=' + q.id" style="text-decoration:none; color:inherit;">
+                        <div class="card-q">
+                            <div class="card-q-title">{{ q.titre }}</div>
+                            <div class="card-q-qr">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </div>
+                        </div>
+                    </a>
                     <i @click="supprimer(q.id)" class="fa-solid fa-trash"
-                        style="cursor:pointer; color: var(--red);"></i>
+                        style="cursor:pointer; color: var(--red); position: absolute; right: 25px; top: 50%; transform: translateY(-50%); z-index: 10;"></i>
                 </div>
 
             </section>

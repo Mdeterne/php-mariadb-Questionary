@@ -97,14 +97,7 @@
 </head>
 
 <body>
-    <header class="topbar">
-        <div class="topbar__left">
-            <a href="index.php" class="topbar__logo">
-                <span class="appicon" aria-hidden="true"></span>
-                <span class="apptitle">QUESTIONARY</span>
-            </a>
-        </div>
-    </header>
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
 
     <div class="app-container" id="app-student">
         <main class="main-content qcm-container">

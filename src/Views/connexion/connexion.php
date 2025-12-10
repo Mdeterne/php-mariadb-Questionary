@@ -15,18 +15,7 @@
 
 <body>
   <!-- Topbar -->
-  <header class="topbar">
-    <div class="topbar__left">
-      <a href="" class="topbar__logo" href="?c=home&a=index">
-        <span class="appicon" aria-hidden="true"></span>
-        <span class="apptitle">QUESTIONARY</span>
-      </a>
-    </div>
-    <div class="topbar__right" aria-label="Université de Limoges">
-      <span class="uni-badge" aria-hidden="true">uℓ</span>
-      <span class="uni-text">Université de Limoges</span>
-    </div>
-  </header>
+  <?php require_once __DIR__ . '/../components/header.php'; ?>
 
   <!-- Contenu principal -->
   <main class="center">

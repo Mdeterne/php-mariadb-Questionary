@@ -26,17 +26,7 @@
 </head>
 
 <body>
-  <header class="topbar">
-    <a href="?c=home&a=index" class="topbar__left">
-      <span class="appicon" aria-hidden="true"></span>
-      <span class="apptitle">QUESTIONARY</span>
-    </a>
-
-    <div class="topbar__right" aria-label="Université de Limoges">
-      <span class="uni-badge" aria-hidden="true"></span>
-      <span class="uni-text">Université de Limoges</span>
-    </div>
-  </header>
+  <?php require_once __DIR__ . '/../components/header.php'; ?>
 
   <main class="center">
     <section class="card" role="region" aria-labelledby="cardTitle">

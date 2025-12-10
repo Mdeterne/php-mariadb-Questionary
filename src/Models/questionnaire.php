@@ -12,23 +12,79 @@ class questionnaire
         $this->conn = $database->getConnection();
     }
 
-    public function saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token)
+    public function saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token, $questions = [])
     {
         $settings = json_encode([
             'description' => $description
-        ]);//TODO a changer plus tard
+        ]);
         $status = 'closed';
 
-        $query = "INSERT INTO surveys (user_id, title, description, access_pin, qr_code_token, status, settings, created_at) VALUES (:user_id, :titre, :description, :access_pin, :qr_code_token, :status, :settings, NOW())";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->bindParam(':titre', $titre);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':access_pin', $access_pin);
-        $stmt->bindParam(':qr_code_token', $qr_code_token);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':settings', $settings);
-        $stmt->execute();
+        try {
+            $this->conn->beginTransaction();
+
+            $query = "INSERT INTO surveys (user_id, title, description, access_pin, qr_code_token, status, settings, created_at) VALUES (:user_id, :titre, :description, :access_pin, :qr_code_token, :status, :settings, NOW())";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':titre', $titre);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':access_pin', $access_pin);
+            $stmt->bindParam(':qr_code_token', $qr_code_token);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':settings', $settings);
+            $stmt->execute();
+
+            $surveyId = $this->conn->lastInsertId();
+
+            if (!empty($questions) && $surveyId) {
+                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required) VALUES (:survey_id, :type, :label, :order_index, :is_required)";
+                $stmtQ = $this->conn->prepare($sqlQ);
+
+                $sqlOpt = "INSERT INTO question_options (question_id, label, order_index) VALUES (:question_id, :label, :order_index)";
+                $stmtOpt = $this->conn->prepare($sqlOpt);
+
+                foreach ($questions as $index => $q) {
+                    $type = $q['type'];
+                    $label = $q['title'] ?? 'Question sans titre';
+                    if (trim($label) === '') $label = 'Question sans titre';
+                    $isRequired = isset($q['required']) && $q['required'] ? 1 : 0;
+
+                    // Mapping types
+                    $dbType = 'text';
+                    if ($type === 'Réponse courte') $dbType = 'short_text';
+                    elseif ($type === 'Paragraphe') $dbType = 'long_text';
+                    elseif ($type === 'Cases à cocher') $dbType = 'multiple_choice';
+                    elseif ($type === 'Choix multiples') $dbType = 'single_choice';
+                    elseif ($type === 'Jauge') $dbType = 'scale';
+
+                    $stmtQ->execute([
+                        ':survey_id' => $surveyId,
+                        ':type' => $dbType,
+                        ':label' => $label,
+                        ':order_index' => $index,
+                        ':is_required' => $isRequired
+                    ]);
+
+                    $questionId = $this->conn->lastInsertId();
+
+                    // Insert Options
+                    if (in_array($type, ['Cases à cocher', 'Choix multiples']) && !empty($q['options'])) {
+                        foreach ($q['options'] as $optIndex => $opt) {
+                            $optLabel = $opt['label'];
+                            $stmtOpt->execute([
+                                ':question_id' => $questionId,
+                                ':label' => $optLabel,
+                                ':order_index' => $optIndex
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            $this->conn->commit();
+        } catch (PDOException $e) {
+            $this->conn->rollBack();
+            throw $e; // Re-throw to be caught by controller
+        }
     }
 
     /**
@@ -171,5 +227,54 @@ class questionnaire
         $stmt->execute();
         
         return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Récupère un questionnaire par son ID.
+     * @param string $id
+     * @return array|false
+     */
+    public function getSurveyById($id)
+    {
+        if ($this->conn === null) return false;
+        $req = $this->conn->prepare("SELECT id, title, description, status FROM surveys WHERE id = :id");
+        $req->bindParam(':id', $id);
+        $req->execute();
+        return $req->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupère les données d'analyse (questions + options) par ID de questionnaire.
+     * @param string $surveyId
+     * @return array
+     */
+    public function getAnalysisData($surveyId)
+    {
+        // 1. Infos du questionnaire
+        $survey = $this->getSurveyById($surveyId);
+        if (!$survey) return [];
+
+        // 2. Questions
+        $reqQuestions = $this->conn->prepare("
+             SELECT id, type, label, order_index, is_required 
+             FROM questions 
+             WHERE survey_id = :surveyId 
+             ORDER BY order_index ASC
+         ");
+        $reqQuestions->bindParam(':surveyId', $surveyId);
+        $reqQuestions->execute();
+        $questions = $reqQuestions->fetchAll(PDO::FETCH_ASSOC);
+
+        // 3. Options
+        foreach ($questions as &$question) {
+            if (in_array($question['type'], ['single_choice', 'multiple_choice'])) {
+                $question['options'] = $this->getOptionsByQuestionId($question['id']);
+            } else {
+                $question['options'] = [];
+            }
+        }
+        
+        $survey['questions'] = $questions;
+        return $survey;
     }
 }

@@ -4,23 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paramètres du Questionnaire</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-       <header class="topbar">
-        <div class="topbar__left">
-            <a href="?c=tableauDeBord" class="topbar__logo">
-                <span class="appicon" aria-hidden="true"></span>
-                <span class="apptitle">QUESTIONARY</span>
-            </a>
-        </div>
-
-        <div class="topbar__right" aria-label="Université de Limoges">
-            <span class="uni-badge" aria-hidden="true">uℓ</span>
-            <span class="uni-text">Université de Limoges</span>
-        </div>
-    </header>
+       <?php require_once __DIR__ . '/../components/header.php'; ?>
 
     <main class="settings-main">
         <div class="page-title-row">

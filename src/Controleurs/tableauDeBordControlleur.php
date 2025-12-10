@@ -40,9 +40,24 @@ class tableauDeBordControlleur
 
     function supprimer()
     {
-        // TODO (Back-End): Supprimer en BDD
         header('Content-Type: application/json');
-        echo json_encode(['status' => 'success_mock']);
+        
+        $id = isset($_GET['id']) ? $_GET['id'] : null;
+        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+
+        if (!$id || !$userId) {
+             echo json_encode(['status' => 'error', 'message' => 'ID manquant ou utilisateur non connecté']);
+             exit;
+        }
+
+        require_once(__DIR__ . '/../Models/questionnaire.php');
+        $questionnaireModel = new questionnaire();
+        
+        if ($questionnaireModel->deleteSurvey($id, $userId)) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Impossible de supprimer ou questionnaire introuvable']);
+        }
         exit;
     }
 

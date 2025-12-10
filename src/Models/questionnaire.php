@@ -12,23 +12,70 @@ class questionnaire
         $this->conn = $database->getConnection();
     }
 
-    public function saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token)
+    public function saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token, $settings_array = [])
     {
-        $settings = json_encode([
-            'description' => $description
-        ]);//TODO a changer plus tard
-        $status = 'closed';
+        // Vérifier si le questionnaire existe déjà
+        $checkQuery = "SELECT id, settings FROM surveys WHERE access_pin = :access_pin";
+        $checkStmt = $this->conn->prepare($checkQuery);
+        $checkStmt->bindParam(':access_pin', $access_pin);
+        $checkStmt->execute();
+        $existingSurvey = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
-        $query = "INSERT INTO surveys (user_id, title, description, access_pin, qr_code_token, status, settings, created_at) VALUES (:user_id, :titre, :description, :access_pin, :qr_code_token, :status, :settings, NOW())";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->bindParam(':titre', $titre);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':access_pin', $access_pin);
-        $stmt->bindParam(':qr_code_token', $qr_code_token);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':settings', $settings);
-        $stmt->execute();
+        // 1. Gestion des paramètres (settings)
+        if ($existingSurvey) {
+            // Mode UPDATE : on récupère les anciens paramètres et on fusionne
+            $current_settings = json_decode($existingSurvey['settings'], true) ?? [];
+            $final_settings = array_merge($current_settings, $settings_array);
+        } else {
+            // Mode INSERT : paramètres par défaut
+            $default_settings = [
+                'accept_responses'      => false, // Toggle "Accepte les réponses"
+                'start_date'            => null,
+                'end_date'              => null,
+                'notify_on_response'    => false, // Toggle "Notification de réponse"
+                'notify_on_threshold'   => false, // Toggle "Seuil atteint"
+                'notify_on_invalid'     => false, // Toggle "Réponses invalides"
+            ];
+            $final_settings = array_merge($default_settings, $settings_array);
+        }
+        
+        // Encoder les paramètres finaux en JSON
+        $settings = json_encode($final_settings);
+
+        // 2. Déterminer le statut
+        // 'active' si le toggle est activé, 'closed' sinon.
+        $status = ($final_settings['accept_responses'] ?? false) ? 'active' : 'closed';
+        
+        // 3. Exécuter la requête (UPDATE ou INSERT)
+        if ($existingSurvey) {
+            $query = "UPDATE surveys 
+                      SET user_id = :user_id, title = :titre, description = :description, status = :status, settings = :settings 
+                      WHERE access_pin = :access_pin";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':titre', $titre);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':settings', $settings);
+            $stmt->bindParam(':access_pin', $access_pin);
+            
+            return $stmt->execute();
+        } else {
+            $query = "INSERT INTO surveys (user_id, title, description, access_pin, qr_code_token, status, settings, created_at) 
+                      VALUES (:user_id, :titre, :description, :access_pin, :qr_code_token, :status, :settings, NOW())";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':titre', $titre);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':access_pin', $access_pin);
+            $stmt->bindParam(':qr_code_token', $qr_code_token);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':settings', $settings); 
+            
+            return $stmt->execute();
+        }
     }
 
     /**

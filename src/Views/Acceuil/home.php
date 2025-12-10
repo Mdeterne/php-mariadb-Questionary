@@ -14,20 +14,10 @@
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="topbar__left">
-      <a href="" class="topbar__logo">
-        <span class="appicon" aria-hidden="true"></span>
-        <span class="apptitle">QUESTIONARY</span>
-      </a>
-      <a class="topbar__create-link" href="?c=tableauDeBord">Créer un questionnaire</a>
-    </div>
-
-    <div class="topbar__right" aria-label="Université de Limoges">
-      <span class="uni-badge" aria-hidden="true">uℓ</span>
-      <span class="uni-text">Université de Limoges</span>
-    </div>
-  </header>
+  <?php 
+  $showCreateLink = true;
+  require_once __DIR__ . '/../components/header.php'; 
+  ?>
 
   <main class="center">
     <div class="content-grid">

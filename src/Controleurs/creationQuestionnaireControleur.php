@@ -26,7 +26,14 @@ class creationQuestionnaireControleur
             }
             $access_pin = rand(100000, 999999);
         }
-        $modelQuestionnaire->saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token);
-        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
+        $questions = isset($_POST['questions']) ? json_decode($_POST['questions'], true) : [];
+        try {
+            $modelQuestionnaire->saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token, $questions);
+            // Redirection ou confirmation (ici on inclut la vue, le JS recevra le HTML 200 OK)
+            require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo "Erreur lors de la sauvegarde : " . $e->getMessage();
+        }
     }
 }

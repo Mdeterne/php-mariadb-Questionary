@@ -5,6 +5,10 @@ $_SESSION['user_id'] = 1; // Simuler un utilisateur connecté pour l'exemple
 $_SESSION['user_email'] = 'user@gmail.com';
 $_SESSION['user_name'] = 'Utilisateur Test';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 //require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Configues".DIRECTORY_SEPARATOR."configue_CAS.php";
 $questionaire = isset($_GET['q'])? $_GET['q'] : '0';
 
@@ -12,6 +16,7 @@ $questionaire = isset($_GET['q'])? $_GET['q'] : '0';
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."homeControleur.php";
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."tableauDeBordControlleur.php";
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."creationQuestionnaireControleur.php";
+require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."espaceAnalyseControleur.php";
 
 $controleur = isset($_GET['c'])? $_GET['c'] : 'home';
 $action = isset($_GET['a'])? $_GET['a'] : 'index';
@@ -37,7 +42,7 @@ switch ($controleur){
   switch ($action){
           
     case 'index':
-      var_dump($_SESSION);
+      // var_dump($_SESSION);
       $tableauDeBordControlleur->index();
     break;
           
@@ -70,10 +75,24 @@ switch ($controleur){
     break;
 
     case 'analyse':
-      $tableauDeBordControlleur->analyse();
+      // Redirection pour l'ancienne URL
+      header('Location: ?c=tableauDeBord');
+      exit;
     break;
 
+
+
   }
+  break;
+
+  case 'espaceAnalyse':
+    $espaceAnalyseControleur = new espaceAnalyseControleur();
+    switch ($action) {
+      case 'index':
+      default:
+        $espaceAnalyseControleur->index();
+      break;
+    }
   break;
 
   case 'createur':

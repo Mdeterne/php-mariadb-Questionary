@@ -47,22 +47,28 @@ const app = createApp({
             const formData = new FormData();
             formData.append('titre', this.formTitle);
             formData.append('description', this.formDescription);
-            
-            console.log('Saving form:', this.formTitle, this.formDescription);
+            formData.append('questions', JSON.stringify(this.questions));
+
+            console.log('Saving form:', this.formTitle, this.formDescription, this.questions);
 
             // Send to PHP backend
             fetch('?c=createur&a=save', {
                 method: 'POST',
                 body: formData,
             })
-                .then(response => response.text())
+                .then(async response => {
+                    if (!response.ok) {
+                        const errText = await response.text();
+                        throw new Error(errText || 'Erreur serveur');
+                    }
+                    return response.text();
+                })
                 .then(data => {
-                    alert('Questionnaire sauvegardé');
-                    console.log(data); // For debugging
+                    alert('Questionnaire sauvegardé avec succès !');
+                    window.location.href = '?c=tableauDeBord'; // Redirection réelle
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
-                    alert('Erreur lors de la sauvegarde');
+                    alert('Erreur lors de la sauvegarde : ' + error.message);
                 });
         },
         // Clone event for drag and drop

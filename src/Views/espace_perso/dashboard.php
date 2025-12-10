@@ -13,19 +13,7 @@
 
 <body>
 
-    <header class="topbar">
-        <div class="topbar__left">
-            <a href="?c=home&a=index" class="topbar__logo">
-                <span class="appicon" aria-hidden="true"></span>
-                <span class="apptitle">QUESTIONARY</span>
-            </a>
-        </div>
-
-        <div class="topbar__right" aria-label="Université de Limoges">
-            <span class="uni-badge" aria-hidden="true">uℓ</span>
-            <span class="uni-text">Université de Limoges</span>
-        </div>
-    </header>
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
 
     <div class="app-container">
 
@@ -34,7 +22,16 @@
                 Résultats
             </div>
             <nav class="sidebar-nav">
-                <p style="color: #aaa; font-size: 0.8rem; padding: 10px;">Aucun résultat récent.</p>
+                <?php if (empty($mesQuestionnaires)): ?>
+                    <p style="color: #aaa; font-size: 0.8rem; padding: 10px;">Aucun résultat récent.</p>
+                <?php else: ?>
+                    <?php foreach ($mesQuestionnaires as $q): ?>
+                        <a href="?c=espaceAnalyse&id=<?= htmlspecialchars($q['id']) ?>">
+                            <span class="sidebar-link-text"><?= htmlspecialchars($q['titre']) ?></span>
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </a>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </nav>
         </aside>
 

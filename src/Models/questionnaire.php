@@ -52,6 +52,23 @@ class questionnaire
     }
 
     /**
+     * Récupère les questionnaires d'un utilisateur.
+     * @param int $userId
+     * @return array
+     */
+    public function getSurveysByUserId($userId)
+    {
+        if ($this->conn === null) {
+            return [];
+        }
+        $query = "SELECT id, title as titre, description, access_pin, status, created_at FROM surveys WHERE user_id = :user_id ORDER BY created_at DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Liste toutes les questions et leurs options pour un questionnaire donné par son PIN.
      * @param string $pin Le code PIN du questionnaire.
      * @return array|false Les données complètes du questionnaire (y compris questions et options), ou false si non trouvé.

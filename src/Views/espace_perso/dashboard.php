@@ -134,6 +134,9 @@
         </main>
     </div>
 
+    <script>
+        window.serverQuestionnaires = <?php echo json_encode($mesQuestionnaires ?? []) ?: '[]'; ?>;
+    </script>
     <script type="module" src="js/dashboard-app.js"></script>
 
 </body>

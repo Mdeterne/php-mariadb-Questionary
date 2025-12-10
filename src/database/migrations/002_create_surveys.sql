@@ -1,5 +1,5 @@
 CREATE TABLE surveys (
-    id CHAR(36) PRIMARY KEY,
+    id int serial PRIMARY KEY,
     user_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,

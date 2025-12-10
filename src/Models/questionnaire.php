@@ -19,7 +19,7 @@ class questionnaire
         ]);//TODO a changer plus tard
         $status = 'closed';
 
-        $query = "INSERT INTO surveys (user_id, titre, description, access_pin, qr_code_token, status, settings) VALUES (:user_id, :titre, :description, :access_pin, :qr_code_token, :status, :settings)";
+        $query = "INSERT INTO surveys (user_id, title, description, access_pin, qr_code_token, status, settings, created_at) VALUES (:user_id, :titre, :description, :access_pin, :qr_code_token, :status, :settings, NOW())";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindParam(':titre', $titre);

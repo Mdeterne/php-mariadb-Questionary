@@ -1,6 +1,6 @@
 CREATE TABLE questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    survey_id CHAR(36) NOT NULL,
+    survey_id int NOT NULL,
     type ENUM('text', 'single_choice', 'multiple_choice') NOT NULL,
     label TEXT NOT NULL,
     order_index INT DEFAULT 0,

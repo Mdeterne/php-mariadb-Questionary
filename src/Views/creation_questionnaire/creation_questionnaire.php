@@ -45,8 +45,8 @@
 
             
             <div class="question-card form-title-card">
-                <input type="text" class="input-field title-input" placeholder="Titre du formulaire">
-                <input type="text" class="input-field desc-input" placeholder="Description du formulaire">
+                <input type="text" class="input-field title-input" v-model="formTitle" placeholder="Titre du formulaire">
+                <input type="text" class="input-field desc-input" v-model="formDescription" placeholder="Description du formulaire">
             </div>
             
 
@@ -123,9 +123,7 @@
         </main>
 
         <aside class="editor-actions">
-            <a href="?c=createur&a=save">
-                <button class="btn-action save">Sauvegarder</button>
-            </a>
+            <button class="btn-action save" @click="saveForm">Sauvegarder</button>
            <a href="index.php?c=tableauDeBord&a=parametres">
                 <button class="btn-action settings">Paramètres</button>
             </a>

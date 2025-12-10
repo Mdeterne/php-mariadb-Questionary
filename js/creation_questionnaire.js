@@ -8,6 +8,7 @@ const app = createApp({
     data() {
         return {
             formTitle: '',
+            formDescription: '',
             questions: [],
             toolItems: [
                 { type: 'Réponse courte', label: 'Réponse Courte', icon: 'fa-pen' },
@@ -43,27 +44,25 @@ const app = createApp({
             question.options.splice(index, 1);
         },
         saveForm() {
-            const formData = {
-                title: this.formTitle,
-                questions: this.questions
-            };
-            console.log('Saving form:', formData);
+            const formData = new FormData();
+            formData.append('titre', this.formTitle);
+            formData.append('description', this.formDescription);
+            
+            console.log('Saving form:', this.formTitle, this.formDescription);
 
             // Send to PHP backend
-            fetch('?c=questionnaire&a=save', { // Placeholder URL
+            fetch('?c=createur&a=save', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+                body: formData,
             })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => {
-                    alert('Questionnaire sauvegardé (Simulation)');
+                    alert('Questionnaire sauvegardé');
+                    console.log(data); // For debugging
                 })
                 .catch((error) => {
                     console.error('Error:', error);
-                    alert('Sauvegarde simulée');
+                    alert('Erreur lors de la sauvegarde');
                 });
         },
         // Clone event for drag and drop

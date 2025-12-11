@@ -1,24 +1,93 @@
 /* analyse specific */
+main {
+    padding: 0 4vw 40px;
+    /* Global padding: Top 0 (handled by margin), Side 4vw, Bottom 40px */
+    max-width: 1400px;
+    /* Prevent it from getting too wide on HUGE screens */
+    margin: 0 auto;
+}
+
 .top-controls {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
+    align-items: flex-end;
+    /* Align bottom of title with button */
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #edf2f7;
+    margin-top: 40px;
+    /* Added breathing room */
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.page-label {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #718096;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a202c;
+    letter-spacing: -0.03em;
+    margin: 0;
+    line-height: 1.2;
 }
 
 .buttons-group {
     display: flex;
-    gap: 15px;
+    align-items: center;
+}
+
+.btn-secondary {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary:hover {
+    background-color: #252525;
+    /* Darker on hover */
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .stats-box {
-    margin-top: 20px;
-    background-color: #e8e8e8;
-    padding: 15px 20px;
-    border-radius: 6px;
-    display: inline-block;
-    font-weight: 500;
-    min-width: 250px;
+    margin-bottom: 40px;
+    background-color: #fce8e8;
+    /* Light red tint */
+    color: #b52424;
+    /* Brand Red */
+    padding: 12px 20px;
+    border-radius: 50px;
+    /* Pill shape */
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+    min-width: auto;
+    /* Reset */
+    gap: 8px;
+    margin-top: 0;
 }
 
 /* --- Analysis Grid Layout --- */
@@ -31,44 +100,81 @@
 
 /* --- Individual Analysis Card Style --- */
 /* Make specific to avoid conflict with main .card */
+/* --- Individual Analysis Card Style --- */
 .cards-container .card {
-    background-color: #e6e6e6;
-    /* Specific grey background for analysis context */
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.10);
+    background-color: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Subtle border */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    border: none;
-    /* Reset main card border */
+    gap: 20px;
+}
+
+.cards-container .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
 
 .cards-container .input-group {
-    background: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-weight: bold;
-    font-size: 14px;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 5px;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a202c;
+    /* Darker, higher contrast text */
+    letter-spacing: -0.02em;
 }
 
 .response-box {
-    background: white;
+    background: #f8fafc;
+    /* Very light cool grey */
     padding: 15px;
     border-radius: 8px;
-    font-weight: bold;
     font-size: 14px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    color: #4a5568;
+    border: 1px solid #edf2f7;
 }
 
 .chart-container {
     background: white;
-    border-radius: 15px;
-    padding: 15px;
-    height: 250px;
+    /* border-radius: 15px; */
+    /* padding: 15px; */
+    height: 300px;
+    /* Taller charts */
     position: relative;
+    width: 100%;
 }
+
+/* List styles overhaul */
+.text-answers-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.text-answers-list li {
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    background-color: #f7fafc;
+    border-radius: 6px;
+    color: #2d3748;
+    font-size: 14px;
+    border-left: 3px solid #cbd5e0;
+}
+
+.text-answers-list li:nth-child(odd) {
+    background-color: #f8fafc;
+}
+
+/* content replaced above */
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -80,4 +186,30 @@
     .cards-container {
         grid-template-columns: 1fr;
     }
+}
+
+/* Split Grid for Long Text Analysis */
+.analysis-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Fix for Grid Blowout with Canvases */
+.analysis-split-grid>div {
+    min-width: 0;
+}
+
+.analysis-sub-title {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.chart-container-small {
+    height: 200px;
+    position: relative;
+    width: 100%;
 }

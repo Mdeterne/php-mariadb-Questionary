@@ -1,0 +1,250 @@
+/* ===== Input ===== */
+.input-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 7px;
+}
+
+.input-label {
+    position: absolute;
+    top: 8px;
+    left: 17px;
+    font-size: 12px;
+    color: var(--muted);
+    z-index: 1;
+    pointer-events: none;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    height: 52px;
+    /* Balanced padding for vertical centering */
+    padding: 0 16px;
+    line-height: 50px;
+    border: 1px solid #cfd3d7;
+    border-radius: 12px;
+    background: #eef0f1;
+    outline: none;
+    font-size: 16px;
+    color: var(--ink);
+    transition: border-color .2s, background .2s, box-shadow .2s;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    background: #fff;
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(181, 36, 36, 0.1);
+    text-align: left;
+}
+
+/* Fix vertical alignment for inputs without checking labels (placeholder only) */
+#pin,
+input.search-input {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 52px;
+    /* Centers text vertically */
+}
+
+.clear {
+    position: absolute;
+    right: 8px;
+    bottom: 11px;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #767b80;
+}
+
+.clear:hover {
+    background: #e0e2e7;
+}
+
+/* Editor Input Field */
+.input-field {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #111;
+    font-family: inherit;
+    outline: none;
+    background-color: #fff;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.input-field:focus {
+    background: #fff;
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(181, 36, 36, 0.1);
+    text-align: left;
+}
+
+.title-input {
+    font-size: 2rem;
+    font-weight: 800;
+    border: 1px solid transparent;
+    padding: 10px 16px;
+}
+
+.title-input:hover {
+    background: #f9fafb;
+}
+
+.title-input:focus {
+    background: #fff;
+    border-color: #e5e7eb;
+    border-bottom: 2px solid var(--red);
+    box-shadow: none;
+}
+
+.question-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: 1px solid #f3f4f6;
+    background: #f9f9f9;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.question-title:focus {
+    background: #fff;
+    border-color: var(--red);
+}
+
+.area-drop {
+    height: 120px;
+    resize: vertical;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #cfd3d7;
+    border-radius: 12px;
+    background-color: #eef0f1;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #111;
+    outline: none;
+    transition: all 0.2s;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.area-drop:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(181, 36, 36, 0.1);
+}
+
+/* --- Range Input / Jauge --- */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    margin: 10px 0;
+    background: transparent;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+/* Webkit Track */
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    background: #eef0f1;
+    border-radius: 6px;
+    border: 1px solid #cfd3d7;
+}
+
+/* Webkit Thumb */
+input[type="range"]::-webkit-slider-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--red);
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -7px;
+    /* (height - track_height) / 2 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 2px solid #fff;
+}
+
+/* Firefox Track */
+input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    background: #eef0f1;
+    border-radius: 6px;
+    border: 1px solid #cfd3d7;
+}
+
+/* Firefox Thumb */
+input[type="range"]::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--red);
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Switch Style */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: var(--red);
+}
+
+input:checked+.slider:before {
+    transform: translateX(24px);
+}

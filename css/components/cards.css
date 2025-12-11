@@ -1,0 +1,56 @@
+/* ===== Cards ===== */
+.card {
+    z-index: 2;
+    position: relative;
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.description h1 {
+    font-size: clamp(28px, 3.2vw, 40px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: var(--ink);
+}
+
+.description p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+    .description {
+        text-align: center;
+        order: -1;
+    }
+}
+
+@media (max-width: 520px) {
+    .card {
+        padding: 22px;
+    }
+}
+
+.card form {
+    width: 100%;
+}
+
+/* Card Box (Settings) */
+.card-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: white;
+    margin-bottom: 15px;
+}

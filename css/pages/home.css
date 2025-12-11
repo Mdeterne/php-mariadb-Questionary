@@ -103,44 +103,7 @@
     /* Add spacing from trash icon */
 }
 
-/* ===== Modale d'Importation (avec flou) ===== */
-.zone-depot {
-    width: 100%;
-    max-width: 900px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex-grow: 1;
-    min-height: 400px;
-    /* Make sure there is always a drop target */
-}
 
-.empty-placeholder {
-    border: 2px dashed #cfd3d7;
-    border-radius: 16px;
-    background-color: #f9f9f9;
-    color: var(--muted);
-    text-align: center;
-    padding: 80px 20px;
-    margin-top: 20px;
-    transition: all 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-}
-
-.empty-placeholder i {
-    font-size: 2.5rem;
-    color: #d1d5db;
-    margin-bottom: 10px;
-}
-
-.empty-placeholder:hover {
-    background-color: #f0f0f0;
-    border-color: var(--muted);
-}
 
 .modal-blur-overlay {
     position: fixed;

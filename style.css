@@ -10,6 +10,7 @@
 @import 'css/components/cards.css';
 @import 'css/components/sidebar.css';
 @import 'css/components/footer.css';
+@import 'css/components/modals.css';
 
 /* Page Specific Styles */
 @import 'css/pages/home.css';

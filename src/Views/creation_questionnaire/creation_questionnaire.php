@@ -135,6 +135,20 @@
 
         </aside>
 
+        <!-- SAVE SUCCESS MODAL -->
+        <div class="modal-blur-overlay" v-if="showSaveModal" @click.self="closeSaveModal">
+            <div class="modal-card">
+                <div>
+                    <h3 class="modal-title">Sauvegarde réussie !</h3>
+                    <p class="modal-desc">Votre questionnaire a été enregistré avec succès.</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-confirm" @click="closeSaveModal">OK</button>
+                </div>
+            </div>
+        </div>
+
     </div>
     <script>
         // Inject existing survey data if available
@@ -143,20 +157,6 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="https://unpkg.com/vuedraggable@4.1.0/dist/vuedraggable.umd.min.js"></script>
-
-    <!-- SAVE SUCCESS MODAL -->
-    <div class="modal-blur-overlay" v-if="showSaveModal" @click.self="closeSaveModal" style="display: flex;">
-        <div class="modal-card">
-            <div>
-                <h3 class="modal-title">Sauvegarde réussie !</h3>
-                <p class="modal-desc">Votre questionnaire a été enregistré avec succès.</p>
-            </div>
-
-            <div class="modal-actions">
-                <button class="btn-confirm" @click="closeSaveModal">OK</button>
-            </div>
-        </div>
-    </div>
 
     <!-- App Logic -->
     <script src="js/creation_questionnaire.js"></script>

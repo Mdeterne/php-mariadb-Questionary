@@ -1,0 +1,99 @@
+/* ===== Topbar ===== */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 64px;
+    padding: 0 clamp(16px, 4vw, 36px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--topbar-bg);
+    color: var(--topbar-ink);
+}
+
+.topbar__left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+.appicon {
+    font-size: 0;
+    color: transparent;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url('../../ressources/appicon.png');
+    /* Adjusted path */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    filter: brightness(0) invert(1);
+}
+
+.apptitle {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+
+a.topbar__logo,
+a.topbar__logo:hover {
+    text-decoration: none;
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topbar__create-link {
+    color: var(--topbar-ink);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.topbar__create-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.topbar__right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: inherit;
+    font-weight: 600;
+}
+
+.uni-badge {
+    font-size: 0;
+    color: transparent;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url('../../ressources/unicon.png');
+    /* Adjusted path */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    border-radius: 4px;
+}
+
+.uni-text {
+    font-size: 15px;
+}
+
+@media (max-width: 520px) {
+    .topbar__right .uni-text {
+        display: none;
+    }
+
+    .topbar__create-link {
+        display: none;
+    }
+}

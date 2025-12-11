@@ -4,11 +4,11 @@ class Database
 
 
     // Configuration MAMP STANDARD (Port 3306, root/root)
-    // Configuration AUTOMATIQUE (Socket detecte)
+    // Configuration Docker (via Port 3306 on Host)
     private $host = "127.0.0.1";
-    private $db_name = "questionary";
-    private $username = "root";
-    private $password = "root";
+    private $db_name = "questionary"; // Created by migrate.php
+    private $username = "mariadb";
+    private $password = "mariadb";
     private $conn;
 
     public function getConnection()

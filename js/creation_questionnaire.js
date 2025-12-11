@@ -18,7 +18,8 @@ const app = createApp({
                 { type: 'Choix multiples', label: 'Choix multiples', icon: 'fa-circle-dot' },
                 { type: 'Jauge', label: 'Jauge', icon: 'fa-sliders' }
             ],
-            activeQuestionIndex: null
+            activeQuestionIndex: null,
+            showSaveModal: false
         };
     },
     mounted() {
@@ -96,12 +97,17 @@ const app = createApp({
                     return response.text();
                 })
                 .then(data => {
-                    alert('Questionnaire sauvegardé avec succès !');
-                    window.location.href = '?c=tableauDeBord'; // Redirection réelle
+                    this.showSaveModal = true;
+                    // alert('Questionnaire sauvegardé avec succès !');
+                    // window.location.href = '?c=tableauDeBord'; // Redirection supprimée ici, faite après OK modal
                 })
                 .catch((error) => {
                     alert('Erreur lors de la sauvegarde : ' + error.message);
                 });
+        },
+        closeSaveModal() {
+            this.showSaveModal = false;
+            window.location.href = '?c=tableauDeBord';
         },
         // Clone event for drag and drop
         onClone(evt) {

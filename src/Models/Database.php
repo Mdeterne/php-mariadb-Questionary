@@ -4,6 +4,7 @@ class Database
 
 
     // Configuration MAMP STANDARD (Port 3306, root/root)
+    // Configuration AUTOMATIQUE (Socket detecte)
     private $host = "127.0.0.1";
     private $db_name = "questionary";
     private $username = "root";
@@ -19,7 +20,7 @@ class Database
 
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $exception) {
-             echo "Erreur de connexion BDD : " . $exception->getMessage();
+            echo "Erreur de connexion BDD : " . $exception->getMessage();
         }
         return $this->conn;
     }

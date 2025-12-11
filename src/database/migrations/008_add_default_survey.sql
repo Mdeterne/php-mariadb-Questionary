@@ -1,5 +1,7 @@
 -- Création d'un questionnaire par défaut avec des questions de test
 
+INSERT IGNORE INTO users (id, email, full_name) VALUES (1, 'demo@example.com', 'Utilisateur Démo');
+
 INSERT INTO surveys (id, user_id, title, description, access_pin, status, created_at) 
 VALUES (1, 1, 'Questionnaire Par Défaut', 'Un questionnaire de démonstration avec des questions de test', '123456', 'active', NOW());
 

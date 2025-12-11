@@ -91,8 +91,10 @@ class espaceAnalyseControleur
              if (in_array($question['type'], ['single_choice', 'multiple_choice'])) {
                  $question['stats'] = $reponseModel->getQuestionStats($question['id']);
              }
-             // For text answers?
-             if ($question['type'] === 'text' || $question['type'] === 'paragraph') {
+             elseif ($question['type'] === 'scale') {
+                 $question['stats'] = $reponseModel->getScaleStats($question['id']);
+             }
+             elseif (in_array($question['type'], ['text', 'paragraph', 'short_text', 'long_text'])) {
                   $question['text_answers'] = $reponseModel->getTextAnswers($question['id']);
              }
         }

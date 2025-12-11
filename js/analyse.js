@@ -15,8 +15,8 @@ questionsData.forEach(q => {
     let contentHTML = '';
 
     // Determine type : Choice (Chart) or Text (List)
-    const isChoice = ['single_choice', 'multiple_choice'].includes(q.type) || ['Cases à cocher', 'Choix multiples'].includes(q.type) || (q.options && q.options.length > 0);
-    const isText = ['text', 'paragraph'].includes(q.type) || ['Réponse courte', 'Paragraphe'].includes(q.type);
+    const isChoice = ['single_choice', 'multiple_choice', 'scale'].includes(q.type) || ['Cases à cocher', 'Choix multiples', 'Jauge'].includes(q.type) || (q.options && q.options.length > 0);
+    const isText = ['text', 'paragraph', 'short_text', 'long_text'].includes(q.type) || ['Réponse courte', 'Paragraphe'].includes(q.type);
 
     if (isChoice) {
         contentHTML = `

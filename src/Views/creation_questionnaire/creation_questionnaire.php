@@ -5,11 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Éditeur - Questionary</title>
-    
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/components/topbar.css">
+    <link rel="stylesheet" href="css/components/buttons.css">
+    <link rel="stylesheet" href="css/components/inputs.css">
+    <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/pages/editor.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -23,8 +28,9 @@
         <aside class="editor-toolbox">
             <div class="sidebar-header-box">Éléments</div>
             <!-- Draggable Source Group -->
-            <draggable class="toolbox-list sidebar-nav" :list="toolItems" :group="{ name: 'questions', pull: 'clone', put: false }"
-                :clone="cloneQuestion" :sort="false" item-key="type">
+            <draggable class="toolbox-list sidebar-nav" :list="toolItems"
+                :group="{ name: 'questions', pull: 'clone', put: false }" :clone="cloneQuestion" :sort="false"
+                item-key="type">
                 <template #item="{ element }">
                     <div class="tool-item" @click="addQuestion(element.type)">
                         <i :class="['fa-solid', element.icon]"></i> {{ element.label }}
@@ -35,12 +41,14 @@
 
         <main class="editor-workspace">
 
-            
+
             <div class="question-card form-title-card">
-                <input type="text" class="input-field title-input" v-model="formTitle" placeholder="Titre du formulaire">
-                <input type="text" class="input-field desc-input" v-model="formDescription" placeholder="Description du formulaire">
+                <input type="text" class="input-field title-input" v-model="formTitle"
+                    placeholder="Titre du formulaire">
+                <input type="text" class="input-field desc-input" v-model="formDescription"
+                    placeholder="Description du formulaire">
             </div>
-            
+
 
             <!-- Drop Zone / Canvas -->
             <draggable class="zone-depot" v-model="questions" group="questions" item-key="id" handle=".drag-handle"
@@ -116,7 +124,7 @@
 
         <aside class="editor-actions">
             <button class="btn-action save" @click="saveForm">Sauvegarder</button>
-           <a href="index.php?c=tableauDeBord&a=parametres">
+            <a href="index.php?c=tableauDeBord&a=parametres">
                 <button class="btn-action settings">Paramètres</button>
             </a>
             <a href="?c=tableauDeBord">

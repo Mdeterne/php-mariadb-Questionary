@@ -1,0 +1,205 @@
+/* --- SECTION CREATION (Les 2 grandes cartes) --- */
+.create-section {
+    display: flex;
+    gap: 40px;
+    /* Espace entre les cartes */
+    /* Espace entre les cartes */
+    margin-bottom: 50px;
+}
+
+.create-section a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-create {
+    width: 220px;
+    height: 300px;
+    background: #fff;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    /* Modern radius */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: box-shadow 0.3s, transform 0.2s;
+}
+
+.card-create:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* --- GRILLE QUESTIONNAIRES --- */
+.questionnaire-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    /* Utilisation de Grid si tu veux être strict 4 par ligne, sinon Flex wrap fonctionne aussi */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 colonnes exactes */
+}
+
+/* Responsive : Si l'écran est petit, on passe à moins de colonnes */
+@media (max-width: 1200px) {
+    .questionnaire-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.card-q {
+    border: 1px solid transparent;
+    border-radius: 16px;
+    /* Modern radius */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: 120px;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-q:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card-q-title {
+    font-weight: bold;
+    font-size: 0.95rem;
+    flex: 1;
+    /* Take all available space */
+    /* Enable wrapping */
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Limit to 2 lines max */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Truncate if too long */
+    margin-right: 15px;
+    /* Space between title and QR */
+    line-height: 1.4;
+    max-width: 20ch;
+    /* Trigger wrap roughly after 15-20 chars as requested */
+}
+
+.card-q-qr {
+    font-size: 2.5rem;
+    /* Taille du QR Code */
+    color: #252525;
+    flex-shrink: 0;
+    /* Prevent shrinking */
+    width: 40px;
+    /* Fixed width container */
+    display: flex;
+    justify-content: center;
+    margin-right: 15px;
+    /* Add spacing from trash icon */
+}
+
+/* ===== Modale d'Importation (avec flou) ===== */
+.zone-depot {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-grow: 1;
+    min-height: 400px;
+    /* Make sure there is always a drop target */
+}
+
+.empty-placeholder {
+    border: 2px dashed #cfd3d7;
+    border-radius: 16px;
+    background-color: #f9f9f9;
+    color: var(--muted);
+    text-align: center;
+    padding: 80px 20px;
+    margin-top: 20px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.empty-placeholder i {
+    font-size: 2.5rem;
+    color: #d1d5db;
+    margin-bottom: 10px;
+}
+
+.empty-placeholder:hover {
+    background-color: #f0f0f0;
+    border-color: var(--muted);
+}
+
+.modal-blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.import-card {
+    background-color: #fff;
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+.import-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #252525;
+}
+
+.import-desc {
+    color: #666;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.input-import {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #eef0f1;
+    border-radius: 12px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-import:focus {
+    border-color: #252525;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}

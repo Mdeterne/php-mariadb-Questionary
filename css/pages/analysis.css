@@ -1,0 +1,83 @@
+/* analyse specific */
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.buttons-group {
+    display: flex;
+    gap: 15px;
+}
+
+.stats-box {
+    margin-top: 20px;
+    background-color: #e8e8e8;
+    padding: 15px 20px;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: 500;
+    min-width: 250px;
+}
+
+/* --- Analysis Grid Layout --- */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 40px;
+    margin-top: 40px;
+}
+
+/* --- Individual Analysis Card Style --- */
+/* Make specific to avoid conflict with main .card */
+.cards-container .card {
+    background-color: #e6e6e6;
+    /* Specific grey background for analysis context */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.10);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: none;
+    /* Reset main card border */
+}
+
+.cards-container .input-group {
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.response-box {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chart-container {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    height: 250px;
+    position: relative;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .top-controls {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+}

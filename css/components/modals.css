@@ -1,0 +1,110 @@
+/* ===== MODAL SYSTEM (Generalized) ===== */
+
+.modal-blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-card {
+    background-color: #fff;
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #252525;
+}
+
+.modal-desc {
+    color: #666;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #eef0f1;
+    border-radius: 12px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.modal-input:focus {
+    border-color: #252525;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Specific buttons for modals if not covered by generic buttons */
+.btn-cancel {
+    background: transparent;
+    color: #666;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #f3f4f6;
+    color: #252525;
+}
+
+.btn-confirm {
+    background: #252525;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+.btn-confirm:hover {
+    opacity: 0.9;
+}
+
+.btn-confirm:active {
+    transform: scale(0.98);
+}
+
+.btn-danger {
+    background: var(--red, #dc3545);
+    color: #fff;
+}

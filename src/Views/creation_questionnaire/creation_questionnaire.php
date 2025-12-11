@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/components/buttons.css">
     <link rel="stylesheet" href="css/components/inputs.css">
     <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/components/sidebar.css">
     <link rel="stylesheet" href="css/pages/editor.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

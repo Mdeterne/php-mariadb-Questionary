@@ -25,16 +25,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 2. Gestion du bouton Supprimer ---
+    // --- 2. Gestion du bouton Supprimer (MODALE) ---
     const btnDelete = document.getElementById('btn-delete');
+    const modalDelete = document.getElementById('modal-delete');
+    const btnCancelDelete = document.getElementById('btn-cancel-delete');
+    const btnConfirmDelete = document.getElementById('btn-confirm-delete');
 
+    // Ouvrir la modale
     btnDelete.addEventListener('click', () => {
-        const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer ce questionnaire définitivement ?");
-        if (confirmDelete) {
-            alert("Le questionnaire a été supprimé.");
-            // Ici, on redirigerait normalement vers la page d'accueil
-            // window.location.href = "/accueil";
+        modalDelete.style.display = 'flex';
+    });
+
+    // Fermer la modale (Annuler)
+    btnCancelDelete.addEventListener('click', () => {
+        modalDelete.style.display = 'none';
+    });
+
+    // Fermer si clic en dehors
+    modalDelete.addEventListener('click', (e) => {
+        if (e.target === modalDelete) {
+            modalDelete.style.display = 'none';
         }
+    });
+
+    // Confirmer suppression
+    btnConfirmDelete.addEventListener('click', () => {
+        // Simulation suppression
+        console.log("Suppression confirmée via modale.");
+        modalDelete.style.display = 'none';
+
+        // Redirection simulée
+        // window.location.href = "/accueil";
+        // Pour la démo, on simule juste une alerte "Supprimé" ou redirection
+        alert("Questionnaire supprimé (Simulation).");
     });
 
     // --- 3. Gestion du bouton Enregistrer ---

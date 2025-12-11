@@ -24,7 +24,7 @@
 
     <?php require_once __DIR__ . '/../components/header.php'; ?>
 
-    <div id="app" class="editor-container">
+    <div id="app" class="editor-container" v-cloak>
 
         <aside class="editor-toolbox">
             <div class="sidebar-header-box">Éléments</div>
@@ -133,6 +133,20 @@
             </a>
 
         </aside>
+
+        <!-- SAVE SUCCESS MODAL -->
+        <div class="modal-blur-overlay" v-if="showSaveModal" @click.self="closeSaveModal">
+            <div class="modal-card">
+                <div>
+                    <h3 class="modal-title">Sauvegarde réussie !</h3>
+                    <p class="modal-desc">Votre questionnaire a été enregistré avec succès.</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-confirm" @click="closeSaveModal">OK</button>
+                </div>
+            </div>
+        </div>
 
     </div>
     <script>

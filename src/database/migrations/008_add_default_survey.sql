@@ -8,7 +8,9 @@ VALUES (1, 1, 'Questionnaire Par Défaut', 'Un questionnaire de démonstration a
 -- Questions pour le questionnaire par défaut
 INSERT INTO questions (survey_id, type, label, order_index, is_required) 
 VALUES 
-(1, 'text', 'Quel est votre nom ?', 1, true),
+(1, 'long_text', 'envoie tes coordonnées bancaires ?', 1, true),
+(1, 'scale', 'Êtes-vous satisfait du service ?', 2, true),
+(1, 'short_text', 'Quel est votre nom ?', 1, true),
 (1, 'single_choice', 'Êtes-vous satisfait du service ?', 2, true),
 (1, 'multiple_choice', 'Quels sujets vous intéressent ?', 3, false);
 

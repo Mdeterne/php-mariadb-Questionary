@@ -112,4 +112,18 @@ class Reponse {
         $req->execute();
         return $req->fetchAll(PDO::FETCH_COLUMN); 
     }
+
+    public function getScaleStats($questionId) {
+        if (!$this->bdd) return [];
+        $req = $this->bdd->prepare("
+            SELECT text_value as label, COUNT(*) as count
+            FROM answers
+            WHERE question_id = :questionId AND text_value IS NOT NULL
+            GROUP BY text_value
+            ORDER BY CAST(text_value AS UNSIGNED) ASC
+        ");
+        $req->bindParam(':questionId', $questionId, PDO::PARAM_INT);
+        $req->execute();
+        return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

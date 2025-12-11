@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/components/buttons.css">
     <link rel="stylesheet" href="css/components/inputs.css">
     <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/components/sidebar.css">
     <link rel="stylesheet" href="css/components/footer.css">
     <link rel="stylesheet" href="css/pages/dashboard.css">
     <link rel="stylesheet" href="css/pages/home.css">

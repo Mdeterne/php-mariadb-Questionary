@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paramètres du Questionnaire</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/components/topbar.css">
+    <link rel="stylesheet" href="css/components/buttons.css">
+    <link rel="stylesheet" href="css/components/inputs.css">
+    <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/pages/settings.css">
 </head>
+
 <body>
 
-       <?php require_once __DIR__ . '/../components/header.php'; ?>
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
 
     <main class="settings-main">
         <div class="page-title-row">
@@ -58,7 +65,7 @@
 
         <div class="section">
             <h3>Notifications</h3>
-            
+
             <div class="card-box toggle-row">
                 <label for="notif-response">Notification de réponse</label>
                 <label class="switch">
@@ -85,7 +92,8 @@
         </div>
 
         <div class="action-buttons">
-            <button class="btn btn-cancel" id="btn-cancel" onclick="window.history.back()">Annuler les modifications</button>
+            <button class="btn btn-cancel" id="btn-cancel" onclick="window.history.back()">Annuler les
+                modifications</button>
             <a href="index.php?c=createur&a=index&id=99">
                 <button class="btn btn-save" id="btn-save">Enregistrer les modifications</button>
             </a>
@@ -99,4 +107,5 @@
 
     <script src="js/parametre.js"></script>
 </body>
+
 </html>

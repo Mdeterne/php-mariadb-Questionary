@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/components/buttons.css">
     <link rel="stylesheet" href="css/components/inputs.css">
     <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/components/modals.css">
     <link rel="stylesheet" href="css/pages/settings.css">
 </head>
 
@@ -104,6 +105,21 @@
         </div>
 
     </main>
+
+    <!-- DELETE MODAL -->
+    <div class="modal-blur-overlay" id="modal-delete" style="display: none;">
+        <div class="modal-card">
+            <div>
+                <h3 class="modal-title">Supprimer ce questionnaire ?</h3>
+                <p class="modal-desc">Cette action est irréversible. Toutes les réponses associées seront perdues.</p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" id="btn-cancel-delete">Annuler</button>
+                <button class="btn-confirm btn-danger" id="btn-confirm-delete">Supprimer</button>
+            </div>
+        </div>
+    </div>
 
     <script src="js/parametre.js"></script>
 </body>

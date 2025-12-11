@@ -1,0 +1,179 @@
+/* --- LAYOUT ÉDITEUR --- */
+.editor-container {
+    display: flex;
+    height: calc(100vh - 60px);
+    /* Toute la hauteur moins le header */
+    background-color: #fff;
+}
+
+/* 1. BOÎTE À OUTILS (GAUCHE) */
+.editor-toolbox {
+    width: 260px;
+    background-color: #fff;
+    border-right: 1px solid var(--card-border);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    /* gap handled by children or removed */
+}
+
+/* Specific override for toolbox list to reduce gap */
+.toolbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    /* override sidebar-nav 10px */
+}
+
+.tool-item {
+    background-color: transparent;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: var(--ink);
+    font-size: 0.95rem;
+    cursor: grab;
+    /* Flat design, no shadow by default */
+    box-shadow: none;
+    border: 1px solid var(--card-border);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tool-item:hover {
+    background-color: #f3f4f6;
+    /* Subtle hover */
+    transform: translateX(2px);
+    color: var(--red);
+}
+
+.tool-item i {
+    color: var(--muted);
+    font-size: 1.1em;
+    transition: color 0.2s;
+}
+
+.tool-item:hover i {
+    color: var(--red);
+}
+
+.tool-item:active {
+    transform: scale(0.98);
+    cursor: grabbing;
+}
+
+/* 2. ESPACE DE TRAVAIL (CENTRE) */
+.editor-workspace {
+    flex: 1;
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+    padding-top: 60px;
+    padding-bottom: 100px;
+    gap: 12px;
+    overflow-y: auto;
+}
+
+.form-title-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-group,
+.question-card,
+.form-title-card {
+    width: 100%;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid transparent;
+    position: relative;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.question-card.active-card {
+    box-shadow: 0 8px 30px rgba(181, 36, 36, 0.08);
+    /* Red tint shadow */
+    border-left: 4px solid var(--red);
+    z-index: 5;
+}
+
+/* Header de la question */
+.question-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    color: var(--muted);
+    transition: opacity 0.2s;
+}
+
+.drag-handle {
+    cursor: grab;
+    padding: 8px;
+    font-size: 1.2rem;
+    color: var(--muted);
+    opacity: 0;
+    /* Hidden by default */
+    transition: opacity 0.2s;
+}
+
+.question-card:hover .drag-handle {
+    opacity: 1;
+    /* Show on hover */
+}
+
+.question-type-badge {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: var(--red);
+    background: rgba(181, 36, 36, 0.08);
+    /* Red wash */
+    padding: 4px 12px;
+    border-radius: 100px;
+    /* Pill shape */
+}
+
+/* --- Options (Cases à cocher / Choix multiples) --- */
+.option-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.option-row input {
+    text-align: left;
+}
+
+
+
+.option-row i {
+    color: #d1d5db;
+    font-size: 1.2rem;
+}
+
+/* 3. BOUTONS D'ACTION (DROITE) */
+.editor-actions {
+    width: 250px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-left: 1px solid var(--card-border);
+    gap: 12px;
+}
+
+.editor-actions a {
+    width: 100%;
+    text-decoration: none;
+}

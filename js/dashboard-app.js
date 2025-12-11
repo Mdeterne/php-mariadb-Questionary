@@ -11,7 +11,8 @@ createApp({
 
             // --- NOUVEAUX CHAMPS POUR L'IMPORTATION ---
             showImportModal: false, // Contrôle l'affichage de la modale floutée
-            lienImport: ''          // Stocke le texte du lien entré par l'utilisateur
+            lienImport: '',          // Stocke le texte du lien entré par l'utilisateur
+            questionnaireToDelete: null // ID du questionnaire à supprimer
         };
     },
 
@@ -53,22 +54,33 @@ createApp({
                 });
         },
 
-        async supprimer(id) {
-            if (!confirm("Êtes-vous sûr de vouloir supprimer ce questionnaire ?")) {
-                return;
-            }
-            console.log(`[Front-End] Demande de suppression id ${id}...`);
+        // Demande de suppression (ouvre la modale)
+        supprimer(id) {
+            this.questionnaireToDelete = id;
+        },
+
+        annulerSuppression() {
+            this.questionnaireToDelete = null;
+        },
+
+        async confirmerSuppression() {
+            const id = this.questionnaireToDelete;
+            if (!id) return;
+
+            console.log(`[Front-End] Validation suppression id ${id}...`);
 
             try {
                 const res = await fetch(`?c=tableauDeBord&a=supprimer&id=${id}`, {
-                    method: 'GET', // Should be POST ideally, but keeping GET for simple routing compat
+                    method: 'GET',
                     headers: { 'Accept': 'application/json' }
                 });
                 // Optimistic UI update
                 this.questionnaires = this.questionnaires.filter(q => q.id !== id);
-                console.log(`[Front-End] Questionnaire ${id} supprimé de l'affichage.`);
+                console.log(`[Front-End] Questionnaire ${id} supprimé.`);
             } catch (e) {
                 console.error("Erreur suppression", e);
+            } finally {
+                this.questionnaireToDelete = null;
             }
         },
 

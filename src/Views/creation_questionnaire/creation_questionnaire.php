@@ -25,7 +25,7 @@
 
     <?php require_once __DIR__ . '/../components/header.php'; ?>
 
-    <div id="app" class="editor-container">
+    <div id="app" class="editor-container" v-cloak>
 
         <aside class="editor-toolbox">
             <div class="sidebar-header-box">Éléments</div>

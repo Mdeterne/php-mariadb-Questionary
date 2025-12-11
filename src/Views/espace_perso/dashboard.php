@@ -44,7 +44,7 @@
             </nav>
         </aside>
 
-        <main class="main-content" id="app-dashboard">
+        <main class="main-content" id="app-dashboard" v-cloak>
 
             <div class="top-tools">
                 <div class="search-bar-container">
@@ -126,7 +126,8 @@
                 <div class="modal-card">
                     <div>
                         <h3 class="modal-title">Importer un questionnaire</h3>
-                        <p class="modal-desc">Collez le lien du questionnaire que vous souhaitez ajouter à votre espace.</p>
+                        <p class="modal-desc">Collez le lien du questionnaire que vous souhaitez ajouter à votre espace.
+                        </p>
                     </div>
 
                     <input type="text" class="modal-input" placeholder="https://questionary.app/..."
@@ -144,7 +145,8 @@
                 <div class="modal-card">
                     <div>
                         <h3 class="modal-title">Supprimer ce questionnaire ?</h3>
-                        <p class="modal-desc">Cette action est irréversible. Toutes les réponses associées seront perdues.</p>
+                        <p class="modal-desc">Cette action est irréversible. Toutes les réponses associées seront
+                            perdues.</p>
                     </div>
 
                     <div class="modal-actions">

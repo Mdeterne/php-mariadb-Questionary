@@ -36,7 +36,7 @@ class questionnaire
             $surveyId = $this->conn->lastInsertId();
 
             if (!empty($questions) && $surveyId) {
-                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required) VALUES (:survey_id, :type, :label, :order_index, :is_required)";
+                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required, scale_min_label, scale_max_label) VALUES (:survey_id, :type, :label, :order_index, :is_required, :scale_min_label, :scale_max_label)";
                 $stmtQ = $this->conn->prepare($sqlQ);
 
                 $sqlOpt = "INSERT INTO question_options (question_id, label, order_index) VALUES (:question_id, :label, :order_index)";
@@ -68,7 +68,9 @@ class questionnaire
                         ':type' => $dbType,
                         ':label' => $label,
                         ':order_index' => $index,
-                        ':is_required' => $isRequired
+                        ':is_required' => $isRequired,
+                        ':scale_min_label' => $q['scale_min_label'] ?? 'Pas du tout',
+                        ':scale_max_label' => $q['scale_max_label'] ?? 'Tout à fait'
                     ]);
 
                     $questionId = $this->conn->lastInsertId();
@@ -134,7 +136,7 @@ class questionnaire
 
             // 3. Re-insert questions (same logic as saveSurvey)
             if (!empty($questions)) {
-                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required) VALUES (:survey_id, :type, :label, :order_index, :is_required)";
+                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required, scale_min_label, scale_max_label) VALUES (:survey_id, :type, :label, :order_index, :is_required, :scale_min_label, :scale_max_label)";
                 $stmtQ = $this->conn->prepare($sqlQ);
 
                 $sqlOpt = "INSERT INTO question_options (question_id, label, order_index) VALUES (:question_id, :label, :order_index)";
@@ -165,7 +167,9 @@ class questionnaire
                         ':type' => $dbType,
                         ':label' => $label,
                         ':order_index' => $index,
-                        ':is_required' => $isRequired
+                        ':is_required' => $isRequired,
+                        ':scale_min_label' => $q['scale_min_label'] ?? 'Pas du tout',
+                        ':scale_max_label' => $q['scale_max_label'] ?? 'Tout à fait'
                     ]);
 
                     $questionId = $this->conn->lastInsertId();
@@ -237,7 +241,7 @@ class questionnaire
             return false;
         }
         $reqQuestions = $this->conn->prepare("
-            SELECT id, type, label, order_index, is_required 
+            SELECT id, type, label, order_index, is_required, scale_min_label, scale_max_label 
             FROM questions 
             WHERE survey_id = :surveyId 
             ORDER BY order_index ASC

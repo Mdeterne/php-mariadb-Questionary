@@ -22,6 +22,7 @@
 <body>
   <?php
   $showCreateLink = true;
+  $logoHref = '?c=home';
   require_once __DIR__ . '/../components/header.php';
   ?>
 

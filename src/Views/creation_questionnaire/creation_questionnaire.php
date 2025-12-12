@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/components/inputs.css">
     <link rel="stylesheet" href="css/components/cards.css">
     <link rel="stylesheet" href="css/components/sidebar.css">
+    <link rel="stylesheet" href="css/components/modals.css">
     <link rel="stylesheet" href="css/pages/editor.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -91,6 +92,10 @@
                             </div>
 
                             <div v-if="element.type === 'Jauge'" class="preview-input">
+                                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                    <input type="text" v-model="element.scale_min_label" placeholder="Label Min (ex: Pas du tout)" class="input-field" style="font-size: 0.9rem;">
+                                    <input type="text" v-model="element.scale_max_label" placeholder="Label Max (ex: Tout à fait)" class="input-field" style="font-size: 0.9rem;">
+                                </div>
                                 <div style="width: 100%;">
                                     <input type="range" min="1" max="5" value="3"
                                         style="width: 100%; margin-bottom: 8px; display: block;">
@@ -101,6 +106,10 @@
                                         <span>3</span>
                                         <span>4</span>
                                         <span>5</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
+                                        <span>{{ element.scale_min_label || 'Pas du tout' }}</span>
+                                        <span>{{ element.scale_max_label || 'Tout à fait' }}</span>
                                     </div>
                                 </div>
                             </div>

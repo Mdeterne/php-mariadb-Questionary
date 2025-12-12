@@ -64,23 +64,7 @@
             height: 20px;
         }
 
-        .submit-btn {
-            background-color: var(--primary);
-            color: white;
-            padding: 16px 32px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 20px;
-        }
-
-        .submit-btn:hover {
-            background-color: var(--primary-dark);
-        }
+        /* Submit button replaced by .btn .btn-primary */
 
         /* New Styles for Inputs */
         .text-input, .text-area {
@@ -96,45 +80,7 @@
             border-color: var(--primary);
             outline: none;
         }
-        .scale-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        .scale-options {
-            display: flex;
-            gap: 15px;
-        }
-        .scale-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            justify-content: center;
-            border: 2px solid #ddd;
-            transition: all 0.2s;
-        }
-        .scale-item.selected {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-            color: var(--primary);
-            font-weight: bold;
-        }
-        .scale-radio {
-            display: none;
-        }
-        .scale-labels {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
+        /* Scale styles removed (replaced by standard range input) */
         .option-checkbox {
             margin-right: 10px;
             accent-color: var(--primary);
@@ -157,7 +103,10 @@
 </head>
 
 <body>
-    <?php require_once __DIR__ . '/../components/header.php'; ?>
+    <?php 
+    $logoHref = 'javascript:void(0)';
+    require_once __DIR__ . '/../components/header.php'; 
+    ?>
 
     <div class="app-container" id="app-student">
         <main class="main-content qcm-container">
@@ -211,21 +160,25 @@
 
                             <!-- Scale -->
                             <div v-else-if="q.type === 'scale'" class="scale-container">
-                                <div class="scale-options">
-                                    <label v-for="n in 5" :key="n" class="scale-item" :class="{ selected: reponses[q.id] == n }">
-                                        <input type="radio" :name="'q_' + q.id" :value="n" v-model="reponses[q.id]" class="scale-radio">
-                                        <span>{{ n }}</span>
-                                    </label>
-                                </div>
-                                <div class="scale-labels">
-                                    <span>Pas du tout</span>
-                                    <span>Tout à fait</span>
+                                <div style="width: 100%; max-width: 90%; margin: 0 auto;">
+                                    <input type="range" min="1" max="5" step="1" v-model="reponses[q.id]" style="width: 100%; margin-bottom: 8px; display: block; accent-color: var(--primary);">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 500; color: #666; padding: 0 2px;">
+                                        <span>1</span>
+                                        <span>2</span>
+                                        <span>3</span>
+                                        <span>4</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
+                                        <span>{{ q.scale_min_label || 'Pas du tout' }}</span>
+                                        <span>{{ q.scale_max_label || 'Tout à fait' }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" class="btn btn-primary" style="margin-top: 30px;">
                         Envoyer mes réponses <i class="fa-solid fa-paper-plane" style="margin-left: 8px;"></i>
                     </button>
                 </form>

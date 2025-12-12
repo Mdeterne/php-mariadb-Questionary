@@ -34,6 +34,10 @@ switch ($controleur){
       case 'valider':
         $homeControleur->valider();
       break;
+
+      case 'saveReponse':
+        $homeControleur->saveReponse();
+      break;
     }
   break;
 
@@ -72,12 +76,6 @@ switch ($controleur){
 
     case 'utilisationCookie':
       $tableauDeBordControlleur->utilisationCookie();
-    break;
-
-    case 'analyse':
-      // Redirection pour l'ancienne URL
-      header('Location: ?c=tableauDeBord');
-      exit;
     break;
 
 

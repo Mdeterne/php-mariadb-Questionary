@@ -76,6 +76,11 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
+        .text-area {
+            resize: none;
+            overflow-y: hidden;
+            min-height: 100px;
+        }
         .text-input:focus, .text-area:focus {
             border-color: var(--primary);
             outline: none;
@@ -155,7 +160,7 @@
 
                             <!-- Long Text -->
                             <div v-else-if="q.type === 'long_text'">
-                                <textarea v-model="reponses[q.id]" class="text-area" rows="4" placeholder="Votre réponse..."></textarea>
+                                <textarea v-model="reponses[q.id]" @input="autoResize" class="text-area" rows="4" placeholder="Votre réponse..."></textarea>
                             </div>
 
                             <!-- Scale -->
@@ -227,6 +232,11 @@
                         console.error("Aucune donnée reçue de PHP");
                         this.loading = false;
                     }
+                },
+                autoResize(event) {
+                    const textarea = event.target;
+                    textarea.style.height = 'auto';
+                    textarea.style.height = textarea.scrollHeight + 'px';
                 },
                 async submitAnswers() {
                     if (confirm("Voulez-vous vraiment envoyer vos réponses ?")) {

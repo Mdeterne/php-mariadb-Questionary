@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/components/buttons.css">
     <link rel="stylesheet" href="css/components/inputs.css">
     <link rel="stylesheet" href="css/components/cards.css">
-    <link rel="stylesheet" href="css/pages/analysis.css">
+    <link rel="stylesheet" href="css/pages/analysis.css?v=<?php echo time(); ?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -22,17 +22,30 @@
 
     <main>
         <div class="top-controls">
-            <div>
-                <h2>Analyse du questionnaire : <?php echo htmlspecialchars($pageTitle ?? 'Titre inconnu'); ?></h2>
+            <div class="header-content">
+                <span class="page-label">Analyse des résultats</span>
+                <h1 class="page-title"><?php echo htmlspecialchars($pageTitle ?? 'Questionnaire sans titre'); ?></h1>
             </div>
             <div class="buttons-group">
-                <!-- <button class="btn">Générer le questionnaire avec les réponses les plus revenues</button> -->
-                <a href="?c=tableauDeBord" class="btn">Quitter</a>
+                <a href="?c=tableauDeBord" class="btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Retour au tableau de bord
+                </a>
             </div>
         </div>
 
         <div class="stats-box">
-            Nombre total de réponses : <strong><?php echo $responseCount ?? 0; ?></strong>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span><strong><?php echo $responseCount ?? 0; ?></strong> réponses collectées</span>
         </div>
 
         <div class="cards-container" id="cards-wrapper">
@@ -49,7 +62,7 @@
     <script>
         window.surveyData = <?php echo $questionsData ?? '[]'; ?>;
     </script>
-    <script src="js/analyse.js"></script>
+    <script src="js/analyse.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/components/buttons.css">
     <link rel="stylesheet" href="css/components/inputs.css">
     <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/components/modals.css">
     <link rel="stylesheet" href="css/pages/settings.css">
 </head>
 
@@ -19,10 +20,10 @@
 
     <?php require_once __DIR__ . '/../components/header.php'; ?>
 
-    <main class="settings-main">
+    <main class="settings-main" data-survey-id="<?php echo $survey['id']; ?>">
         <div class="page-title-row">
             <span class="page-title-label">Paramètres du Questionnaire :</span>
-            <span class="page-title-value">QUESTIONNAIRE 1</span>
+            <span class="page-title-value"><?php echo htmlspecialchars($survey['title']); ?></span>
         </div>
 
         <div class="section">
@@ -30,7 +31,7 @@
             <div class="card-box">
                 <label class="sub-label">Lien de partage</label>
                 <div class="input-group">
-                    <input type="text" id="share-link" value="https://questionary.unilim.fr/q/12345" readonly>
+                    <input type="text" id="share-link" value="<?php echo "http://" . $_SERVER['HTTP_HOST'] . "/?c=home&q=" . ($survey['access_pin'] ?? 'TEST01'); ?>" readonly>
                     <button class="btn-copy" id="btn-copy">Copier</button>
                 </div>
             </div>

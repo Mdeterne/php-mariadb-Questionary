@@ -47,4 +47,7 @@ class homeControleur {
             echo json_encode(['error' => 'Erreur lors de la sauvegarde']);
         }
     }
+    function merci(){
+        require_once(__DIR__ . '/../Views/confirmation/merci.php');
+    }
 }

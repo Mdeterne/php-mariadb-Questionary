@@ -73,6 +73,24 @@ class tableauDeBordControlleur
 
     function parametres()
     {
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header('Location: ?c=tableauDeBord');
+            exit;
+        }
+
+        require_once(__DIR__ . '/../Models/questionnaire.php');
+        $questionnaireModel = new questionnaire();
+        $survey = $questionnaireModel->getSurveyById($id);
+
+        if (!$survey) {
+            echo "Questionnaire introuvable.";
+            return;
+        }
+
+        // Add ID to survey array for view to use
+        // $survey contains id, title, description, status
+
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Parametres' . DIRECTORY_SEPARATOR . 'parametre.php';
     }
     function utilisationCookie()

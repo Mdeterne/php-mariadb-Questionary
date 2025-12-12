@@ -1,0 +1,94 @@
+/* Body layout */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color, #f8f9fa);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--text-color, #252525);
+}
+
+/* Header Adjustments */
+/* If topbar.css is loaded, we just ensure it stretches */
+.topbar {
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Card Styles */
+.card {
+    background: white;
+    padding: 60px 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    /* Center in remaining vertical space */
+    margin: auto;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.icon-box {
+    width: 80px;
+    height: 80px;
+    background-color: rgb(220, 252, 231);
+    color: rgb(22, 163, 74);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px auto;
+}
+
+.icon-box svg {
+    width: 40px;
+    height: 40px;
+    stroke-width: 3;
+}
+
+h1.page-title {
+    font-weight: 800;
+    margin: 0 0 15px 0;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+}
+
+p.message {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+.btn-home {
+    background-color: var(--text-color, #252525);
+    color: white;
+    text-decoration: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: inline-block;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-home:hover {
+    transform: translateY(-2px);
+    background-color: black;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

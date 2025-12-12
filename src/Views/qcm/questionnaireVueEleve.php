@@ -104,6 +104,81 @@
                 transform: translateY(0);
             }
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: var(--dark);
+        }
+
+        .modal-card p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-confirm {
+            background: #252525; /* Explicit Blue */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-confirm:hover {
+            background: #333;
+        }
     </style>
 </head>
 
@@ -190,6 +265,18 @@
             </div>
 
         </main>
+
+        <!-- Custom Confirmation Modal -->
+        <div v-if="showModal" class="modal-overlay">
+            <div class="modal-card">
+                <h3>Confirmer l'envoi</h3>
+                <p>Êtes-vous sûr de vouloir envoyer vos réponses ?<br>Cette action est définitive.</p>
+                <div class="modal-buttons">
+                    <button @click="showModal = false" class="btn-cancel">Annuler</button>
+                    <button @click="confirmSubmission" class="btn-confirm">Oui, envoyer</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Vue.js 3 -->
@@ -200,6 +287,7 @@
             data() {
                 return {
                     loading: true,
+                    showModal: false,
                     // Récupération des données PHP injectées ou mock
                     questionnaire: {
                         title: "Titre du questionnaire",
@@ -238,32 +326,37 @@
                     textarea.style.height = 'auto';
                     textarea.style.height = textarea.scrollHeight + 'px';
                 },
-                async submitAnswers() {
-                    if (confirm("Voulez-vous vraiment envoyer vos réponses ?")) {
-                        try {
-                            const response = await fetch('index.php?c=home&a=saveReponse', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    survey_id: this.questionnaire.id,
-                                    answers: this.reponses
-                                })
-                            });
+                submitAnswers() {
+                    this.showModal = true;
+                },
+                async confirmSubmission() {
+                    this.showModal = false;
+                    this.loading = true; // Show loading state
 
-                            const result = await response.json();
+                    try {
+                        const response = await fetch('index.php?c=home&a=saveReponse', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                survey_id: this.questionnaire.id,
+                                answers: this.reponses
+                            })
+                        });
 
-                            if (result.success) {
-                                alert("Merci ! Vos réponses ont été enregistrées.");
-                                window.location.href = "index.php";
-                            } else {
-                                alert("Erreur lors de l'enregistrement : " + (result.error || "Erreur inconnue"));
-                            }
-                        } catch (error) {
-                            console.error("Erreur réseau:", error);
-                            alert("Une erreur est survenue lors de l'envoi.");
+                        const result = await response.json();
+
+                        if (result.success) {
+                            window.location.href = "index.php?c=home&a=merci";
+                        } else {
+                            alert("Erreur lors de l'enregistrement : " + (result.error || "Erreur inconnue"));
+                            this.loading = false;
                         }
+                    } catch (error) {
+                        console.error("Erreur réseau:", error);
+                        alert("Une erreur est survenue lors de l'envoi.");
+                        this.loading = false;
                     }
                 }
             }

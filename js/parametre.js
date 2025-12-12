@@ -50,14 +50,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Confirmer suppression
     btnConfirmDelete.addEventListener('click', () => {
-        // Simulation suppression
-        console.log("Suppression confirmée via modale.");
-        modalDelete.style.display = 'none';
+        const surveyId = document.querySelector('.settings-main').dataset.surveyId;
+        console.log("Suppression du questionnaire ID:", surveyId);
 
-        // Redirection simulée
-        // window.location.href = "/accueil";
-        // Pour la démo, on simule juste une alerte "Supprimé" ou redirection
-        alert("Questionnaire supprimé (Simulation).");
+        // Appel AJAX au controlleur
+        fetch(`index.php?c=tableauDeBord&a=supprimer&id=${surveyId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Suppression réussie
+                    modalDelete.style.display = 'none';
+                    alert("Questionnaire supprimé avec succès.");
+                    window.location.href = "index.php?c=tableauDeBord";
+                } else {
+                    alert("Erreur lors de la suppression : " + (data.message || 'Erreur inconnue'));
+                }
+            })
+            .catch(err => {
+                console.error("Erreur réseau:", err);
+                alert("Une erreur est survenue.");
+            });
     });
 
     // --- 3. Gestion du bouton Enregistrer ---

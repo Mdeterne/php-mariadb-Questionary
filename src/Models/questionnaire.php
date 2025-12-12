@@ -241,7 +241,7 @@ class questionnaire
             return false;
         }
         $reqQuestions = $this->conn->prepare("
-            SELECT id, type, label, order_index, is_required, scale_min_label, scale_max_label 
+            SELECT id, type, label, order_index, is_required 
             FROM questions 
             WHERE survey_id = :surveyId 
             ORDER BY order_index ASC

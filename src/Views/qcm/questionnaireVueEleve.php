@@ -82,6 +82,66 @@
             background-color: var(--primary-dark);
         }
 
+        /* New Styles for Inputs */
+        .text-input, .text-area {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .text-input:focus, .text-area:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .scale-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .scale-options {
+            display: flex;
+            gap: 15px;
+        }
+        .scale-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+            border: 2px solid #ddd;
+            transition: all 0.2s;
+        }
+        .scale-item.selected {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .scale-radio {
+            display: none;
+        }
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        .option-checkbox {
+            margin-right: 10px;
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -109,7 +169,7 @@
 
             <div v-else>
                 <div class="header-qcm" style="margin-bottom: 30px;">
-                    <h1 style="font-size: 2rem; margin-bottom: 10px;">{{ questionnaire.titre }}</h1>
+                    <h1 style="font-size: 2rem; margin-bottom: 10px;">{{ questionnaire.title }}</h1>
                     <p style="color: var(--gray);">{{ questionnaire.description }}</p>
                 </div>
 
@@ -117,16 +177,51 @@
                     <div v-for="(q, index) in questionnaire.questions" :key="q.id" class="question-card">
                         <div class="question-title">
                             <span style="color: var(--primary); margin-right: 8px;">{{ index + 1 }}.</span>
-                            {{ q.texte }}
+                            {{ q.label }}
                         </div>
 
-                        <div class="options-list">
-                            <label v-for="opt in q.options" :key="opt.id" class="option-item"
-                                :class="{ selected: reponses[q.id] === opt.id }">
-                                <input type="radio" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]"
-                                    class="option-radio">
-                                <span>{{ opt.texte }}</span>
-                            </label>
+                        <div class="answer-area">
+                            <!-- Single Choice -->
+                            <div v-if="q.type === 'single_choice'" class="options-list">
+                                <label v-for="opt in q.options" :key="opt.id" class="option-item"
+                                    :class="{ selected: reponses[q.id] === opt.id }">
+                                    <input type="radio" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]" class="option-radio">
+                                    <span>{{ opt.label }}</span>
+                                </label>
+                            </div>
+
+                            <!-- Multiple Choice -->
+                            <div v-else-if="q.type === 'multiple_choice'" class="options-list">
+                                <label v-for="opt in q.options" :key="opt.id" class="option-item"
+                                    :class="{ selected: Array.isArray(reponses[q.id]) && reponses[q.id].includes(opt.id) }">
+                                    <input type="checkbox" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]" class="option-checkbox">
+                                    <span>{{ opt.label }}</span>
+                                </label>
+                            </div>
+
+                            <!-- Short Text -->
+                            <div v-else-if="q.type === 'short_text'">
+                                <input type="text" v-model="reponses[q.id]" class="text-input" placeholder="Votre réponse...">
+                            </div>
+
+                            <!-- Long Text -->
+                            <div v-else-if="q.type === 'long_text'">
+                                <textarea v-model="reponses[q.id]" class="text-area" rows="4" placeholder="Votre réponse..."></textarea>
+                            </div>
+
+                            <!-- Scale -->
+                            <div v-else-if="q.type === 'scale'" class="scale-container">
+                                <div class="scale-options">
+                                    <label v-for="n in 5" :key="n" class="scale-item" :class="{ selected: reponses[q.id] == n }">
+                                        <input type="radio" :name="'q_' + q.id" :value="n" v-model="reponses[q.id]" class="scale-radio">
+                                        <span>{{ n }}</span>
+                                    </label>
+                                </div>
+                                <div class="scale-labels">
+                                    <span>Pas du tout</span>
+                                    <span>Tout à fait</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -149,7 +244,7 @@
                     loading: true,
                     // Récupération des données PHP injectées ou mock
                     questionnaire: {
-                        titre: "Titre du questionnaire",
+                        title: "Titre du questionnaire",
                         description: "Description...",
                         questions: []
                     },
@@ -162,55 +257,51 @@
             },
             methods: {
                 loadData() {
-                    // Ici on récupèrerait les données passées par PHP via une variable globale
-                    // EXEMPLE : const dataFromPHP = <?php echo json_encode($questionQuestionnaire ?? null); ?>;
-
-                    // POUR LA DEMO FRONTEND : On utilise un Mock si PHP ne renvoie rien
-                    const mockData = {
-                        titre: "Culture Générale",
-                        description: "Testez vos connaissances avec ce quiz rapide !",
-                        questions: [
-                            {
-                                id: 101,
-                                texte: "Quelle est la capitale de la France ?",
-                                options: [
-                                    { id: 1, texte: "Lyon" },
-                                    { id: 2, texte: "Paris" },
-                                    { id: 3, texte: "Marseille" },
-                                    { id: 4, texte: "Bordeaux" }
-                                ]
-                            },
-                            {
-                                id: 102,
-                                texte: "Combien font 2 + 2 ?",
-                                options: [
-                                    { id: 5, texte: "3" },
-                                    { id: 6, texte: "4" },
-                                    { id: 7, texte: "5" }
-                                ]
-                            },
-                            {
-                                id: 103,
-                                texte: "Quel langage est utilisé pour le style web ?",
-                                options: [
-                                    { id: 8, texte: "HTML" },
-                                    { id: 9, texte: "Python" },
-                                    { id: 10, texte: "CSS" }
-                                ]
+                    const dataFromPHP = <?php echo json_encode($questionQuestionnaire ?? null); ?>;
+                    
+                    if (dataFromPHP) {
+                        this.questionnaire = dataFromPHP;
+                        // Initialize responses
+                        this.questionnaire.questions.forEach(q => {
+                            if (q.type === 'multiple_choice') {
+                                this.reponses[q.id] = [];
+                            } else {
+                                this.reponses[q.id] = null;
                             }
-                        ]
-                    };
-
-                    setTimeout(() => {
-                        // Si on avait de la vraie donnée PHP, on l'utiliserait ici
-                        this.questionnaire = mockData;
+                        });
                         this.loading = false;
-                    }, 500);
+                    } else {
+                        console.error("Aucune donnée reçue de PHP");
+                        this.loading = false;
+                    }
                 },
-                submitAnswers() {
-                    console.log("Réponses envoyées :", this.reponses);
-                    alert("Merci ! Vos réponses ont été enregistrées (Simulation).");
-                    window.location.href = "index.php";
+                async submitAnswers() {
+                    if (confirm("Voulez-vous vraiment envoyer vos réponses ?")) {
+                        try {
+                            const response = await fetch('index.php?c=home&a=saveReponse', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    survey_id: this.questionnaire.id,
+                                    answers: this.reponses
+                                })
+                            });
+
+                            const result = await response.json();
+
+                            if (result.success) {
+                                alert("Merci ! Vos réponses ont été enregistrées.");
+                                window.location.href = "index.php";
+                            } else {
+                                alert("Erreur lors de l'enregistrement : " + (result.error || "Erreur inconnue"));
+                            }
+                        } catch (error) {
+                            console.error("Erreur réseau:", error);
+                            alert("Une erreur est survenue lors de l'envoi.");
+                        }
+                    }
                 }
             }
         }).mount('#app-student');

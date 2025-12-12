@@ -70,7 +70,7 @@
                         </div>
                         <h3 class="modal-username">Nom d'utilisateur</h3>
 
-                        <a href="?c=connexion&a=deconnecter" class="modal-logout-btn">
+                        <a href="?c=home" class="modal-logout-btn">
                             Se déconnecter <i class="fa-solid fa-right-from-bracket"></i>
                         </a>
 

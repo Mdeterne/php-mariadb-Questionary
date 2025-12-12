@@ -128,6 +128,13 @@ const app = createApp({
         },
         setActive(index) {
             this.activeQuestionIndex = index;
+        },
+        goToSettings() {
+            if (this.surveyId) {
+                window.location.href = `index.php?c=tableauDeBord&a=parametres&id=${this.surveyId}`;
+            } else {
+                alert("Veuillez d'abord sauvegarder le questionnaire pour accéder aux paramètres.");
+            }
         }
     }
 });

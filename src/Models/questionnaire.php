@@ -45,16 +45,23 @@ class questionnaire
                 foreach ($questions as $index => $q) {
                     $type = $q['type'];
                     $label = $q['title'] ?? 'Question sans titre';
-                    if (trim($label) === '') $label = 'Question sans titre';
+                    if (trim($label) === '')
+                        $label = 'Question sans titre';
                     $isRequired = isset($q['required']) && $q['required'] ? 1 : 0;
 
                     // Mapping types
-                    $dbType = 'text';
-                    if ($type === 'Réponse courte') $dbType = 'short_text';
-                    elseif ($type === 'Paragraphe') $dbType = 'long_text';
-                    elseif ($type === 'Cases à cocher') $dbType = 'multiple_choice';
-                    elseif ($type === 'Choix multiples') $dbType = 'single_choice';
-                    elseif ($type === 'Jauge') $dbType = 'scale';
+                    $dbType = 'short_text';
+                    if ($type === 'Réponse courte')
+                        $dbType = 'short_text';
+                    elseif ($type === 'Paragraphe')
+                        $dbType = 'long_text';
+                    elseif ($type === 'Cases à cocher')
+                        $dbType = 'multiple_choice';
+                    elseif ($type === 'Choix multiples')
+                        $dbType = 'single_choice';
+                    elseif ($type === 'Jauge')
+                        $dbType = 'scale';
+
 
                     $stmtQ->execute([
                         ':survey_id' => $surveyId,
@@ -81,6 +88,7 @@ class questionnaire
             }
 
             $this->conn->commit();
+            return $surveyId;
         } catch (PDOException $e) {
             $this->conn->rollBack();
             throw $e; // Re-throw to be caught by controller
@@ -109,7 +117,7 @@ class questionnaire
             // 2. Delete existing questions (options cascade delete usually, or we delete them too)
             // Assuming ON DELETE CASCADE on question_options, otherwise delete options first.
             // Safest: Delete options first then questions
-            
+
             // Get question IDs for this survey to clear options
             $qIdsReq = $this->conn->prepare("SELECT id FROM questions WHERE survey_id = :survey_id");
             $qIdsReq->execute([':survey_id' => $id]);
@@ -125,7 +133,7 @@ class questionnaire
             $delQ->execute([':survey_id' => $id]);
 
             // 3. Re-insert questions (same logic as saveSurvey)
-             if (!empty($questions)) {
+            if (!empty($questions)) {
                 $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required) VALUES (:survey_id, :type, :label, :order_index, :is_required)";
                 $stmtQ = $this->conn->prepare($sqlQ);
 
@@ -135,16 +143,22 @@ class questionnaire
                 foreach ($questions as $index => $q) {
                     $type = $q['type'];
                     $label = $q['title'] ?? 'Question sans titre';
-                    if (trim($label) === '') $label = 'Question sans titre';
+                    if (trim($label) === '')
+                        $label = 'Question sans titre';
                     $isRequired = isset($q['required']) && $q['required'] ? 1 : 0;
 
                     // Mapping types
                     $dbType = 'text';
-                    if ($type === 'Réponse courte') $dbType = 'short_text';
-                    elseif ($type === 'Paragraphe') $dbType = 'long_text';
-                    elseif ($type === 'Cases à cocher') $dbType = 'multiple_choice';
-                    elseif ($type === 'Choix multiples') $dbType = 'single_choice';
-                    elseif ($type === 'Jauge') $dbType = 'scale';
+                    if ($type === 'Réponse courte')
+                        $dbType = 'short_text';
+                    elseif ($type === 'Paragraphe')
+                        $dbType = 'long_text';
+                    elseif ($type === 'Cases à cocher')
+                        $dbType = 'multiple_choice';
+                    elseif ($type === 'Choix multiples')
+                        $dbType = 'single_choice';
+                    elseif ($type === 'Jauge')
+                        $dbType = 'scale';
 
                     $stmtQ->execute([
                         ':survey_id' => $id,
@@ -177,11 +191,7 @@ class questionnaire
         }
     }
 
-    /**
-     * Vérifie si un code PIN existe et si le questionnaire est actif.
-     * @param string $pin Le code PIN à vérifier.
-     * @return array|false Les données de base du questionnaire si trouvé, false sinon.
-     */
+    /** Vérifie si un code PIN existe et si le questionnaire est actif. */
     function exists($pin)
     {
         if ($this->conn === null) {
@@ -197,11 +207,7 @@ class questionnaire
         return $req->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère les questionnaires d'un utilisateur.
-     * @param int $userId
-     * @return array
-     */
+    /** Récupère les questionnaires d'un utilisateur. */
     public function getSurveysByUserId($userId)
     {
         if ($this->conn === null) {
@@ -214,11 +220,7 @@ class questionnaire
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Liste toutes les questions et leurs options pour un questionnaire donné par son PIN.
-     * @param string $pin Le code PIN du questionnaire.
-     * @return array|false Les données complètes du questionnaire (y compris questions et options), ou false si non trouvé.
-     */
+    /** Liste toutes les questions et leurs options pour un questionnaire donné par son PIN. */
     function listerLesQuestions($pin)
     {
         // 1. Récupérer les informations de base du questionnaire (ID et statut)
@@ -258,11 +260,7 @@ class questionnaire
         return $survey;
     }
 
-    /**
-     * Fonction utilitaire pour récupérer les options d'une question.
-     * @param int $questionId L'ID de la question.
-     * @return array La liste des options.
-     */
+    /** Fonction utilitaire pour récupérer les options d'une question. */
     private function getOptionsByQuestionId($questionId)
     {
         if ($this->conn === null) {
@@ -279,10 +277,7 @@ class questionnaire
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Liste les 5 premiers questionnaires actifs ou les plus récents (pour la page d'accueil ou une liste publique).
-     * @return array La liste des questionnaires.
-     */
+    /** Liste les 5 premiers questionnaires actifs ou les plus récents (pour la page d'accueil ou une liste publique). */
     function listerLesQuestionnaires()
     {
         // Cette fonction n'est pas strictement requise par les maquettes, mais peut servir à l'administration.
@@ -299,12 +294,7 @@ class questionnaire
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Supprime un questionnaire appartenant à un utilisateur.
-     * @param string $id L'ID du questionnaire.
-     * @param int $userId L'ID de l'utilisateur (pour sécurité).
-     * @return bool True si supprimé, False sinon.
-     */
+    /** Supprime un questionnaire appartenant à un utilisateur. */
     public function deleteSurvey($id, $userId)
     {
         if ($this->conn === null) {
@@ -315,34 +305,28 @@ class questionnaire
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':user_id', $userId);
         $stmt->execute();
-        
+
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Récupère un questionnaire par son ID.
-     * @param string $id
-     * @return array|false
-     */
+    /** Récupère un questionnaire par son ID. */
     public function getSurveyById($id)
     {
-        if ($this->conn === null) return false;
+        if ($this->conn === null)
+            return false;
         $req = $this->conn->prepare("SELECT id, title, description, status FROM surveys WHERE id = :id");
         $req->bindParam(':id', $id);
         $req->execute();
         return $req->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère les données d'analyse (questions + options) par ID de questionnaire.
-     * @param string $surveyId
-     * @return array
-     */
+    /** Récupère les données d'analyse (questions + options) par ID de questionnaire. */
     public function getAnalysisData($surveyId)
     {
         // 1. Infos du questionnaire
         $survey = $this->getSurveyById($surveyId);
-        if (!$survey) return [];
+        if (!$survey)
+            return [];
 
         // 2. Questions
         $reqQuestions = $this->conn->prepare("
@@ -363,7 +347,7 @@ class questionnaire
                 $question['options'] = [];
             }
         }
-        
+
         $survey['questions'] = $questions;
         return $survey;
     }

@@ -43,8 +43,11 @@ const app = createApp({
                         id: Date.now() + Math.random(), // New temporary ID for vue loop
                         type: type,
                         title: q.label,
+                        title: q.label,
                         required: q.is_required == 1,
-                        options: q.options ? q.options.map(o => ({ label: o.label })) : []
+                        options: q.options ? q.options.map(o => ({ label: o.label })) : [],
+                        scale_min_label: q.scale_min_label || 'Pas du tout',
+                        scale_max_label: q.scale_max_label || 'Tout à fait'
                     };
                 });
             }
@@ -61,7 +64,9 @@ const app = createApp({
                 type: type,
                 title: '',
                 options: ['Cases à cocher', 'Choix multiples'].includes(type) ? [{ label: 'Option 1' }] : [],
-                required: false
+                required: false,
+                scale_min_label: type === 'Jauge' ? 'Pas du tout' : '',
+                scale_max_label: type === 'Jauge' ? 'Tout à fait' : ''
             };
         },
         removeQuestion(index) {

@@ -16,6 +16,10 @@
   --radius-xl: 18px;
 }
 
+[v-cloak] {
+  display: none;
+}
+
 * {
   box-sizing: border-box;
 }

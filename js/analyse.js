@@ -99,7 +99,7 @@ questionsData.forEach(q => {
         // Sentiment Only + List
         contentHTML = `
             <div class="chart-container" style="height:300px; margin-bottom:20px;">
-                <canvas id="chart-sentiment-${q.id}"></canvas>
+                <canvas id="chart-wordcloud-${q.id}" width="800" height="400"></canvas>
             </div>
             <details>
                 <summary style="cursor:pointer; color:#666; margin-bottom:10px;">Lire les réponses complètes</summary>
@@ -230,12 +230,15 @@ questionsData.forEach(q => {
         renderChart(shortCanvasId, labels, values, null, 'Occurrences');
     }
 
-    // C. Sentiment Only (Long Text)
-    const sentimentCanvasId = `chart-sentiment-${q.id}`;
+    // C. Word Cloud (Long Text)
+    const wordCloudCanvasId = `chart-wordcloud-${q.id}`;
+    const wordCloudCanvas = document.getElementById(wordCloudCanvasId);
 
-    if (q.text_answers && document.getElementById(sentimentCanvasId)) {
-        const sentiment = computeSentiment(q.text_answers);
-        renderPieChart(sentimentCanvasId, sentiment);
+    if (q.text_answers && wordCloudCanvas) {
+        const topWords = computeWordFrequency(q.text_answers);
+        const list = topWords.map(w => [w.label, w.count * 10]);
+
+        renderWordCloud(wordCloudCanvas, list);
     }
 });
 
@@ -293,67 +296,41 @@ function computeWordFrequency(answers) {
     return Object.entries(counts)
         .map(([label, count]) => ({ label, count }))
         .sort((a, b) => b.count - a.count)
-        .slice(0, 5); // Top 5
+    // Return Top 30 for Word Cloud (more interesting than Top 5)
+    return Object.entries(counts)
+        .map(([label, count]) => ({ label, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 30);
 }
 
 // ---------------------------------------------------------
-// Helper: Compute Sentiment Analysis
+// Helper: Render Word Cloud
 // ---------------------------------------------------------
-function computeSentiment(answers) {
-    const positiveWords = ['super', 'excellent', 'adoré', 'aime', 'aimé', 'bien', 'bon', 'top', 'génial', 'parfait', 'efficace', 'rapide', 'merci', 'bravo', 'satisfait', 'cool', 'meilleur', 'facile', 'rapide', 'pro'];
-    const negativeWords = ['déçu', 'nul', 'mauvais', 'horrible', 'lent', 'bug', 'problème', 'erreur', 'catastrophe', 'pire', 'jamais', 'bof', 'difficile', 'compliqué', 'cher', 'pas', 'peu'];
+function renderWordCloud(canvas, list) {
+    if (!list || list.length === 0) return;
 
-    let counts = { 'Positif': 0, 'Neutre': 0, 'Négatif': 0 };
+    // Ensure canvas size
+    canvas.width = canvas.parentElement.offsetWidth || 600;
+    canvas.height = 300;
 
-    answers.forEach(text => {
-        let score = 0;
-        const words = text.toLowerCase()
-            .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "")
-            .split(/\s+/);
-
-        words.forEach(w => {
-            if (positiveWords.includes(w)) score++;
-            if (negativeWords.includes(w)) score--;
-        });
-
-        if (score > 0) counts['Positif']++;
-        else if (score < 0) counts['Négatif']++;
-        else counts['Neutre']++;
-    });
-
-    return counts;
-}
-
-// ---------------------------------------------------------
-// Helper: Render Pie Chart
-// ---------------------------------------------------------
-function renderPieChart(canvasId, dataMap) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(dataMap),
-            datasets: [{
-                data: Object.values(dataMap),
-                backgroundColor: [
-                    '#48bb78', // Green (Positif)
-                    '#a0aec0', // Grey (Neutre)
-                    '#f56565'  // Red (Négatif)
-                ],
-                borderWidth: 0
-            }]
+    WordCloud(canvas, {
+        list: list,
+        gridSize: 8,
+        weightFactor: function (size) {
+            // Dynamic scaling based on the max size in the list
+            const max = list[0][1];
+            return (size / max) * 60; // Max font size 60px
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'right', labels: { font: { family: "'Inter', sans-serif" } } },
-                title: { display: true, text: 'Analyse de Sentiment (Bêta)', font: { size: 14 } }
-            },
-            layout: { padding: 20 }
-        }
+        fontFamily: "'Inter', sans-serif",
+        color: function (word, weight) {
+            // Random red-ish colors
+            const colors = [
+                '#b52424', '#c93434', '#d64d4d', '#8c1e1e', '#a32020',
+                '#555', '#666', '#777' // Some greys for contrast
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        },
+        rotateRatio: 0,
+        backgroundColor: '#ffffff'
     });
 }

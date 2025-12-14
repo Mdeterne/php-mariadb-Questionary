@@ -7,29 +7,29 @@ const app = createApp({
     },
     data() {
         return {
-            formTitle: '',
-            formDescription: '',
-            surveyId: null,
+            titreFormulaire: '',
+            descriptionFormulaire: '',
+            idQuestionnaire: null,
             questions: [],
-            toolItems: [
+            outils: [
                 { type: 'Réponse courte', label: 'Réponse Courte', icon: 'fa-pen' },
                 { type: 'Paragraphe', label: 'Paragraphe', icon: 'fa-align-left' },
                 { type: 'Cases à cocher', label: 'Cases à cocher', icon: 'fa-square-check' },
                 { type: 'Choix multiples', label: 'Choix multiples', icon: 'fa-circle-dot' },
                 { type: 'Jauge', label: 'Jauge', icon: 'fa-sliders' }
             ],
-            activeQuestionIndex: null,
-            showSaveModal: false
+            indexQuestionActive: null,
+            afficherModaleSauvegarde: false
         };
     },
     mounted() {
         if (window.existingSurvey) {
             const s = window.existingSurvey;
-            this.surveyId = s.id;
-            this.formTitle = s.title;
-            this.formDescription = s.description;
+            this.idQuestionnaire = s.id;
+            this.titreFormulaire = s.title;
+            this.descriptionFormulaire = s.description;
 
-            // Map backend questions to frontend
+            // Adaptation des questions pour le frontend
             if (s.questions && s.questions.length > 0) {
                 this.questions = s.questions.map(q => {
                     let type = 'Réponse courte';
@@ -40,9 +40,8 @@ const app = createApp({
                     else if (q.type === 'scale') type = 'Jauge';
 
                     return {
-                        id: Date.now() + Math.random(), // New temporary ID for vue loop
+                        id: Date.now() + Math.random(), // Id temporaire pour la boucle vue
                         type: type,
-                        title: q.label,
                         title: q.label,
                         required: q.is_required == 1,
                         options: q.options ? q.options.map(o => ({ label: o.label })) : [],
@@ -54,11 +53,11 @@ const app = createApp({
         }
     },
     methods: {
-        addQuestion(type) {
-            // Logic for manual add button if needed (though drag n drop is primary)
-            this.questions.push(this.createQuestionObject(type));
+        ajouterQuestion(type) {
+            // Logique pour le bouton d'ajout manuel
+            this.questions.push(this.creerObjetQuestion(type));
         },
-        createQuestionObject(type) {
+        creerObjetQuestion(type) {
             return {
                 id: Date.now() + Math.random(),
                 type: type,
@@ -69,69 +68,59 @@ const app = createApp({
                 scale_max_label: type === 'Jauge' ? 'Tout à fait' : ''
             };
         },
-        removeQuestion(index) {
+        supprimerQuestion(index) {
             this.questions.splice(index, 1);
         },
-        addOption(question) {
+        ajouterOption(question) {
             question.options.push({ label: `Option ${question.options.length + 1}` });
         },
-        removeOption(question, index) {
+        supprimerOption(question, index) {
             question.options.splice(index, 1);
         },
-        saveForm() {
-            const formData = new FormData();
-            if (this.surveyId) {
-                formData.append('id', this.surveyId);
+        sauvegarderFormulaire() {
+            const donneesFormulaire = new FormData();
+            if (this.idQuestionnaire) {
+                donneesFormulaire.append('id', this.idQuestionnaire);
             }
-            formData.append('titre', this.formTitle);
-            formData.append('description', this.formDescription);
-            formData.append('questions', JSON.stringify(this.questions));
+            donneesFormulaire.append('titre', this.titreFormulaire);
+            donneesFormulaire.append('description', this.descriptionFormulaire);
+            donneesFormulaire.append('questions', JSON.stringify(this.questions));
 
-            console.log('Saving form:', this.formTitle, this.formDescription, this.questions);
+            console.log('Sauvegarde du formulaire :', this.titreFormulaire, this.descriptionFormulaire, this.questions);
 
-            // Send to PHP backend
+            // Envoi au backend
             fetch('?c=createur&a=save', {
                 method: 'POST',
-                body: formData,
+                body: donneesFormulaire,
             })
-                .then(async response => {
-                    if (!response.ok) {
-                        const errText = await response.text();
-                        throw new Error(errText || 'Erreur serveur');
+                .then(async reponse => {
+                    if (!reponse.ok) {
+                        const texteErreur = await reponse.text();
+                        throw new Error(texteErreur || 'Erreur serveur');
                     }
-                    return response.text();
+                    return reponse.text();
                 })
-                .then(data => {
-                    this.showSaveModal = true;
-                    // alert('Questionnaire sauvegardé avec succès !');
-                    // window.location.href = '?c=tableauDeBord'; // Redirection supprimée ici, faite après OK modal
+                .then(donnees => {
+                    this.afficherModaleSauvegarde = true;
                 })
-                .catch((error) => {
-                    alert('Erreur lors de la sauvegarde : ' + error.message);
+                .catch((erreur) => {
+                    alert('Erreur lors de la sauvegarde : ' + erreur.message);
                 });
         },
-        closeSaveModal() {
-            this.showSaveModal = false;
+        fermerModaleSauvegarde() {
+            this.afficherModaleSauvegarde = false;
             window.location.href = '?c=tableauDeBord';
         },
-        // Clone event for drag and drop
-        onClone(evt) {
-            const origEl = evt.item;
-            // The clone operation is handled by VueDraggable's :group="{ pull: 'clone' }"
-            // But we need to ensure the data pushed to 'questions' is a new object, not a reference to toolItems
-            // VueDraggable handles this nicely usually, but lets verify if we need a custom clone function.
-            // Yes, usually :clone="cloneDog" prop is needed on the source draggable.
+        clonerQuestion(outil) {
+            // Fonction utiliser par draggable lors du clonage depuis la boîte à outils
+            return this.creerObjetQuestion(outil.type);
         },
-        cloneQuestion(toolItem) {
-            // This function is called by draggable when cloning from toolbox
-            return this.createQuestionObject(toolItem.type);
+        definirActif(index) {
+            this.indexQuestionActive = index;
         },
-        setActive(index) {
-            this.activeQuestionIndex = index;
-        },
-        goToSettings() {
-            if (this.surveyId) {
-                window.location.href = `index.php?c=tableauDeBord&a=parametres&id=${this.surveyId}`;
+        allerAuxParametres() {
+            if (this.idQuestionnaire) {
+                window.location.href = `index.php?c=tableauDeBord&a=parametres&id=${this.idQuestionnaire}`;
             } else {
                 alert("Veuillez d'abord sauvegarder le questionnaire pour accéder aux paramètres.");
             }

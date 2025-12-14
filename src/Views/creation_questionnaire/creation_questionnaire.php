@@ -30,11 +30,11 @@
         <aside class="editor-toolbox">
             <div class="sidebar-header-box">Éléments</div>
             <!-- Draggable Source Group -->
-            <draggable class="toolbox-list sidebar-nav" :list="toolItems"
-                :group="{ name: 'questions', pull: 'clone', put: false }" :clone="cloneQuestion" :sort="false"
+            <draggable class="toolbox-list sidebar-nav" :list="outils"
+                :group="{ name: 'questions', pull: 'clone', put: false }" :clone="clonerQuestion" :sort="false"
                 item-key="type">
                 <template #item="{ element }">
-                    <div class="tool-item" @click="addQuestion(element.type)">
+                    <div class="tool-item" @click="ajouterQuestion(element.type)">
                         <i :class="['fa-solid', element.icon]"></i> {{ element.label }}
                     </div>
                 </template>
@@ -45,25 +45,25 @@
 
 
             <div class="question-card form-title-card">
-                <input type="text" class="input-field title-input" v-model="formTitle"
+                <input type="text" class="input-field title-input" v-model="titreFormulaire"
                     placeholder="Titre du formulaire">
-                <input type="text" class="input-field desc-input" v-model="formDescription"
+                <input type="text" class="input-field desc-input" v-model="descriptionFormulaire"
                     placeholder="Description du formulaire">
             </div>
 
 
-            <!-- Drop Zone / Canvas -->
+            <!-- Zone de drop et canvas -->
             <draggable class="zone-depot" v-model="questions" group="questions" item-key="id" handle=".drag-handle"
                 ghost-class="ghost">
 
                 <template #item="{ element, index }">
-                    <div class="question-card" :class="{ 'active-card': activeQuestionIndex === index }"
-                        @click="setActive(index)">
+                    <div class="question-card" :class="{ 'active-card': indexQuestionActive === index }"
+                        @click="definirActif(index)">
 
                         <div class="question-header">
                             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
                             <div class="question-type-badge">{{ element.type }}</div>
-                            <button class="btn-icon delete" @click.stop="removeQuestion(index)"><i
+                            <button class="btn-icon delete" @click.stop="supprimerQuestion(index)"><i
                                     class="fa-solid fa-trash"></i></button>
                         </div>
 
@@ -71,7 +71,7 @@
                             <input type="text" class="input-field question-title" v-model="element.title"
                                 placeholder="Question sans titre">
 
-                            <!-- Dynamic Inputs based on type -->
+                            <!-- Texte dynamique basé sur le type de question -->
                             <div v-if="element.type === 'Réponse courte'" class="preview-input">
                                 <input disabled type="text" placeholder="Réponse courte">
                             </div>
@@ -85,16 +85,20 @@
                                     <i
                                         :class="element.type === 'Cases à cocher' ? 'fa-regular fa-square' : 'fa-regular fa-circle'"></i>
                                     <input type="text" v-model="opt.label" placeholder="Option">
-                                    <button @click="removeOption(element, optIndex)" class="btn-icon"><i
+                                    <button @click="supprimerOption(element, optIndex)" class="btn-icon"><i
                                             class="fa-solid fa-xmark"></i></button>
                                 </div>
-                                <button @click="addOption(element)" class="btn-text">+ Ajouter une option</button>
+                                <button @click="ajouterOption(element)" class="btn-text">+ Ajouter une option</button>
                             </div>
 
                             <div v-if="element.type === 'Jauge'" class="preview-input">
                                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                                    <input type="text" v-model="element.scale_min_label" placeholder="Label Min (ex: Pas du tout)" class="input-field" style="font-size: 0.9rem;">
-                                    <input type="text" v-model="element.scale_max_label" placeholder="Label Max (ex: Tout à fait)" class="input-field" style="font-size: 0.9rem;">
+                                    <input type="text" v-model="element.scale_min_label"
+                                        placeholder="Label Min (ex: Pas du tout)" class="input-field"
+                                        style="font-size: 0.9rem;">
+                                    <input type="text" v-model="element.scale_max_label"
+                                        placeholder="Label Max (ex: Tout à fait)" class="input-field"
+                                        style="font-size: 0.9rem;">
                                 </div>
                                 <div style="width: 100%;">
                                     <input type="range" min="1" max="5" value="3"
@@ -107,16 +111,16 @@
                                         <span>4</span>
                                         <span>5</span>
                                     </div>
-                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
+                                    <div
+                                        style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
                                         <span>{{ element.scale_min_label || 'Pas du tout' }}</span>
                                         <span>{{ element.scale_max_label || 'Tout à fait' }}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Actions Bar (Floating) for Active Card -->
-                            <div class="question-actions" v-if="activeQuestionIndex === index">
-                                <!-- Future actions like duplicate, required toggle etc -->
+                            <!-- Bar d'actions pour la question active -->
+                            <div class="question-actions" v-if="indexQuestionActive === index">
                             </div>
                         </div>
 
@@ -133,16 +137,16 @@
         </main>
 
         <aside class="editor-actions">
-            <button class="btn-action save" @click="saveForm">Sauvegarder</button>
-            <button class="btn-action settings" @click="goToSettings">Paramètres</button>
+            <button class="btn-action save" @click="sauvegarderFormulaire">Sauvegarder</button>
+            <button class="btn-action settings" @click="allerAuxParametres">Paramètres</button>
             <a href="?c=tableauDeBord">
                 <button class="btn-action quit">Quitter</button>
             </a>
 
         </aside>
 
-        <!-- SAVE SUCCESS MODAL -->
-        <div class="modal-blur-overlay" v-if="showSaveModal" @click.self="closeSaveModal">
+        <!-- Pop up de sauvegarde -->
+        <div class="modal-blur-overlay" v-if="afficherModaleSauvegarde" @click.self="fermerModaleSauvegarde">
             <div class="modal-card">
                 <div>
                     <h3 class="modal-title">Sauvegarde réussie !</h3>
@@ -150,21 +154,21 @@
                 </div>
 
                 <div class="modal-actions">
-                    <button class="btn-confirm" @click="closeSaveModal">OK</button>
+                    <button class="btn-confirm" @click="fermerModaleSauvegarde">OK</button>
                 </div>
             </div>
         </div>
 
     </div>
     <script>
-        // Inject existing survey data if available
+        // Ajout des données existantes si elles sont disponibles
         window.existingSurvey = <?php echo isset($existingSurvey) ? json_encode($existingSurvey) : 'null'; ?>;
     </script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="https://unpkg.com/vuedraggable@4.1.0/dist/vuedraggable.umd.min.js"></script>
 
-    <!-- App Logic -->
+    <!-- Logique de l'app -->
     <script src="js/creation_questionnaire.js"></script>
 
 </body>

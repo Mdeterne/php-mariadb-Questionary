@@ -1,171 +1,149 @@
-// Custom tooltip positioner - DISABLED to prevent crash with Chart.js v4+
-// if (Chart && Chart.Tooltip) {
-//    Chart.Tooltip.positioners.cursor = function (elements, eventPosition) {
-//        return {
-//            x: eventPosition.x,
-//            y: eventPosition.y
-//        };
-//    };
-// }
-
-
 // Configuration des données
-const questionsData = window.surveyData || [];
-const container = document.getElementById('cards-wrapper');
+const donneesQuestions = window.surveyData || [];
+const conteneur = document.getElementById('cards-wrapper');
 
-// ---------------------------------------------------------
-// Helper: Compute Frequency of exact strings (for Short Text)
-// ---------------------------------------------------------
-function computeFrequency(answers) {
-    const counts = {};
-    answers.forEach(a => {
-        const val = a.trim();
-        if (val) counts[val] = (counts[val] || 0) + 1;
+// Frequence de chaines pour texte court
+function calculerFrequence(reponses) {
+    const compteurs = {};
+    reponses.forEach(r => {
+        const val = r.trim();
+        if (val) compteurs[val] = (compteurs[val] || 0) + 1;
     });
-    // Convert to sorted array
-    return Object.entries(counts)
-        .map(([label, count]) => ({ label, count }))
-        .sort((a, b) => b.count - a.count)
+    // Convertir en tableau trié
+    return Object.entries(compteurs)
+        .map(([etiquette, compte]) => ({ etiquette, compte }))
+        .sort((a, b) => b.compte - a.compte)
         .slice(0, 5); // Top 5
 }
 
-// ---------------------------------------------------------
-// Helper: Compute Word Frequency (for Long Text)
-// ---------------------------------------------------------
-/* computeWordFrequency moved below */
+// Génération du HTML
+donneesQuestions.forEach(q => {
+    let contenuHTML = '';
 
-// ---------------------------------------------------------
-// 1. Génération du HTML
-// ---------------------------------------------------------
-questionsData.forEach(q => {
-    let contentHTML = '';
+    const estEchelle = q.type === 'scale' || q.type === 'Jauge';
+    const estChoix = !estEchelle && (['single_choice', 'multiple_choice'].includes(q.type) || ['Cases à cocher', 'Choix multiples'].includes(q.type) || (q.options && q.options.length > 0));
+    const estTexteCourt = ['short_text', 'Réponse courte'].includes(q.type);
+    const estTexteLong = ['paragraph', 'long_text', 'text', 'Paragraphe'].includes(q.type);
 
-    const isScale = q.type === 'scale' || q.type === 'Jauge';
-    const isChoice = !isScale && (['single_choice', 'multiple_choice'].includes(q.type) || ['Cases à cocher', 'Choix multiples'].includes(q.type) || (q.options && q.options.length > 0));
-    const isShortText = ['short_text', 'Réponse courte'].includes(q.type);
-    const isLongText = ['paragraph', 'long_text', 'text', 'Paragraphe'].includes(q.type);
-
-    if (isScale) {
-        // Calculate Average
-        let totalScore = 0;
-        let totalVotes = 0;
+    if (estEchelle) {
+        // Calcul de la moyenne
+        let scoreTotal = 0;
+        let votesTotaux = 0;
         if (q.stats) {
             q.stats.forEach(s => {
                 const val = parseInt(s.label);
                 if (!isNaN(val)) {
-                    totalScore += val * s.count;
-                    totalVotes += s.count;
+                    scoreTotal += val * s.count;
+                    votesTotaux += s.count;
                 }
             });
         }
 
-        let avgDisplay = "N/A";
-        if (totalVotes > 0) {
-            const rawAvg = totalScore / totalVotes;
-            // Round to nearest 0.5
-            const rounded = (Math.round(rawAvg * 2) / 2).toFixed(1).replace('.0', '');
-            avgDisplay = `${rounded} / 5`;
+        let affichageMoyenne = "N/A";
+        if (votesTotaux > 0) {
+            const moyenneBrute = scoreTotal / votesTotaux;
+            // Arrondir au 0.5 le plus proche
+            const arrondi = (Math.round(moyenneBrute * 2) / 2).toFixed(1).replace('.0', '');
+            affichageMoyenne = `${arrondi} / 5`;
         }
 
-        contentHTML = `
+        contenuHTML = `
             <div style="text-align:center; margin-bottom:20px;">
-                <span style="font-size:32px; font-weight:800; color:#b52424;">${avgDisplay}</span>
+                <span style="font-size:32px; font-weight:800; color:#b52424;">${affichageMoyenne}</span>
                 <div style="font-size:13px; color:#666; margin-top:5px; font-weight:500;">Note moyenne</div>
             </div>
             <div class="chart-container">
                 <canvas id="chart-${q.id}"></canvas>
             </div>`;
     }
-    else if (isChoice) {
-        contentHTML = `
+    else if (estChoix) {
+        // Graphique
+        contenuHTML = `
             <div class="chart-container">
                 <canvas id="chart-${q.id}"></canvas>
             </div>`;
     }
-    else if (isShortText) {
-        // Hybrid: Chart + List
-        contentHTML = `
+    else if (estTexteCourt) {
+        // Graphique + Liste
+        contenuHTML = `
             <div class="chart-container" style="height:200px; margin-bottom:15px;">
                 <canvas id="chart-text-${q.id}"></canvas>
             </div>
             <details>
                 <summary style="cursor:pointer; color:#666; margin-bottom:10px;">Voir toutes les réponses</summary>
                 <ul class="text-answers-list">
-                    ${(q.text_answers || []).map(ans => `<li>${ans}</li>`).join('')}
+                    ${(q.text_answers || []).map(rep => `<li>${rep}</li>`).join('')}
                 </ul>
             </details>`;
     }
-    else if (isLongText) {
-        // Sentiment Only + List
-        contentHTML = `
+    else if (estTexteLong) {
+        // Nuage de mots + Liste
+        contenuHTML = `
             <div class="chart-container" style="height:300px; margin-bottom:20px;">
                 <canvas id="chart-wordcloud-${q.id}" width="800" height="400"></canvas>
             </div>
             <details>
                 <summary style="cursor:pointer; color:#666; margin-bottom:10px;">Lire les réponses complètes</summary>
                 <ul class="text-answers-list">
-                    ${(q.text_answers || []).map(ans => `<li>${ans}</li>`).join('')}
+                    ${(q.text_answers || []).map(rep => `<li>${rep}</li>`).join('')}
                 </ul>
             </details>`;
     }
 
     else {
-        contentHTML = `<p class="no-answer">Type de question non pris en charge.</p>`;
+        contenuHTML = `<p class="no-answer">Type de question non pris en charge.</p>`;
     }
 
-    const cardHTML = `
+    const carteHTML = `
         <div class="card">
             <div class="input-group">${q.label}</div>
             <div class="response-box-container">
-                ${contentHTML}
+                ${contenuHTML}
             </div>
         </div>
         `;
-    container.innerHTML += cardHTML;
+    conteneur.innerHTML += carteHTML;
 });
 
 
-// ---------------------------------------------------------
-// 2. Initialisation des graphiques
-// ---------------------------------------------------------
-function renderChart(canvasId, labels, dataValues, colorBase, labelName) {
-    const canvas = document.getElementById(canvasId);
+// Initialisation des graphiques
+function afficherGraphique(idCanvas, etiquettes, valeursDonnees, couleurBase, nomEtiquette) {
+    const canvas = document.getElementById(idCanvas);
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    // Brand colors (Université de Limoges Red: #b52424)
-    // Monochromatic palette based on #b52424
-    const brandPalette = [
-        'rgba(181, 36, 36, 0.8)',   // Base Red
-        'rgba(181, 36, 36, 0.65)',  // Lighter
-        'rgba(181, 36, 36, 0.5)',   // Soft
-        'rgba(181, 36, 36, 0.35)',  // Very Soft
-        'rgba(181, 36, 36, 0.2)',   // Pale
-        'rgba(181, 36, 36, 0.9)',   // Base Red
+    // Couleurs Université
+    const paletteUniversite = [
+        'rgba(181, 36, 36, 0.8)',
+        'rgba(181, 36, 36, 0.65)',
+        'rgba(181, 36, 36, 0.5)',
+        'rgba(181, 36, 36, 0.35)',
+        'rgba(181, 36, 36, 0.2)',
+        'rgba(181, 36, 36, 0.9)',
         'rgba(181, 36, 36, 0.75)',
         'rgba(181, 36, 36, 0.6)',
         'rgba(181, 36, 36, 0.45)',
         'rgba(181, 36, 36, 0.3)',
-        'rgba(140, 30, 30, 0.9)'    // Darker accent
+        'rgba(140, 30, 30, 0.9)'
     ];
 
-    // If a specific color is passed, use it (as single array), else use palette loop
-    let backgroundColors;
-    if (colorBase) {
-        backgroundColors = colorBase;
+    // Si une couleur spécifique est passée, l'utiliser, sinon boucle sur la palette
+    let couleursArrierePlan;
+    if (couleurBase) {
+        couleursArrierePlan = couleurBase;
     } else {
-        backgroundColors = dataValues.map((_, i) => brandPalette[i % brandPalette.length]);
+        couleursArrierePlan = valeursDonnees.map((_, i) => paletteUniversite[i % paletteUniversite.length]);
     }
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels: etiquettes,
             datasets: [{
-                label: labelName,
-                backgroundColor: backgroundColors,
+                label: nomEtiquette,
+                backgroundColor: couleursArrierePlan,
                 borderRadius: 4,
-                data: dataValues,
+                data: valeursDonnees,
                 barThickness: 30,
                 maxBarThickness: 50
             }]
@@ -180,7 +158,7 @@ function renderChart(canvasId, labels, dataValues, colorBase, labelName) {
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    backgroundColor: '#252525', // Dark Grey from variables
+                    backgroundColor: '#252525',
                     padding: 12,
                     cornerRadius: 8,
                     titleFont: { family: "'Inter', sans-serif", size: 13 },
@@ -196,7 +174,7 @@ function renderChart(canvasId, labels, dataValues, colorBase, labelName) {
                 },
                 y: {
                     grid: { display: false },
-                    ticks: { font: { family: "'Inter', sans-serif", weight: '500' }, color: '#70757a' }, // Muted from variables
+                    ticks: { font: { family: "'Inter', sans-serif", weight: '500' }, color: '#70757a' }, // Atténué des variables
                     border: { display: false }
                 }
             }
@@ -204,131 +182,121 @@ function renderChart(canvasId, labels, dataValues, colorBase, labelName) {
     });
 }
 
-// ---------------------------------------------------------
-// 2. Initialisation des graphiques (Second pass after HTML is in DOM)
-// ---------------------------------------------------------
-questionsData.forEach(q => {
-    // A. Standard Choice Charts
+// Initialisation des graphiques (deuxieme étape) 
+donneesQuestions.forEach(q => {
+    // Graphiques de Choix Standard
     if (document.getElementById(`chart-${q.id}`)) {
-        let labels = [], values = [];
+        let etiquettes = [], valeurs = [];
         if (q.stats) {
-            // Sort by count descending and take Top 5 (user request)
-            const sortedStats = [...q.stats].sort((a, b) => b.count - a.count).slice(0, 5);
-            sortedStats.forEach(s => { labels.push(s.label); values.push(s.count); });
+            // Trier par nombre décroissant et prendre le Top 5
+            const statsTriees = [...q.stats].sort((a, b) => b.count - a.count).slice(0, 5);
+            statsTriees.forEach(s => { etiquettes.push(s.label); valeurs.push(s.count); });
         } else if (q.options) {
-            q.options.forEach(o => { labels.push(o.label); values.push(0); });
+            q.options.forEach(o => { etiquettes.push(o.label); valeurs.push(0); });
         }
-        renderChart(`chart-${q.id}`, labels, values, null, 'Réponses');
+        afficherGraphique(`chart-${q.id}`, etiquettes, valeurs, null, 'Réponses');
     }
 
-    // B. Short Text Frequency
-    const shortCanvasId = `chart-text-${q.id}`;
-    if (document.getElementById(shortCanvasId) && q.text_answers) {
-        const freq = computeFrequency(q.text_answers);
-        const labels = freq.map(f => f.label);
-        const values = freq.map(f => f.count);
-        renderChart(shortCanvasId, labels, values, null, 'Occurrences');
+    // Fréquence Texte Court
+    const idCanvasCourt = `chart-text-${q.id}`;
+    if (document.getElementById(idCanvasCourt) && q.text_answers) {
+        const freq = calculerFrequence(q.text_answers);
+        const etiquettes = freq.map(f => f.etiquette);
+        const valeurs = freq.map(f => f.compte);
+        afficherGraphique(idCanvasCourt, etiquettes, valeurs, null, 'Occurrences');
     }
 
-    // C. Word Cloud (Long Text)
-    const wordCloudCanvasId = `chart-wordcloud-${q.id}`;
-    const wordCloudCanvas = document.getElementById(wordCloudCanvasId);
+    // Nuage de Mots
+    const idCanvasNuage = `chart-wordcloud-${q.id}`;
+    const canvasNuage = document.getElementById(idCanvasNuage);
 
-    if (q.text_answers && wordCloudCanvas) {
-        const topWords = computeWordFrequency(q.text_answers);
-        const list = topWords.map(w => [w.label, w.count * 10]);
+    if (q.text_answers && canvasNuage) {
+        const topMots = calculerFrequenceMots(q.text_answers);
+        const liste = topMots.map(m => [m.etiquette, m.compte * 10]);
 
-        renderWordCloud(wordCloudCanvas, list);
+        afficherNuageMots(canvasNuage, liste);
     }
 });
 
-// ---------------------------------------------------------
-// Helper: Compute Word Frequency (for Long Text)
-// ---------------------------------------------------------
-function computeWordFrequency(answers) {
-    const stopWords = [
+// Calculer la fréquence des mots (texte long)
+function calculerFrequenceMots(reponses) {
+    const motsVides = [
         'le', 'la', 'les', 'de', 'du', 'des', 'un', 'une', 'et', 'à', 'en', 'ce', 'pour', 'que', 'qui',
         'dans', 'sur', 'par', 'a', 'plus', 'est', 'sont', 'c\'est', 'j\'ai', 'je', 'mon',
         'ma', 'mes', 'au', 'aux', 'ne', 'se', 'ce', 'ces', 'son', 'sa', 'ses', 'vos', 'votre', 'nous',
         'vous', 'il', 'elle', 'ils', 'elles', 'on', 'mais', 'ou', 'où', 'donc', 'or', 'ni', 'car',
         'tout', 'tous', 'toute', 'toutes', 'cela', 'ça', 'comme',
         'si', 'y', 'sans', 'sous', 'vers', 'avec', 'rien', 'aucun', 'aucune',
-        // Helpers re-added to stopWords so they don't appear alone, 
-        // but they act as connectors in the logic below
         'très', 'trop', 'peu', 'pas', 'assez', 'bien', 'mal'
     ];
 
-    // Words that trigger a "combo" lookahead
-    const intensifiers = ['très', 'trop', 'peu', 'pas', 'assez', 'super', 'hyper', 'vraiment', 'bien', 'mal'];
+    // Mots pour intensifier
+    const intensificateurs = ['très', 'trop', 'peu', 'pas', 'assez', 'super', 'hyper', 'vraiment', 'bien', 'mal'];
 
-    const counts = {};
+    const compteurs = {};
 
-    answers.forEach(text => {
-        // Clean and tokenize
-        const words = text.toLowerCase()
+    reponses.forEach(texte => {
+        // Nettoyer et tokeniser
+        const mots = texte.toLowerCase()
             .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "")
             .split(/\s+/)
-            .filter(w => w.length > 0);
+            .filter(m => m.length > 0);
 
-        for (let i = 0; i < words.length; i++) {
-            const w = words[i];
+        for (let i = 0; i < mots.length; i++) {
+            const m = mots[i];
 
-            // Check for Bigram (Intensifier + NextWord)
-            // e.g. "très" + "bien" -> "très bien"
-            if (intensifiers.includes(w) && i + 1 < words.length) {
-                const nextW = words[i + 1];
-                // Ensure next word is significant (longer than 2 chars)
-                if (nextW.length > 2) {
-                    const bigram = `${w} ${nextW}`;
-                    counts[bigram] = (counts[bigram] || 0) + 1;
-                    i++; // Skip next word as it's consumed in the bigram
+            // Vérifier Intensificateur + MotSuivant
+            if (intensificateurs.includes(m) && i + 1 < mots.length) {
+                const motSuivant = mots[i + 1];
+                if (motSuivant.length > 2) {
+                    const bigramme = `${m} ${motSuivant}`;
+                    compteurs[bigramme] = (compteurs[bigramme] || 0) + 1;
+                    i++;
                     continue;
                 }
             }
 
-            // Regular Single Word handling
-            if (w.length > 2 && !stopWords.includes(w)) {
-                counts[w] = (counts[w] || 0) + 1;
+            // Gestion mot classique
+            if (m.length > 2 && !motsVides.includes(m)) {
+                compteurs[m] = (compteurs[m] || 0) + 1;
             }
         }
     });
 
-    return Object.entries(counts)
-        .map(([label, count]) => ({ label, count }))
-        .sort((a, b) => b.count - a.count)
-    // Return Top 30 for Word Cloud (more interesting than Top 5)
-    return Object.entries(counts)
-        .map(([label, count]) => ({ label, count }))
-        .sort((a, b) => b.count - a.count)
+    return Object.entries(compteurs)
+        .map(([etiquette, compte]) => ({ etiquette, compte }))
+        .sort((a, b) => b.compte - a.compte)
+    // On prend le top 30 pour le nuage de mots
+    return Object.entries(compteurs)
+        .map(([etiquette, compte]) => ({ etiquette, compte }))
+        .sort((a, b) => b.compte - a.compte)
         .slice(0, 30);
 }
 
-// ---------------------------------------------------------
-// Helper: Render Word Cloud
-// ---------------------------------------------------------
-function renderWordCloud(canvas, list) {
-    if (!list || list.length === 0) return;
+// Afficher le Nuage de Mots
+function afficherNuageMots(canvas, liste) {
+    if (!liste || liste.length === 0) return;
 
-    // Ensure canvas size
+    // Taille du canvas
     canvas.width = canvas.parentElement.offsetWidth || 600;
     canvas.height = 300;
 
     WordCloud(canvas, {
-        list: list,
+        list: liste,
         gridSize: 8,
-        weightFactor: function (size) {
-            // Dynamic scaling based on the max size in the list
-            const max = list[0][1];
-            return (size / max) * 60; // Max font size 60px
+        weightFactor: function (taille) {
+            // Mise à l'échelle basée sur la taille de la liste
+            const max = liste[0][1];
+            return (taille / max) * 60;
         },
         fontFamily: "'Inter', sans-serif",
-        color: function (word, weight) {
-            // Random red-ish colors
-            const colors = [
+        color: function (mot, poids) {
+            // Couleurs aléatoires dans les tons de l'app
+            const couleurs = [
                 '#b52424', '#c93434', '#d64d4d', '#8c1e1e', '#a32020',
-                '#555', '#666', '#777' // Some greys for contrast
+                '#555', '#666', '#777'
             ];
-            return colors[Math.floor(Math.random() * colors.length)];
+            return couleurs[Math.floor(Math.random() * couleurs.length)];
         },
         rotateRatio: 0,
         backgroundColor: '#ffffff'

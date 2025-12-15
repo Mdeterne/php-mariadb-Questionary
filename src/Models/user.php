@@ -29,13 +29,14 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    function createUserIfNotExists($email, $name) {
+    function createUserIfNotExists($id,$email, $name) {
         $existingUser = $this->findbyEmail($email);
         if ($existingUser) {
             return $existingUser['id'];
         } else {
-            $query = "INSERT INTO users (email, full_name) VALUES (:email, :full_name)";
+            $query = "INSERT INTO users (id,email, full_name) VALUES (:id, :email, :full_name)";
             $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $id);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':full_name', $name);
             $stmt->execute();

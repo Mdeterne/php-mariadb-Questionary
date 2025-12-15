@@ -1,15 +1,16 @@
 <?php
 
 session_start();
-$_SESSION['user_id'] = 1; // Simuler un utilisateur connecté pour l'exemple
-$_SESSION['user_email'] = 'user@gmail.com';
-$_SESSION['user_name'] = 'Utilisateur Test';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-//require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Configues".DIRECTORY_SEPARATOR."configue_CAS.php";
+require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Configues".DIRECTORY_SEPARATOR."configue_CAS.php";
+$_SESSION['mail'] = $infoSESION['mail'];
+$_SESSION['name'] = $infoSESION['cn'];
+$_SESSION['id'] = $infoSESION['uid'];
+
 $questionaire = isset($_GET['q'])? $_GET['q'] : '0';
 
 // Controllers

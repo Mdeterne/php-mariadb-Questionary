@@ -115,8 +115,6 @@
                             </div>
                         </div>
                     </a>
-                    <i @click="supprimer(q.id)" class="fa-solid fa-trash"
-                        style="cursor:pointer; color: var(--red); position: absolute; right: 25px; top: 50%; transform: translateY(-50%); z-index: 10;"></i>
                 </div>
 
             </section>

@@ -70,9 +70,9 @@
                         </div>
                         <h3 class="modal-username"><?php echo $_SESSION['name'] ?? 'Utilisateur'; ?></h3>
 
-                        <a href="?c=home" class="modal-logout-btn">
+                        <!--<a href="?c=home" class="modal-logout-btn">
                             Se déconnecter <i class="fa-solid fa-right-from-bracket"></i>
-                        </a>
+                        </a>-->
 
                         <div class="modal-footer">
                             <a href="?c=tableauDeBord&a=conditionGenerales">Conditions générales</a> | <a

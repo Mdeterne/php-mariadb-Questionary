@@ -29,7 +29,9 @@
   <main class="center">
     <div class="content-grid">
       <section class="card" role="region" aria-label="Accéder à un questionnaire">
-        <form method="POST" action="?c=home&a=valider">
+        <form method="GET" action="index.php">
+          <input type="hidden" name="c" value="home">
+          <input type="hidden" name="a" value="valider">
           <div class="input-wrap">
             <label for="pin" class="input-label"></label>
 

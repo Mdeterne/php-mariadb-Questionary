@@ -3,9 +3,7 @@
 require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Models'.DIRECTORY_SEPARATOR.'questionnaire.php';
 require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Models'.DIRECTORY_SEPARATOR.'user.php';
 class homeControleur {
-    function valider(){
-
-        $pin = $_POST['pin'];
+    function valider($pin){
 
         $modelQuestionnaire = new questionnaire();
         if($modelQuestionnaire->exists($pin)){

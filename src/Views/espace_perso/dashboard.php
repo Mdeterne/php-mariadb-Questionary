@@ -68,7 +68,7 @@
                         <div class="modal-avatar">
                             <i class="fa-solid fa-user"></i>
                         </div>
-                        <h3 class="modal-username">Nom d'utilisateur</h3>
+                        <h3 class="modal-username"><?php echo $_SESSION['name'] ?? 'Utilisateur'; ?></h3>
 
                         <a href="?c=home" class="modal-logout-btn">
                             Se déconnecter <i class="fa-solid fa-right-from-bracket"></i>

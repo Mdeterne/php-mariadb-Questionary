@@ -97,6 +97,17 @@ class questionnaire
         }
     }
 
+    public function updateSurveySettings($id, $user_id, $status, $settings)
+    {
+        $query = "UPDATE surveys SET status = :status, settings = :settings WHERE id = :id AND user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':settings', $settings);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':user_id', $user_id);
+        return $stmt->execute();
+    }
+
     public function updateSurvey($id, $user_id, $titre, $description, $questions = [])
     {
         $settings = json_encode([
@@ -318,7 +329,7 @@ class questionnaire
     {
         if ($this->conn === null)
             return false;
-        $req = $this->conn->prepare("SELECT id, title, description, status FROM surveys WHERE id = :id");
+        $req = $this->conn->prepare("SELECT id, title, description, status, settings FROM surveys WHERE id = :id");
         $req->bindParam(':id', $id);
         $req->execute();
         return $req->fetch(PDO::FETCH_ASSOC);

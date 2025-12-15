@@ -8,7 +8,7 @@ class tableauDeBordControlleur
         require_once(__DIR__ . '/../Models/questionnaire.php');
         $questionnaireModel = new questionnaire();
         // On suppose que l'ID utilisateur est en session
-        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1;
+        $userId = isset($_SESSION['id']) ? $_SESSION['id'] : 1;
         $mesQuestionnaires = $questionnaireModel->getSurveysByUserId($userId);
 
         require_once(__DIR__ . '/../Views/espace_perso/dashboard.php');
@@ -18,7 +18,7 @@ class tableauDeBordControlleur
     {
         require_once(__DIR__ . '/../Models/questionnaire.php');
         $questionnaireModel = new questionnaire();
-        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+        $userId = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
         $mesQuestionnaires = $questionnaireModel->getSurveysByUserId($userId);
 
         header('Content-Type: application/json');
@@ -43,7 +43,7 @@ class tableauDeBordControlleur
         header('Content-Type: application/json');
         
         $id = isset($_GET['id']) ? $_GET['id'] : null;
-        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+        $userId = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
 
         if (!$id || !$userId) {
              echo json_encode(['status' => 'error', 'message' => 'ID manquant ou utilisateur non connecté']);
@@ -73,26 +73,59 @@ class tableauDeBordControlleur
 
     function parametres()
     {
-        $id = $_GET['id'] ?? null;
-        if (!$id) {
+        if (!isset($_GET['id'])) {
             header('Location: ?c=tableauDeBord');
             exit;
         }
-
-        require_once(__DIR__ . '/../Models/questionnaire.php');
-        $questionnaireModel = new questionnaire();
-        $survey = $questionnaireModel->getSurveyById($id);
-
+        $id = $_GET['id'];
+        require_once __DIR__ . '/../Models/questionnaire.php';
+        $model = new questionnaire();
+        $survey = $model->getSurveyById($id);
+        
         if (!$survey) {
-            echo "Questionnaire introuvable.";
-            return;
+             header('Location: ?c=tableauDeBord');
+             exit;
         }
-
-        // Add ID to survey array for view to use
-        // $survey contains id, title, description, status
 
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Parametres' . DIRECTORY_SEPARATOR . 'parametre.php';
     }
+
+    function saveSettings()
+    {
+        header('Content-Type: application/json');
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        if (!$data || !isset($data['id'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Données invalides']);
+            exit;
+        }
+
+        $id = $data['id'];
+        $userId = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+        $acceptResponses = $data['acceptResponses']; // boolean
+        
+        $status = $acceptResponses ? 'active' : 'closed';
+        
+        // Other settings can be stored in the JSON column
+        $settings = json_encode([
+            'dateStart' => $data['dateStart'] ?? null,
+            'dateEnd' => $data['dateEnd'] ?? null,
+            'notifResponse' => $data['notifResponse'] ?? false,
+            'notifLimit' => $data['notifLimit'] ?? false,
+            'notifInvalid' => $data['notifInvalid'] ?? false
+        ]);
+
+        require_once __DIR__ . '/../Models/questionnaire.php';
+        $model = new questionnaire();
+        
+        if ($model->updateSurveySettings($id, $userId, $status, $settings)) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Erreur lors de la sauvegarde']);
+        }
+        exit;
+    }
+
     function utilisationCookie()
     {
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'utilisationCookie.php';

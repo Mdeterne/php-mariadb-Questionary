@@ -39,10 +39,6 @@ switch ($controleur){
       case 'saveReponse':
         $homeControleur->saveReponse();
       break;
-
-      case 'merci':
-        $homeControleur->merci();
-      break;
     }
   break;
 
@@ -77,6 +73,10 @@ switch ($controleur){
 
     case 'parametres':
       $tableauDeBordControlleur->parametres();
+    break;
+
+    case 'saveSettings':
+      $tableauDeBordControlleur->saveSettings();
     break;
 
     case 'utilisationCookie':

@@ -43,7 +43,7 @@ class creationQuestionnaireControleur
         $modelQuestionnaire = new questionnaire();
         $titre = $_POST['titre'];
         $description = $_POST['description'];
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION['id'];
         $questions = isset($_POST['questions']) ? json_decode($_POST['questions'], true) : [];
 
         // Check if updating

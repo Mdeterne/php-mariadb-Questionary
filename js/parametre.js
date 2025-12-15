@@ -51,35 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Confirmer suppression
     btnConfirmDelete.addEventListener('click', () => {
         const surveyId = document.querySelector('.settings-main').dataset.surveyId;
-        console.log("Suppression du questionnaire ID:", surveyId);
 
-        // Appel AJAX au controlleur
-        fetch(`index.php?c=tableauDeBord&a=supprimer&id=${surveyId}`)
+        fetch(`?c=tableauDeBord&a=supprimer&id=${surveyId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Suppression réussie
-                    modalDelete.style.display = 'none';
-                    alert("Questionnaire supprimé avec succès.");
-                    window.location.href = "index.php?c=tableauDeBord";
+                    // Redirection vers le tableau de bord après suppression
+                    window.location.href = '?c=tableauDeBord';
                 } else {
-                    alert("Erreur lors de la suppression : " + (data.message || 'Erreur inconnue'));
+                    alert("Erreur lors de la suppression : " + (data.message || "Erreur inconnue"));
+                    modalDelete.style.display = 'none';
                 }
             })
             .catch(err => {
-                console.error("Erreur réseau:", err);
-                alert("Une erreur est survenue.");
+                console.error('Erreur:', err);
+                alert("Erreur de communication avec le serveur.");
+                modalDelete.style.display = 'none';
             });
     });
 
     // --- 3. Gestion du bouton Enregistrer ---
     const btnSave = document.getElementById('btn-save');
+    const toggleAccess = document.getElementById('toggle-access');
 
-    btnSave.addEventListener('click', () => {
-        // Simulation de récupération des données
+    const saveSettings = (showSuccessAlert = true) => {
+        const surveyId = document.querySelector('.settings-main').dataset.surveyId;
+
         const formData = {
-            link: inputLink.value,
-            acceptResponses: document.getElementById('toggle-access').checked,
+            id: surveyId,
+            acceptResponses: toggleAccess.checked,
             dateStart: document.getElementById('date-start').value,
             dateEnd: document.getElementById('date-end').value,
             notifResponse: document.getElementById('notif-response').checked,
@@ -87,14 +87,47 @@ document.addEventListener('DOMContentLoaded', () => {
             notifInvalid: document.getElementById('notif-invalid').checked
         };
 
-        console.log("Données à envoyer au serveur :", formData);
-
-        // Petit effet de chargement simulé
+        const originalBtnText = btnSave.innerText;
         btnSave.innerText = "Enregistrement...";
-        setTimeout(() => {
-            alert("Modifications enregistrées avec succès !");
+        btnSave.disabled = true;
+
+        fetch('?c=tableauDeBord&a=saveSettings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                if (showSuccessAlert) {
+                    alert("Modifications enregistrées avec succès !");
+                }
+            } else {
+                alert("Erreur : " + (data.message || "Une erreur est survenue"));
+            }
+        })
+        .catch(err => {
+            console.error('Erreur:', err);
+            alert("Erreur de communication avec le serveur.");
+        })
+        .finally(() => {
             btnSave.innerText = "Enregistrer les modifications";
-        }, 800);
+            btnSave.disabled = false;
+        });
+    };
+
+    btnSave.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent default link behavior if any
+        saveSettings(true);
     });
+
+    // Auto-save on toggle access change
+    if (toggleAccess) {
+        toggleAccess.addEventListener('change', () => {
+            saveSettings(false);
+        });
+    }
 
 });

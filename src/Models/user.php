@@ -35,6 +35,13 @@ class User
 
     function createUserIfNotExists($id, $email, $name)
     {
+        // Check by ID first (primary key from CAS)
+        $existingUserById = $this->findById($id);
+        if ($existingUserById) {
+            return $existingUserById['id'];
+        }
+
+        // Check by email to avoid duplicates if ID is different
         $existingUser = $this->findbyEmail($email);
         if ($existingUser) {
             return $existingUser['id'];

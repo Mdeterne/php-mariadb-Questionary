@@ -20,6 +20,11 @@
 
     <?php require_once __DIR__ . '/../components/header.php'; ?>
 
+    <?php
+    $settings = isset($survey['settings']) ? json_decode($survey['settings'], true) : [];
+    $isActive = isset($survey['status']) && $survey['status'] === 'active';
+    ?>
+
     <main class="settings-main" data-survey-id="<?php echo $survey['id']; ?>">
         <div class="page-title-row">
             <span class="page-title-label">Paramètres du Questionnaire :</span>
@@ -42,7 +47,7 @@
             <div class="card-box toggle-row">
                 <label for="toggle-access">Accepte les réponses</label>
                 <label class="switch">
-                    <input type="checkbox" id="toggle-access" checked>
+                    <input type="checkbox" id="toggle-access" <?php echo $isActive ? 'checked' : ''; ?>>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -54,11 +59,11 @@
                 <div class="date-row">
                     <div class="date-col">
                         <label class="sub-label">Date de début</label>
-                        <input type="date" id="date-start">
+                        <input type="date" id="date-start" value="<?php echo $settings['dateStart'] ?? ''; ?>">
                     </div>
                     <div class="date-col">
                         <label class="sub-label">Date de fin</label>
-                        <input type="date" id="date-end">
+                        <input type="date" id="date-end" value="<?php echo $settings['dateEnd'] ?? ''; ?>">
                     </div>
                 </div>
             </div>
@@ -70,7 +75,7 @@
             <div class="card-box toggle-row">
                 <label for="notif-response">Notification de réponse</label>
                 <label class="switch">
-                    <input type="checkbox" id="notif-response" checked>
+                    <input type="checkbox" id="notif-response" <?php echo ($settings['notifResponse'] ?? false) ? 'checked' : ''; ?>>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -78,7 +83,7 @@
             <div class="card-box toggle-row">
                 <label for="notif-limit">Seuil atteint</label>
                 <label class="switch">
-                    <input type="checkbox" id="notif-limit" checked>
+                    <input type="checkbox" id="notif-limit" <?php echo ($settings['notifLimit'] ?? false) ? 'checked' : ''; ?>>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -86,7 +91,7 @@
             <div class="card-box toggle-row">
                 <label for="notif-invalid">Réponses invalides</label>
                 <label class="switch">
-                    <input type="checkbox" id="notif-invalid" checked>
+                    <input type="checkbox" id="notif-invalid" <?php echo ($settings['notifInvalid'] ?? false) ? 'checked' : ''; ?>>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -95,9 +100,7 @@
         <div class="action-buttons">
             <button class="btn btn-cancel" id="btn-cancel" onclick="window.history.back()">Annuler les
                 modifications</button>
-            <a href="index.php?c=createur&a=index&id=99">
-                <button class="btn btn-save" id="btn-save">Enregistrer les modifications</button>
-            </a>
+            <button class="btn btn-save" id="btn-save">Enregistrer les modifications</button>
         </div>
 
         <div class="delete-zone">
@@ -121,7 +124,7 @@
         </div>
     </div>
 
-    <script src="js/parametre.js"></script>
+    <script src="js/parametre.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>

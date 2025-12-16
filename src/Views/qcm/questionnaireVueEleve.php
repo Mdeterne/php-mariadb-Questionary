@@ -9,6 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: var(--red);
+        }
+
         .qcm-container {
             max-width: 800px;
             margin: 0 auto;
@@ -54,7 +58,7 @@
 
         .option-item.selected {
             border-color: var(--primary);
-            background-color: #eef2ff;
+            background-color: #fff0f0;
         }
 
         .option-radio {

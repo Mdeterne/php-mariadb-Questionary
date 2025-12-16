@@ -7,9 +7,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Configues".DIRECTORY_SEPARATOR."configue_CAS.php";
-$_SESSION['mail'] = $infoSESION['mail'];
-$_SESSION['name'] = $infoSESION['cn'];
-$_SESSION['id'] = $infoSESION['uid'];
+$_SESSION['mail'] = $infoSESSION['mail'];
+$_SESSION['name'] = $infoSESSION['cn'];
+$_SESSION['id'] = $infoSESSION['uid'];
 
 // Controllers
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."homeControleur.php";

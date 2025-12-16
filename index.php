@@ -39,6 +39,10 @@ switch ($controleur){
       case 'saveReponse':
         $homeControleur->saveReponse();
       break;
+
+      case 'merci':
+        $homeControleur->merci();
+      break;
     }
   break;
 

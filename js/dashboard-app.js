@@ -1,6 +1,10 @@
-import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+import { createApp } from 'vue';
+import QrcodeVue from 'qrcode.vue';
 
 createApp({
+    components: {
+        QrcodeVue
+    },
     data() {
         return {
             // Initialisation avec les données injectées par PHP (window.serverQuestionnaires)
@@ -12,7 +16,12 @@ createApp({
             // --- NOUVEAUX CHAMPS POUR L'IMPORTATION ---
             showImportModal: false, // Contrôle l'affichage de la modale floutée
             lienImport: '',          // Stocke le texte du lien entré par l'utilisateur
-            questionnaireToDelete: null // ID du questionnaire à supprimer
+            questionnaireToDelete: null, // ID du questionnaire à supprimer
+
+            // --- QR CODE MODAL ---
+            showQrModal: false,
+            qrLink: '',
+            qrTitle: ''
         };
     },
 
@@ -100,6 +109,30 @@ createApp({
             // On remet à zéro et on ferme la modale
             this.lienImport = '';
             this.showImportModal = false;
+        },
+
+        // --- QR CODE METHODS ---
+        afficherQrCode(pin, titre) {
+            // Construit l'URL absolue pour répondre au questionnaire
+            // On suppose que l'URL actuelle est .../index.php ou .../
+            // On redirige vers ?c=home&a=valider&pin=...
+            const baseUrl = window.location.origin + window.location.pathname;
+            // On s'assure de ne pas doubler le slash si pathname finit par /
+            // Mais pathname finit généralement par .php ou dossier.
+            // Une façon safe de reconstruire l'url :
+
+            // Si on est sur /index.php, on garde /index.php
+            // Si on est sur /, on garde /
+
+            // On retire les parametres GET actuels
+            this.qrLink = `${baseUrl}?c=home&a=valider&pin=${pin}`;
+            this.qrTitle = titre;
+            this.showQrModal = true;
+        },
+
+        closeQrModal() {
+            this.showQrModal = false;
+            this.qrLink = '';
         }
     },
     mounted() {

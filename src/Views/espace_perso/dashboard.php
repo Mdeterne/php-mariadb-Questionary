@@ -110,7 +110,7 @@
                     <a :href="'?c=createur&a=editer&id=' + q.id" style="text-decoration:none; color:inherit;">
                         <div class="card-q">
                             <div class="card-q-title">{{ q.titre }}</div>
-                            <div class="card-q-qr">
+                            <div class="card-q-qr" @click.prevent.stop="afficherQrCode(q.access_pin, q.titre)">
                                 <i class="fa-solid fa-qrcode"></i>
                             </div>
                         </div>
@@ -154,11 +154,45 @@
                 </div>
             </div>
 
+            <!-- QR CODE MODAL -->
+            <div class="modal-blur-overlay" v-if="showQrModal" @click.self="closeQrModal">
+                <div class="modal-card" style="text-align: center;">
+                    <button class="modal-close-btn" @click="closeQrModal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                    <h3 class="modal-title" style="margin-bottom: 20px;">Scannez pour répondre</h3>
+                    <h4 style="margin-bottom: 20px; color: #666;">{{ qrTitle }}</h4>
+
+                    <div
+                        style="background: white; padding: 20px; display: inline-block; border-radius: 10px; border: 1px solid #eee;">
+                        <qrcode-vue :value="qrLink" :size="200" level="H"></qrcode-vue>
+                    </div>
+
+                    <p style="margin-top: 20px; word-break: break-all; color: #666; font-size: 0.8rem;">
+                        Lien direct : <br>
+                        <a :href="qrLink" target="_blank" style="color: var(--primary-color);">{{ qrLink }}</a>
+                    </p>
+
+                    <div class="modal-actions" style="justify-content: center; margin-top: 20px;">
+                        <button class="btn-confirm" @click="closeQrModal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 
     <script>
         window.serverQuestionnaires = <?php echo json_encode($mesQuestionnaires ?? []) ?: '[]'; ?>;
+    </script>
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+            "qrcode.vue": "https://cdn.jsdelivr.net/npm/qrcode.vue@3.6.0/dist/qrcode.vue.esm.js"
+        }
+    }
     </script>
     <script type="module" src="js/dashboard-app.js"></script>
 

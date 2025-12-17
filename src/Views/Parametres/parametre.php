@@ -79,22 +79,6 @@
                     <span class="slider"></span>
                 </label>
             </div>
-
-            <div class="card-box toggle-row">
-                <label for="notif-limit">Seuil atteint</label>
-                <label class="switch">
-                    <input type="checkbox" id="notif-limit" <?php echo ($settings['notifLimit'] ?? false) ? 'checked' : ''; ?>>
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="card-box toggle-row">
-                <label for="notif-invalid">Réponses invalides</label>
-                <label class="switch">
-                    <input type="checkbox" id="notif-invalid" <?php echo ($settings['notifInvalid'] ?? false) ? 'checked' : ''; ?>>
-                    <span class="slider"></span>
-                </label>
-            </div>
         </div>
 
         <div class="action-buttons">

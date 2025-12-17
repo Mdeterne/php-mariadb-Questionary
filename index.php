@@ -7,9 +7,16 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Configues".DIRECTORY_SEPARATOR."configue_CAS.php";
-$_SESSION['mail'] = $infoSESSION['mail'];
-$_SESSION['name'] = $infoSESSION['cn'];
-$_SESSION['id'] = $infoSESSION['uid'];
+if (isset($infoSESSION)) {
+    $_SESSION['mail'] = $infoSESSION['mail'];
+    $_SESSION['name'] = $infoSESSION['cn'];
+    $_SESSION['id'] = $infoSESSION['uid'];
+} else {
+    // Fallback for local development or when CAS is not active
+    if (!isset($_SESSION['mail'])) $_SESSION['mail'] = 'dev@local.test';
+    if (!isset($_SESSION['name'])) $_SESSION['name'] = 'Developpeur';
+    if (!isset($_SESSION['id'])) $_SESSION['id'] = '1'; // Ensure this matches a valid user ID if needed
+}
 
 // Controllers
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."homeControleur.php";

@@ -73,6 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3. Gestion du bouton Enregistrer ---
     const btnSave = document.getElementById('btn-save');
     const toggleAccess = document.getElementById('toggle-access');
+    const modalSuccess = document.getElementById('modal-success');
+    const btnConfirmSuccess = document.getElementById('btn-confirm-success');
+
+    // Redirection après clic sur OK
+    btnConfirmSuccess.addEventListener('click', () => {
+        const surveyId = document.querySelector('.settings-main').dataset.surveyId;
+        window.location.href = '?c=createur&a=editer&id=' + surveyId;
+    });
 
     const saveSettings = (showSuccessAlert = true) => {
         const surveyId = document.querySelector('.settings-main').dataset.surveyId;
@@ -98,24 +106,25 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(formData)
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                if (showSuccessAlert) {
-                    alert("Modifications enregistrées avec succès !");
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    if (showSuccessAlert) {
+                        // Afficher la modale de succès
+                        modalSuccess.style.display = 'flex';
+                    }
+                } else {
+                    alert("Erreur : " + (data.message || "Une erreur est survenue"));
                 }
-            } else {
-                alert("Erreur : " + (data.message || "Une erreur est survenue"));
-            }
-        })
-        .catch(err => {
-            console.error('Erreur:', err);
-            alert("Erreur de communication avec le serveur.");
-        })
-        .finally(() => {
-            btnSave.innerText = "Enregistrer les modifications";
-            btnSave.disabled = false;
-        });
+            })
+            .catch(err => {
+                console.error('Erreur:', err);
+                alert("Erreur de communication avec le serveur.");
+            })
+            .finally(() => {
+                btnSave.innerText = "Enregistrer les modifications";
+                btnSave.disabled = false;
+            });
     };
 
     btnSave.addEventListener('click', (e) => {
@@ -123,10 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
         saveSettings(true);
     });
 
-    // Auto-save on toggle access change
-    if (toggleAccess) {
-        toggleAccess.addEventListener('change', () => {
-            saveSettings(false);
+
+    // --- 4. Gestion du bouton Annuler ---
+    const btnCancel = document.getElementById('btn-cancel');
+    if (btnCancel) {
+        btnCancel.addEventListener('click', () => {
+            const surveyId = document.querySelector('.settings-main').dataset.surveyId;
+            window.location.href = '?c=createur&a=editer&id=' + surveyId;
         });
     }
 

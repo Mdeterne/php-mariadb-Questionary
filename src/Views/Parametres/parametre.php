@@ -98,7 +98,7 @@
         </div>
 
         <div class="action-buttons">
-            <button class="btn btn-cancel" id="btn-cancel" onclick="window.history.back()">Annuler les
+            <button class="btn btn-cancel" id="btn-cancel">Annuler les
                 modifications</button>
             <button class="btn btn-save" id="btn-save">Enregistrer les modifications</button>
         </div>
@@ -108,6 +108,18 @@
         </div>
 
     </main>
+    <div class="modal-blur-overlay" id="modal-success" style="display: none;">
+            <div class="modal-card">
+                <div>
+                    <h3 class="modal-title">Sauvegarde réussie !</h3>
+                    <p class="modal-desc">Les paramètres de votre questionnaire ont été enregistré avec succès.</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-confirm" id="btn-confirm-success">OK</button>
+                </div>
+            </div>
+        </div>
 
     <!-- DELETE MODAL -->
     <div class="modal-blur-overlay" id="modal-delete" style="display: none;">

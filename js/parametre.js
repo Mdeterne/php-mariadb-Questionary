@@ -91,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
             dateStart: document.getElementById('date-start').value,
             dateEnd: document.getElementById('date-end').value,
             notifResponse: document.getElementById('notif-response').checked,
-            notifLimit: document.getElementById('notif-limit').checked,
-            notifInvalid: document.getElementById('notif-invalid').checked
+            notifLimit: document.getElementById('notif-limit') ? document.getElementById('notif-limit').checked : false,
+            notifInvalid: document.getElementById('notif-invalid') ? document.getElementById('notif-invalid').checked : false
         };
 
         const originalBtnText = btnSave.innerText;

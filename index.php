@@ -22,7 +22,6 @@ $action = isset($_GET['a'])? $_GET['a'] : 'index';
 $questionaire = isset($_GET['q'])? $_GET['q'] : '0';
 $pin = isset($_GET['pin'])? $_GET['pin'] : '';
 
-
 switch ($controleur){
   
   case 'home':
@@ -48,6 +47,12 @@ switch ($controleur){
 
   case 'tableauDeBord':
   $tableauDeBordControlleur = new tableauDeBordControlleur();
+  if($_SESSION['role'] != 'enseignant'){
+    $controleur = 'home';
+    $action = null;
+    require_once(__DIR__.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
+    exit();
+  }
   switch ($action){
           
     case 'index':
@@ -94,6 +99,12 @@ switch ($controleur){
 
   case 'espaceAnalyse':
     $espaceAnalyseControleur = new espaceAnalyseControleur();
+    if($_SESSION['role'] != 'enseignant'){
+      $controleur = 'home';
+      $action = null;
+      require_once(__DIR__.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
+      exit();
+    }
     switch ($action) {
       case 'index':
       default:
@@ -104,6 +115,12 @@ switch ($controleur){
 
   case 'createur':
     $creationQuestionnaireControleur = new creationQuestionnaireControleur();
+    if($_SESSION['role'] != 'enseignant'){
+      $controleur = 'home';
+      $action = null;
+      require_once(__DIR__.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
+      exit();
+    }
 
     switch ($action){
       case 'nouveauFormulaire':
@@ -125,6 +142,12 @@ switch ($controleur){
   break;
 
   case 'parametre':
+    if($_SESSION['role'] != 'enseignant'){
+      $controleur = 'home';
+      $action = null;
+      require_once(__DIR__.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
+      exit();
+    }
     $tableauDeBordControlleur = new tableauDeBordControlleur();
     $tableauDeBordControlleur->parametres();
   break;

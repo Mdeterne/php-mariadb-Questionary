@@ -175,7 +175,8 @@
                     </p>
 
                     <div class="modal-actions" style="justify-content: center; margin-top: 20px;">
-                        <button class="btn-confirm" @click="closeQrModal">Fermer</button>
+                        <button class="btn-confirm" @click="downloadQrImage"> <i class="fa-solid fa-download"></i> Télécharger l'image</button>
+                        <button class="btn-cancel" @click="closeQrModal" style="margin-left: 10px;">Fermer</button>
                     </div>
                 </div>
             </div>

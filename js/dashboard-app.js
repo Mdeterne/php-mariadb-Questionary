@@ -130,13 +130,25 @@ createApp({
             this.showQrModal = true;
         },
 
+        async downloadQrImage() {
+            const canvas = document.querySelector('.modal-card canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'qrcode.png';
+                link.href = canvas.toDataURL('image/png');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        },
+
         closeQrModal() {
             this.showQrModal = false;
             this.qrLink = '';
         }
     },
     mounted() {
-        // Plus besoin de charger via AJAX au démarrage car les données sont injectées par PHP
+        // Plus         besoin de charger via AJAX au démarrage car les données sont injectées par PHP
         console.log("Application montée. Données initiales :", this.questionnaires);
     }
 

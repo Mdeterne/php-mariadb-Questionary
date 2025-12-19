@@ -100,8 +100,14 @@ class espaceAnalyseControleur
         }
         
         // 6. View Data
-        $pageTitle = $survey['title'];
-        $questionsData = json_encode($analysisData['questions']);
+        // 6. View Data
+        $pageTitle = $survey['title'] ?? 'Analyse';
+        $questionsList = $analysisData['questions'] ?? [];
+        $questionsData = json_encode($questionsList, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        
+        if ($questionsData === false) {
+            $questionsData = '[]';
+        }
         
         require_once(__DIR__ . '/../Views/analyse/analyse.php');
     }

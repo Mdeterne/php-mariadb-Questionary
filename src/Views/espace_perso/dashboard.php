@@ -75,8 +75,8 @@
                         </a>-->
 
                         <div class="modal-footer">
-                            <a href="?c=tableauDeBord&a=conditionGenerales">Conditions générales</a> | <a
-                                href="?c=tableauDeBord&a=confidentialite">Confidentialité</a>
+                            <a href="?c=home&a=conditionGenerales">Conditions générales</a> | <a
+                                href="?c=home&a=confidentialite">Confidentialité</a>
                         </div>
                     </div>
                 </div>

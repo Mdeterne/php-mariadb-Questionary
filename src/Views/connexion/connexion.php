@@ -51,11 +51,11 @@
       <!-- Pied de page -->
       <footer class="footer">
         <nav class="footer__links" aria-label="Liens légaux">
-          <a href="?c=tableauDeBord&a=conditionGenerales" title="Conditions générales">Conditions générales</a>
+          <a href="?c=home&a=conditionGenerales" title="Conditions générales">Conditions générales</a>
           <span aria-hidden="true">|</span>
-          <a href="?c=tableauDeBord&a=confidentialite" title="Confidentialité">Confidentialité</a>
+          <a href="?c=home&a=confidentialite" title="Confidentialité">Confidentialité</a>
           <span aria-hidden="true">|</span>
-          <a href="#" title="Utilisation des cookies">Utilisation des cookies</a>
+          <a href="?c=home&a=utilisationCookie" title="Utilisation des cookies">Utilisation des cookies</a>
         </nav>
       </footer>
 

@@ -49,6 +49,18 @@ switch ($controleur){
       case 'merci':
         $homeControleur->merci();
       break;
+
+      case 'conditionGenerales':
+        $homeControleur->conditionGenerales();
+      break;
+
+      case 'confidentialite':
+        $homeControleur->confidentialite();
+      break;
+
+      case 'utilisationCookie':
+        $homeControleur->utilisationCookie();
+      break;
     }
   break;
 
@@ -79,13 +91,7 @@ switch ($controleur){
       $tableauDeBordControlleur->supprimer();
     break;
 
-    case 'conditionGenerales':
-      $tableauDeBordControlleur->conditionGenerales();
-    break;
 
-    case 'confidentialite':
-      $tableauDeBordControlleur->confidentialite();
-    break;
 
     case 'parametres':
       $tableauDeBordControlleur->parametres();
@@ -95,9 +101,7 @@ switch ($controleur){
       $tableauDeBordControlleur->saveSettings();
     break;
 
-    case 'utilisationCookie':
-      $tableauDeBordControlleur->utilisationCookie();
-    break;
+
 
 
 

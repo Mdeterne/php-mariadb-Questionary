@@ -17,6 +17,7 @@ function calculerFrequence(reponses) {
 }
 
 // Génération du HTML
+let htmlAcc = '';
 donneesQuestions.forEach(q => {
     let contenuHTML = '';
 
@@ -102,8 +103,11 @@ donneesQuestions.forEach(q => {
             </div>
         </div>
         `;
-    conteneur.innerHTML += carteHTML;
+    htmlAcc += carteHTML;
 });
+
+// Injection unique dans le DOM pour éviter de casser les canvas
+conteneur.innerHTML = htmlAcc;
 
 
 // Initialisation des graphiques
@@ -263,9 +267,6 @@ function calculerFrequenceMots(reponses) {
         }
     });
 
-    return Object.entries(compteurs)
-        .map(([etiquette, compte]) => ({ etiquette, compte }))
-        .sort((a, b) => b.compte - a.compte)
     // On prend le top 30 pour le nuage de mots
     return Object.entries(compteurs)
         .map(([etiquette, compte]) => ({ etiquette, compte }))

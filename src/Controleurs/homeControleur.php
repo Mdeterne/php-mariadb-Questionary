@@ -71,4 +71,19 @@ class homeControleur
     {
         require_once(__DIR__ . '/../Views/confirmation/merci.php');
     }
+
+    function conditionGenerales()
+    {
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'conditionGenerales.php';
+    }
+
+    function confidentialite()
+    {
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'confidentialite.php';
+    }
+
+    function utilisationCookie()
+    {
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'utilisationCookie.php';
+    }
 }

@@ -103,12 +103,7 @@ createApp({
 
             console.log("Importation du lien : ", this.lienImport);
 
-            // Simulation d'une action réussie
-            alert("Questionnaire importé avec succès (Simulation) !");
-
-            // On remet à zéro et on ferme la modale
-            this.lienImport = '';
-            this.showImportModal = false;
+            window.location.href = '?c=tableauDeBord&a=importer&pin=' + this.lienImport;
         },
 
         // --- QR CODE METHODS ---

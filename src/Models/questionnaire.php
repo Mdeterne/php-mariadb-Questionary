@@ -207,15 +207,24 @@ class questionnaire
     }
 
     /** Vérifie si un code PIN existe et si le questionnaire est actif. */
-    function exists($pin)
+    function existsAndOpen($pin)
     {
-        if ($this->conn === null) {
-            return false;
-        }
         $req = $this->conn->prepare("
             SELECT id, title, description 
             FROM surveys 
             WHERE access_pin = :pin AND status = 'active'
+        ");
+        $req->bindParam(':pin', $pin, PDO::PARAM_STR);
+        $req->execute();
+        return $req->fetch(PDO::FETCH_ASSOC);
+    }
+
+    function exists($pin)
+    {
+        $req = $this->conn->prepare("
+            SELECT id, title, description 
+            FROM surveys 
+            WHERE access_pin = :pin
         ");
         $req->bindParam(':pin', $pin, PDO::PARAM_STR);
         $req->execute();
@@ -228,7 +237,11 @@ class questionnaire
         if ($this->conn === null) {
             return [];
         }
-        $query = "SELECT id, title as titre, description, access_pin, status, created_at FROM surveys WHERE user_id = :user_id ORDER BY created_at DESC";
+        $query = "SELECT id, title as titre, description, access_pin, status, created_at FROM surveys WHERE user_id = :user_id
+        UNION
+        SELECT surveys.id, surveys.title as titre, surveys.description, surveys.access_pin, surveys.status, surveys.created_at FROM surveys JOIN importedSurveys ON surveys.id = importedSurveys.survey_id WHERE importedSurveys.user_id = :user_id
+        ORDER BY created_at DESC";
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $userId);
         $stmt->execute();
@@ -299,12 +312,22 @@ class questionnaire
         if ($this->conn === null) {
             return [];
         }
+        $user_id = $_SESSION['id'];
         $req = $this->conn->prepare("
             SELECT id, title, status, created_at
             FROM surveys
+            join importedSurveys on surveys.id = importedSurveys.survey_id
+            WHERE importedSurveys.user_id = :user_id
             ORDER BY created_at DESC
-            LIMIT 5
+            LIMIT 2
+            union
+            SELECT id, title, status, created_at
+            from surveys
+            WHERE user_id = :user_id
+            ORDER BY created_at DESC
+            limit 3
         ");
+        $req->bindParam(':user_id', $user_id);
         $req->execute();
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -365,5 +388,21 @@ class questionnaire
 
         $survey['questions'] = $questions;
         return $survey;
+    }
+
+    function getSurveyByPin($pin){
+        $req = $this->conn->prepare("SELECT id, user_id, title, description, status, settings FROM surveys WHERE access_pin = :pin");
+        $req->bindParam(':pin', $pin);
+        $req->execute();
+        return $req->fetch(PDO::FETCH_ASSOC);
+    }
+
+    function import ($id){
+
+        $query = "insert into importedSurveys (survey_id, user_id) values (:survey_id, :user_id)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':survey_id', $id);
+        $stmt->bindParam(':user_id', $_SESSION['id']);
+        return $stmt->execute();
     }
 }

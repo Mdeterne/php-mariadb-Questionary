@@ -2,8 +2,7 @@
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'questionnaire.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'user.php';
-class homeControleur
-{
+class homeControleur {
     function valider($pin)
     {
 
@@ -20,7 +19,7 @@ class homeControleur
         }
 
         $modelQuestionnaire = new questionnaire();
-        if ($modelQuestionnaire->exists($pin)) {
+        if ($modelQuestionnaire->existsAndOpen($pin)) {
             $questionQuestionnaire = $modelQuestionnaire->listerLesQuestions($pin);
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'qcm' . DIRECTORY_SEPARATOR . 'questionnaireVueEleve.php');
         } else {
@@ -29,17 +28,15 @@ class homeControleur
 
     }
 
-    function index()
-    {
+    function index(){
         $Model_User = new User();
         $Model_User->createUserIfNotExists($_SESSION['id'], $_SESSION['mail'], $_SESSION['name']);
 
-        if (strpos($_SESSION['mail'], 'etu') !== false) {
-            $_SESSION['role'] = 'etudiant';
+        if ($_SESSION['role'] == 'etudiant') {
             require_once(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
-        } else {
-            $_SESSION['role'] = 'enseignant';
-            header('Location: ?c=tableauDeBord');
+        }
+        if ($_SESSION['role'] == 'enseignant'){
+            require_once(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'espace_perso'.DIRECTORY_SEPARATOR.'dashboard.php');
         }
     }
 
@@ -87,3 +84,4 @@ class homeControleur
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'utilisationCookie.php';
     }
 }
+?>

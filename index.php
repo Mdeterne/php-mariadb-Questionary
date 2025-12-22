@@ -2,23 +2,16 @@
 
 session_start();
 
-$_SESSION['role'] = '';
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Configues".DIRECTORY_SEPARATOR."configue_CAS.php";
-if (isset($infoSESSION)) {
-    $_SESSION['mail'] = $infoSESSION['mail'];
-    $_SESSION['name'] = $infoSESSION['cn'];
-    $_SESSION['id'] = $infoSESSION['uid'];
-} else {
-    // Fallback for local development or when CAS is not active
-    if (!isset($_SESSION['mail'])) $_SESSION['mail'] = 'dev@local.test';
-    if (!isset($_SESSION['name'])) $_SESSION['name'] = 'Developpeur';
-    if (!isset($_SESSION['id'])) $_SESSION['id'] = '1'; // Ensure this matches a valid user ID if needed
-}
+
+$_SESSION['mail'] = $infoSESSION['mail'];
+$_SESSION['name'] = $infoSESSION['cn'];
+$_SESSION['id'] = $infoSESSION['uid'];
+
 
 // Controllers
 require_once __dir__.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."Controleurs".DIRECTORY_SEPARATOR."homeControleur.php";
@@ -30,6 +23,7 @@ $controleur = isset($_GET['c'])? $_GET['c'] : 'home';
 $action = isset($_GET['a'])? $_GET['a'] : 'index';
 $questionaire = isset($_GET['q'])? $_GET['q'] : '0';
 $pin = isset($_GET['pin'])? $_GET['pin'] : '';
+
 
 switch ($controleur){
   
@@ -68,11 +62,10 @@ switch ($controleur){
 
   case 'tableauDeBord':
   $tableauDeBordControlleur = new tableauDeBordControlleur();
+  $creationQuestionnaireControleur = new creationQuestionnaireControleur();
   if($_SESSION['role'] != 'enseignant'){
     $controleur = 'home';
     $action = null;
-    require_once(__DIR__.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
-    exit();
   }
   switch ($action){
           
@@ -93,7 +86,9 @@ switch ($controleur){
       $tableauDeBordControlleur->supprimer();
     break;
 
-
+    case 'importer':
+      $creationQuestionnaireControleur->import($pin);
+    break;
 
     case 'parametres':
       $tableauDeBordControlleur->parametres();
@@ -115,7 +110,6 @@ switch ($controleur){
     if($_SESSION['role'] != 'enseignant'){
       $controleur = 'home';
       $action = null;
-      require_once(__DIR__.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
       exit();
     }
     switch ($action) {
@@ -131,8 +125,6 @@ switch ($controleur){
     if($_SESSION['role'] != 'enseignant'){
       $controleur = 'home';
       $action = null;
-      require_once(__DIR__.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
-      exit();
     }
 
     switch ($action){
@@ -158,8 +150,6 @@ switch ($controleur){
     if($_SESSION['role'] != 'enseignant'){
       $controleur = 'home';
       $action = null;
-      require_once(__DIR__.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
-      exit();
     }
     $tableauDeBordControlleur = new tableauDeBordControlleur();
     $tableauDeBordControlleur->parametres();

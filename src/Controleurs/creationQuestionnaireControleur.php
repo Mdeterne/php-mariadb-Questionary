@@ -39,6 +39,22 @@ class creationQuestionnaireControleur
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
     }
 
+    function import($pin){
+        $model = new questionnaire();
+        if ($model->exists($pin)) {
+            $questionnaire = $model->getSurveyByPin($pin);
+            if ($questionnaire['user_id'] != $_SESSION['id']) {
+                $id = $questionnaire['id'];
+                $model->import($id);
+                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'success_import.php';
+            }else{
+                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'importationNonAutorise.php';
+            }
+        }else{
+            require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php';
+        }
+    }
+
     function save(){
         $modelQuestionnaire = new questionnaire();
         $titre = $_POST['titre'];

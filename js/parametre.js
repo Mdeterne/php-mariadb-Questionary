@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. Gestion du bouton Copier ---
+    // Bouton copier
     const btnCopy = document.getElementById('btn-copy');
     const inputLink = document.getElementById('share-link');
 
@@ -25,18 +25,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 2. Gestion du bouton Supprimer (MODALE) ---
+    // Bouton supprimer
     const btnDelete = document.getElementById('btn-delete');
     const modalDelete = document.getElementById('modal-delete');
     const btnCancelDelete = document.getElementById('btn-cancel-delete');
     const btnConfirmDelete = document.getElementById('btn-confirm-delete');
 
-    // Ouvrir la modale
+    // Ouvrir la popup supprimer
     btnDelete.addEventListener('click', () => {
         modalDelete.style.display = 'flex';
     });
 
-    // Fermer la modale (Annuler)
+    // Fermer la popup supprimer
     btnCancelDelete.addEventListener('click', () => {
         modalDelete.style.display = 'none';
     });
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
 
-    // --- 3. Gestion du bouton Enregistrer ---
+    // Bouton enregistrer
     const btnSave = document.getElementById('btn-save');
     const toggleAccess = document.getElementById('toggle-access');
     const modalSuccess = document.getElementById('modal-success');
@@ -128,12 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     btnSave.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent default link behavior if any
+        e.preventDefault(); // Prevenir en cas de clic sur un lien
         saveSettings(true);
     });
 
 
-    // --- 4. Gestion du bouton Annuler ---
+    // Bouton Annuler
     const btnCancel = document.getElementById('btn-cancel');
     if (btnCancel) {
         btnCancel.addEventListener('click', () => {

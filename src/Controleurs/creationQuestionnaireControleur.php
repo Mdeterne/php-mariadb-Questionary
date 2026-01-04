@@ -22,12 +22,12 @@ class creationQuestionnaireControleur
 
         $id = $_GET['id'];
         $model = new questionnaire();
-        
+
         // Verify ownership (or existence)
         $survey = $model->getAnalysisData($id); // Re-use analysis data fetching so we get everything
         if (!$survey) {
-             header('Location: ?c=tableauDeBord');
-             exit;
+            header('Location: ?c=tableauDeBord');
+            exit;
         }
 
         // Ideally check user_id if we want stricter security here, but getSurveysByUserId on dashboard already filters access.
@@ -39,7 +39,8 @@ class creationQuestionnaireControleur
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
     }
 
-    function import($pin){
+    function import($pin)
+    {
         $model = new questionnaire();
         if ($model->exists($pin)) {
             $questionnaire = $model->getSurveyByPin($pin);
@@ -47,15 +48,16 @@ class creationQuestionnaireControleur
                 $id = $questionnaire['id'];
                 $model->import($id);
                 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'success_import.php';
-            }else{
+            } else {
                 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'importationNonAutorise.php';
             }
-        }else{
-            require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php';
+        } else {
+            require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'importationNonAutorise.php';
         }
     }
 
-    function save(){
+    function save()
+    {
         $modelQuestionnaire = new questionnaire();
         $titre = $_POST['titre'];
         $description = $_POST['description'];
@@ -67,17 +69,17 @@ class creationQuestionnaireControleur
             $id = $_POST['id'];
             try {
                 $modelQuestionnaire->updateSurvey($id, $user_id, $titre, $description, $questions);
-                 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
+                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
             } catch (Exception $e) {
-                 http_response_code(500);
-                 echo "Erreur lors de la mise à jour : " . $e->getMessage();
+                http_response_code(500);
+                echo "Erreur lors de la mise à jour : " . $e->getMessage();
             }
         } else {
             // New creation
             $access_pin = rand(100000, 999999);
             $qr_code_token = bin2hex(random_bytes(16));
             while (true) {
-            if (!$modelQuestionnaire->exists($access_pin)) {
+                if (!$modelQuestionnaire->exists($access_pin)) {
                     break;
                 }
                 $access_pin = rand(100000, 999999);

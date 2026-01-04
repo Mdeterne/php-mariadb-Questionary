@@ -2,18 +2,19 @@
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'questionnaire.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'user.php';
-class homeControleur {
+class homeControleur
+{
     function valider($pin)
     {
 
-        if ($pin == 'je suis un developpeur 01587642098'){
-            if ($_SESSION['role'] == 'enseignant'){
+        if ($pin == 'je suis un developpeur 01587642098') {
+            if ($_SESSION['role'] == 'enseignant') {
                 $_SESSION['role'] = 'etudiant';
-                require_once(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
+                require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Acceuil' . DIRECTORY_SEPARATOR . 'home.php');
                 exit();
             } else {
                 $_SESSION['role'] = 'enseignant';
-                require_once(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'espace_perso'.DIRECTORY_SEPARATOR.'dashboard.php');
+                require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'espace_perso' . DIRECTORY_SEPARATOR . 'dashboard.php');
                 exit();
             }
         }
@@ -28,15 +29,16 @@ class homeControleur {
 
     }
 
-    function index(){
+    function index()
+    {
         $Model_User = new User();
         $Model_User->createUserIfNotExists($_SESSION['id'], $_SESSION['mail'], $_SESSION['name']);
 
         if ($_SESSION['role'] == 'etudiant') {
-            require_once(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Acceuil'.DIRECTORY_SEPARATOR.'home.php');
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Acceuil' . DIRECTORY_SEPARATOR . 'home.php');
         }
-        if ($_SESSION['role'] == 'enseignant'){
-            require_once(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'espace_perso'.DIRECTORY_SEPARATOR.'dashboard.php');
+        if ($_SESSION['role'] == 'enseignant') {
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'espace_perso' . DIRECTORY_SEPARATOR . 'dashboard.php');
         }
     }
 

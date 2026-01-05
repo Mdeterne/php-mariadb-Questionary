@@ -24,11 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Copier aussi en cliquant sur l'input
-    inputLink.addEventListener('click', () => {
-        btnCopy.click();
-    });
-
     // Bouton supprimer
     const btnDelete = document.getElementById('btn-delete');
     const modalDelete = document.getElementById('modal-delete');

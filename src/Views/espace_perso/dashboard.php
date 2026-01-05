@@ -124,12 +124,13 @@
                 <div class="modal-card">
                     <div>
                         <h3 class="modal-title">Importer un questionnaire</h3>
-                        <p class="modal-desc">Collez le lien du questionnaire que vous souhaitez ajouter à votre espace.
+                        <p class="modal-desc">Entrez le code PIN du questionnaire que vous souhaitez ajouter à votre
+                            espace.
                         </p>
                     </div>
 
-                    <input type="text" class="modal-input" placeholder="https://questionary.app/..."
-                        v-model="lienImport" @keyup.enter="validerImport">
+                    <input type="text" class="modal-input" placeholder="Code PIN (ex: 123456)" v-model="lienImport"
+                        @keyup.enter="validerImport">
 
                     <div class="modal-actions">
                         <button class="btn-cancel" @click="showImportModal = false">Annuler</button>

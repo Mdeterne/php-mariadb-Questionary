@@ -100,11 +100,11 @@ createApp({
         validerImport() {
             // Petite vérification simple
             if (this.lienImport.trim() === '') {
-                alert("Veuillez entrer un lien valide.");
+                alert("Veuillez entrer un code PIN valide.");
                 return;
             }
 
-            console.log("Importation du lien : ", this.lienImport);
+            console.log("Importation du PIN : ", this.lienImport);
 
             window.location.href = '?c=tableauDeBord&a=importer&pin=' + this.lienImport;
         },

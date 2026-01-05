@@ -352,7 +352,7 @@ class questionnaire
     {
         if ($this->conn === null)
             return false;
-        $req = $this->conn->prepare("SELECT id, title, description, status, settings FROM surveys WHERE id = :id");
+        $req = $this->conn->prepare("SELECT id, title, description, status, settings, access_pin FROM surveys WHERE id = :id");
         $req->bindParam(':id', $id);
         $req->execute();
         return $req->fetch(PDO::FETCH_ASSOC);
@@ -390,14 +390,16 @@ class questionnaire
         return $survey;
     }
 
-    function getSurveyByPin($pin){
+    function getSurveyByPin($pin)
+    {
         $req = $this->conn->prepare("SELECT id, user_id, title, description, status, settings FROM surveys WHERE access_pin = :pin");
         $req->bindParam(':pin', $pin);
         $req->execute();
         return $req->fetch(PDO::FETCH_ASSOC);
     }
 
-    function import ($id){
+    function import($id)
+    {
 
         $query = "insert into importedSurveys (survey_id, user_id) values (:survey_id, :user_id)";
         $stmt = $this->conn->prepare($query);

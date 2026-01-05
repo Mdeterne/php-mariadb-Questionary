@@ -37,7 +37,8 @@
                 <label class="sub-label">Code PIN</label>
                 <div class="input-group">
                     <input type="text" id="share-link"
-                        value="<?php echo htmlspecialchars($survey['access_pin'] ?? ''); ?>" readonly>
+                        value="<?php echo htmlspecialchars($survey['access_pin'] ?? ''); ?>" readonly
+                        style="cursor: pointer; caret-color: transparent; font-weight: bold; text-align: center; background-color: #f9f9f9;">
                     <button class="btn-copy" id="btn-copy">Copier</button>
                 </div>
             </div>

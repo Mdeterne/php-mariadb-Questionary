@@ -5,12 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputLink = document.getElementById('share-link');
 
     btnCopy.addEventListener('click', () => {
-        // Sélectionne le texte
-        inputLink.select();
-        inputLink.setSelectionRange(0, 99999); // Pour mobile
+        const textToCopy = inputLink.value;
 
         // Copie dans le presse-papier
-        navigator.clipboard.writeText(inputLink.value).then(() => {
+        navigator.clipboard.writeText(textToCopy).then(() => {
             // Feedback visuel temporaire
             const originalText = btnCopy.innerText;
             btnCopy.innerText = "Copié !";
@@ -22,7 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         }).catch(err => {
             console.error('Erreur lors de la copie :', err);
+            // Fallback pour anciens navigateurs si besoin (optionnel)
         });
+    });
+
+    // Copier aussi en cliquant sur l'input
+    inputLink.addEventListener('click', () => {
+        btnCopy.click();
     });
 
     // Bouton supprimer

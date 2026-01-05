@@ -7,10 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCopy.addEventListener('click', () => {
         const textToCopy = inputLink.value;
 
-        // Copie dans le presse-papier
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            // Feedback visuel temporaire
-            const originalText = btnCopy.innerText;
+        // Fonction pour gérer le feedback visuel
+        const showSuccessFeedback = () => {
+            const originalText = "Copier"; // Hardcodé car btnCopy.innerText change
             btnCopy.innerText = "Copié !";
             btnCopy.style.backgroundColor = "#d4edda"; // Vert clair
 
@@ -18,10 +17,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnCopy.innerText = originalText;
                 btnCopy.style.backgroundColor = "";
             }, 2000);
-        }).catch(err => {
-            console.error('Erreur lors de la copie :', err);
-            // Fallback pour anciens navigateurs si besoin (optionnel)
-        });
+        };
+
+        // Tentative 1 : API Clipboard moderne
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showSuccessFeedback();
+            }).catch(err => {
+                console.warn('Echec API Clipboard, tentative fallback...', err);
+                fallbackCopyTextToClipboard(textToCopy);
+            });
+        } else {
+            // Tentative 2 : Fallback immédiat si API non dispo
+            fallbackCopyTextToClipboard(textToCopy);
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+
+                // S'assurer que le textarea n'est pas visible mais fait partie du DOM
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                document.body.appendChild(textArea);
+
+                textArea.focus();
+                textArea.select();
+
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                if (successful) {
+                    showSuccessFeedback();
+                } else {
+                    console.error('Fallback: Echec de la commande copy');
+                    alert("Impossible de copier automatiquement. Veuillez copier le code manuellement.");
+                }
+            } catch (err) {
+                console.error('Fallback: Erreur inattendue', err);
+                alert("Impossible de copier le code.");
+            }
+        }
     });
 
     // Bouton supprimer

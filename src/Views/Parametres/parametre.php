@@ -34,9 +34,10 @@
         <div class="section">
             <h3>Partage</h3>
             <div class="card-box">
-                <label class="sub-label">Lien de partage</label>
+                <label class="sub-label">Code PIN</label>
                 <div class="input-group">
-                    <input type="text" id="share-link" value="<?php echo "http://" . $_SERVER['HTTP_HOST'] . "/?c=home&q=" . ($survey['access_pin'] ?? 'TEST01'); ?>" readonly>
+                    <input type="text" id="share-link"
+                        value="<?php echo htmlspecialchars($survey['access_pin'] ?? ''); ?>" readonly>
                     <button class="btn-copy" id="btn-copy">Copier</button>
                 </div>
             </div>
@@ -93,17 +94,17 @@
 
     </main>
     <div class="modal-blur-overlay" id="modal-success" style="display: none;">
-            <div class="modal-card">
-                <div>
-                    <h3 class="modal-title">Sauvegarde réussie !</h3>
-                    <p class="modal-desc">Les paramètres de votre questionnaire ont été enregistré avec succès.</p>
-                </div>
+        <div class="modal-card">
+            <div>
+                <h3 class="modal-title">Sauvegarde réussie !</h3>
+                <p class="modal-desc">Les paramètres de votre questionnaire ont été enregistré avec succès.</p>
+            </div>
 
-                <div class="modal-actions">
-                    <button class="btn-confirm" id="btn-confirm-success">OK</button>
-                </div>
+            <div class="modal-actions">
+                <button class="btn-confirm" id="btn-confirm-success">OK</button>
             </div>
         </div>
+    </div>
 
     <!-- DELETE MODAL -->
     <div class="modal-blur-overlay" id="modal-delete" style="display: none;">

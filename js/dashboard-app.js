@@ -21,7 +21,8 @@ createApp({
             // --- QR CODE MODAL ---
             showQrModal: false,
             qrLink: '',
-            qrTitle: ''
+            qrTitle: '',
+            qrPin: ''
         };
     },
 
@@ -122,6 +123,7 @@ createApp({
             // On retire les parametres GET actuels
             this.qrLink = `${baseUrl}?c=home&a=valider&pin=${pin}`;
             this.qrTitle = titre;
+            this.qrPin = pin;
             this.showQrModal = true;
         },
 
@@ -140,6 +142,7 @@ createApp({
         closeQrModal() {
             this.showQrModal = false;
             this.qrLink = '';
+            this.qrPin = '';
         }
     },
     mounted() {

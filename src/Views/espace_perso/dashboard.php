@@ -161,21 +161,20 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
 
-                    <h3 class="modal-title" style="margin-bottom: 20px;">Scannez pour répondre</h3>
-                    <h4 style="margin-bottom: 20px; color: #666;">{{ qrTitle }}</h4>
+                    <h3 class="modal-title" style="margin-bottom: 5px;">Scannez pour répondre</h3>
+                    <h2 style="font-size: 2.5rem; font-weight: 800; color: #333; margin: 10px 0;">{{ qrPin }}</h2>
+                    <h4 style="margin-bottom: 20px; color: #666; font-weight: normal;">{{ qrTitle }}</h4>
 
                     <div
                         style="background: white; padding: 20px; display: inline-block; border-radius: 10px; border: 1px solid #eee;">
                         <qrcode-vue :value="qrLink" :size="200" level="H"></qrcode-vue>
                     </div>
 
-                    <p style="margin-top: 20px; word-break: break-all; color: #666; font-size: 0.8rem;">
-                        Lien direct : <br>
-                        <a :href="qrLink" target="_blank" style="color: var(--primary-color);">{{ qrLink }}</a>
-                    </p>
+
 
                     <div class="modal-actions" style="justify-content: center; margin-top: 20px;">
-                        <button class="btn-confirm" @click="downloadQrImage"> <i class="fa-solid fa-download"></i> Télécharger l'image</button>
+                        <button class="btn-confirm" @click="downloadQrImage"> <i class="fa-solid fa-download"></i>
+                            Télécharger l'image</button>
                         <button class="btn-cancel" @click="closeQrModal" style="margin-left: 10px;">Fermer</button>
                     </div>
                 </div>

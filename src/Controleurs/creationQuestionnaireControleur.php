@@ -47,12 +47,18 @@ class creationQuestionnaireControleur
             if ($questionnaire['user_id'] != $_SESSION['id']) {
                 $id = $questionnaire['id'];
                 $model->import($id);
-                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'success_import.php';
+                // Redirection vers le tableau de bord avec succès
+                header('Location: ?c=tableauDeBord&import=success');
+                exit;
             } else {
-                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'importationNonAutorise.php';
+                // Redirection vers le tableau de bord avec erreur (déjà propriétaire)
+                header('Location: ?c=tableauDeBord&import=error');
+                exit;
             }
         } else {
-            require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'importationNonAutorise.php';
+            // Redirection vers le tableau de bord avec erreur (introuvable)
+            header('Location: ?c=tableauDeBord&import=error');
+            exit;
         }
     }
 

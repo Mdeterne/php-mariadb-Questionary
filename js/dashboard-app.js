@@ -15,6 +15,8 @@ createApp({
 
             // --- NOUVEAUX CHAMPS POUR L'IMPORTATION ---
             showImportModal: false, // Contrôle l'affichage de la modale floutée
+            showImportSuccess: false,
+            showImportError: false,
             lienImport: '',          // Stocke le texte du lien entré par l'utilisateur
             questionnaireToDelete: null, // ID du questionnaire à supprimer
 
@@ -146,8 +148,24 @@ createApp({
         }
     },
     mounted() {
-        // Plus         besoin de charger via AJAX au démarrage car les données sont injectées par PHP
+        // Plus besoin de charger via AJAX au démarrage car les données sont injectées par PHP
         console.log("Application montée. Données initiales :", this.questionnaires);
+
+        // Check for import status in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const importStatus = urlParams.get('import');
+
+        if (importStatus === 'success') {
+            this.showImportSuccess = true;
+            // Clean URL
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=tableauDeBord';
+            window.history.replaceState({ path: newUrl }, '', newUrl);
+        } else if (importStatus === 'error') {
+            this.showImportError = true;
+            // Clean URL
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=tableauDeBord';
+            window.history.replaceState({ path: newUrl }, '', newUrl);
+        }
     }
 
 }).mount('#app-dashboard');

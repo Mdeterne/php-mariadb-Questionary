@@ -138,6 +138,40 @@
                 </div>
             </div>
 
+            <!-- IMPORT SUCCESS MODAL -->
+            <div class="modal-blur-overlay" v-if="showImportSuccess" @click.self="showImportSuccess = false">
+                <div class="modal-card">
+                    <div>
+                        <h3 class="modal-title">Importation réussie !</h3>
+                        <p class="modal-desc" style="margin-top: 10px;">
+                            Le questionnaire a été importé avec succès. Vous pouvez maintenant le retrouver dans votre
+                            tableau de bord.
+                        </p>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button class="btn-confirm" @click="showImportSuccess = false">OK</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IMPORT ERROR MODAL -->
+            <div class="modal-blur-overlay" v-if="showImportError" @click.self="showImportError = false">
+                <div class="modal-card">
+                    <div>
+                        <h3 class="modal-title">Importation impossible</h3>
+                        <p class="modal-desc" style="margin-top: 10px;">
+                            Le questionnaire n'a pas pu être importé. Vérifiez le code PIN ou assurez-vous que vous
+                            n'êtes pas déjà le propriétaire.
+                        </p>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button class="btn-confirm" @click="showImportError = false">OK</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- DELETE CONFIRMATION MODAL -->
             <div class="modal-blur-overlay" v-if="questionnaireToDelete" @click.self="annulerSuppression">
                 <div class="modal-card">

@@ -112,11 +112,39 @@ createApp({
         },
 
         async downloadQrImage() {
-            const canvas = document.querySelector('.modal-card canvas');
-            if (canvas) {
+            const originalCanvas = document.querySelector('.modal-card canvas');
+            if (originalCanvas) {
+                // Créer un nouveau canvas plus grand pour contenir le texte
+                const nouveauCanvas = document.createElement('canvas');
+                const ctx = nouveauCanvas.getContext('2d');
+
+                const padding = 20;
+                const texteHauteur = 40;
+
+                nouveauCanvas.width = originalCanvas.width + (padding * 2);
+                nouveauCanvas.height = originalCanvas.height + (padding * 2) + texteHauteur;
+
+                // Fond blanc
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, nouveauCanvas.width, nouveauCanvas.height);
+
+                // Dessiner le QR Code
+                ctx.drawImage(originalCanvas, padding, padding);
+
+                // Configurer le style du texte du PIN
+                ctx.font = 'bold 24px Arial';
+                ctx.fillStyle = '#000000';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // Dessiner le PIN en dessous
+                const textX = nouveauCanvas.width / 2;
+                const textY = originalCanvas.height + padding + (texteHauteur / 2);
+                ctx.fillText(`Code: ${this.qrPin}`, textX, textY);
+
                 const lien = document.createElement('a');
-                lien.download = 'qrcode.png';
-                lien.href = canvas.toDataURL('image/png');
+                lien.download = 'qrcode_questionnaire_' + this.qrPin + '.png';
+                lien.href = nouveauCanvas.toDataURL('image/png');
                 document.body.appendChild(lien);
                 lien.click();
                 document.body.removeChild(lien);

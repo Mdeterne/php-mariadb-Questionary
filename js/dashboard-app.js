@@ -42,31 +42,29 @@ createApp({
     },
 
     methods: {
-        // IMPORTANT : La méthode appelée quand on clique sur l'image
+        // La méthode appelée quand on clique sur l'image
         toggleUserMenu() {
             this.showUserMenu = !this.showUserMenu;
         },
 
         creerNouveau() {
-            console.log("[Front-End] Simulation: Demande de création...");
-            // FIXED: Call the correct controller for creation
+            // Appel du bon contrôleur pour la création
             fetch('?c=tableauDeBord&a=creerNouveau', { headers: { 'Accept': 'application/json' } })
                 .then(res => res.json())
-                .then(data => {
-                    // If backend works, use the real ID, otherwise simulate
-                    const nouveauId = (data && data.nouveau_id) ? data.nouveau_id : 99;
-                    console.log(`[Front-End] Redirection vers créateur avec ID ${nouveauId}`);
+                .then(donnees => {
+                    // Si le backend fonctionne, utiliser le vrai ID, sinon simuler
+                    const nouveauId = (donnees && donnees.nouveau_id) ? donnees.nouveau_id : 99;
                     window.location.href = `?c=createur&a=index&id=${nouveauId}`;
                 })
-                .catch(err => {
-                    console.error("Erreur création", err);
-                    // Fallback simulation
+                .catch(erreur => {
+                    console.error("Erreur lors de la création", erreur);
+                    // Si y'a un problème, on simule un ID
                     const nouveauIdSimule = 99;
                     window.location.href = `?c=createur&a=index&id=${nouveauIdSimule}`;
                 });
         },
 
-        // Demande de suppression (ouvre la modale)
+        // Demande de suppression (popup)
         supprimer(id) {
             this.questionnaireToDelete = id;
         },
@@ -79,51 +77,35 @@ createApp({
             const id = this.questionnaireToDelete;
             if (!id) return;
 
-            console.log(`[Front-End] Validation suppression id ${id}...`);
-
             try {
                 const res = await fetch(`?c=tableauDeBord&a=supprimer&id=${id}`, {
                     method: 'GET',
                     headers: { 'Accept': 'application/json' }
                 });
-                // Optimistic UI update
+                // Mise à jour optimiste de l'interface
                 this.questionnaires = this.questionnaires.filter(q => q.id !== id);
-                console.log(`[Front-End] Questionnaire ${id} supprimé.`);
-            } catch (e) {
-                console.error("Erreur suppression", e);
+            } catch (erreur) {
+                console.error("Erreur lors de la suppression", erreur);
             } finally {
                 this.questionnaireToDelete = null;
             }
         },
 
-        // --- NOUVELLE MÉTHODE D'IMPORTATION ---
+        // Importation d'un questionnaire
         validerImport() {
-            // Petite vérification simple
             if (this.lienImport.trim() === '') {
                 alert("Veuillez entrer un code PIN valide.");
                 return;
             }
-
-            console.log("Importation du PIN : ", this.lienImport);
-
             window.location.href = '?c=tableauDeBord&a=importer&pin=' + this.lienImport;
         },
 
-        // --- QR CODE METHODS ---
+        // QR Code, url du questionnaire et lien
         afficherQrCode(pin, titre) {
-            // Construit l'URL absolue pour répondre au questionnaire
-            // On suppose que l'URL actuelle est .../index.php ou .../
-            // On redirige vers ?c=home&a=valider&pin=...
-            const baseUrl = window.location.origin + window.location.pathname;
-            // On s'assure de ne pas doubler le slash si pathname finit par /
-            // Mais pathname finit généralement par .php ou dossier.
-            // Une façon safe de reconstruire l'url :
 
-            // Si on est sur /index.php, on garde /index.php
-            // Si on est sur /, on garde /
+            const urlBase = window.location.origin + window.location.pathname;
 
-            // On retire les parametres GET actuels
-            this.qrLink = `${baseUrl}?c=home&a=valider&pin=${pin}`;
+            this.qrLink = `${urlBase}?c=home&a=valider&pin=${pin}`;
             this.qrTitle = titre;
             this.qrPin = pin;
             this.showQrModal = true;
@@ -132,12 +114,12 @@ createApp({
         async downloadQrImage() {
             const canvas = document.querySelector('.modal-card canvas');
             if (canvas) {
-                const link = document.createElement('a');
-                link.download = 'qrcode.png';
-                link.href = canvas.toDataURL('image/png');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const lien = document.createElement('a');
+                lien.download = 'qrcode.png';
+                lien.href = canvas.toDataURL('image/png');
+                document.body.appendChild(lien);
+                lien.click();
+                document.body.removeChild(lien);
             }
         },
 
@@ -148,23 +130,20 @@ createApp({
         }
     },
     mounted() {
-        // Plus besoin de charger via AJAX au démarrage car les données sont injectées par PHP
-        console.log("Application montée. Données initiales :", this.questionnaires);
 
-        // Check for import status in URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const importStatus = urlParams.get('import');
+        const paramsUrl = new URLSearchParams(window.location.search);
+        const statutImport = paramsUrl.get('import');
 
-        if (importStatus === 'success') {
+        if (statutImport === 'success') {
             this.showImportSuccess = true;
-            // Clean URL
-            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=tableauDeBord';
-            window.history.replaceState({ path: newUrl }, '', newUrl);
-        } else if (importStatus === 'error') {
+            // Nettoyage de l'URL
+            const nouvelleUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=tableauDeBord';
+            window.history.replaceState({ path: nouvelleUrl }, '', nouvelleUrl);
+        } else if (statutImport === 'error') {
             this.showImportError = true;
-            // Clean URL
-            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=tableauDeBord';
-            window.history.replaceState({ path: newUrl }, '', newUrl);
+            // Nettoyage de l'URL
+            const nouvelleUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=tableauDeBord';
+            window.history.replaceState({ path: nouvelleUrl }, '', nouvelleUrl);
         }
     }
 

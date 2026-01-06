@@ -55,15 +55,21 @@ class Reponse
                         $textValue = trim((string) $value);
                     }
                 } else {
-                    // It's a choice question
+                    // C'est une question à choix (choix multiple ou unique)
                     if (is_array($value)) {
-                        $optionIds = $value;
+                        // NOUVEAU : Si la structure est { options: [...], text_value: "..." } pour gérer "Autre"
+                        if (isset($value['options']) || isset($value['text_value'])) {
+                            $optionIds = isset($value['options']) ? (is_array($value['options']) ? $value['options'] : []) : [];
+                            $textValue = isset($value['text_value']) ? trim((string) $value['text_value']) : null;
+                        } else {
+                            // Cas classique : tableau d'IDs (checkboxes standard)
+                            $optionIds = $value;
+                        }
                     } elseif (is_numeric($value)) {
+                        // Cas classique : ID unique (radio standard)
                         $optionIds[] = (int) $value;
                     } else {
-                        // Fallback for non-numeric single choice?
-                        // Maybe it's a string label passed?
-                        // For now keep existing behavior for fallbacks or ignore
+                        // Cas de fallback
                     }
                 }
 

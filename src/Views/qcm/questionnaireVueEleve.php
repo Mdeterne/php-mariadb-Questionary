@@ -71,7 +71,8 @@
         /* Submit button replaced by .btn .btn-primary */
 
         /* New Styles for Inputs */
-        .text-input, .text-area {
+        .text-input,
+        .text-area {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -80,15 +81,19 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
+
         .text-area {
             resize: none;
             overflow-y: hidden;
             min-height: 100px;
         }
-        .text-input:focus, .text-area:focus {
+
+        .text-input:focus,
+        .text-area:focus {
             border-color: var(--primary);
             outline: none;
         }
+
         /* Scale styles removed (replaced by standard range input) */
         .option-checkbox {
             margin-right: 10px;
@@ -170,7 +175,8 @@
         }
 
         .btn-confirm {
-            background: #252525; /* Explicit Blue */
+            background: #252525;
+            /* Explicit Blue */
             color: white;
             border: none;
             padding: 10px 20px;
@@ -187,9 +193,9 @@
 </head>
 
 <body>
-    <?php 
+    <?php
     $logoHref = 'javascript:void(0)';
-    require_once __DIR__ . '/../components/header.php'; 
+    require_once __DIR__ . '/../components/header.php';
     ?>
 
     <div class="app-container" id="app-student">
@@ -216,44 +222,63 @@
                         <div class="answer-area">
                             <!-- Single Choice -->
                             <div v-if="q.type === 'single_choice'" class="options-list">
-                                <label v-for="opt in q.options" :key="opt.id" class="option-item"
-                                    :class="{ selected: reponses[q.id] === opt.id }">
-                                    <input type="radio" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]" class="option-radio">
-                                    <span>{{ opt.label }}</span>
-                                </label>
+                                <div v-for="opt in q.options" :key="opt.id">
+                                    <label class="option-item"
+                                        :class="{ selected: reponses[q.id] === opt.id }">
+                                        <input type="radio" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]"
+                                            class="option-radio">
+                                        <span>{{ opt.label }}</span>
+                                    </label>
+                                    <!-- Champ texte si c'est une option ouverte et qu'elle est sélectionnée -->
+                                    <div v-if="opt.is_open_ended == 1 && reponses[q.id] === opt.id" style="margin-left: 36px; margin-top: 8px;">
+                                         <input type="text" v-model="autreReponses[q.id]" class="text-input" placeholder="Veuillez préciser...">
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Multiple Choice -->
                             <div v-else-if="q.type === 'multiple_choice'" class="options-list">
-                                <label v-for="opt in q.options" :key="opt.id" class="option-item"
-                                    :class="{ selected: Array.isArray(reponses[q.id]) && reponses[q.id].includes(opt.id) }">
-                                    <input type="checkbox" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]" class="option-checkbox">
-                                    <span>{{ opt.label }}</span>
-                                </label>
+                                <div v-for="opt in q.options" :key="opt.id">
+                                    <label class="option-item"
+                                        :class="{ selected: Array.isArray(reponses[q.id]) && reponses[q.id].includes(opt.id) }">
+                                        <input type="checkbox" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]"
+                                            class="option-checkbox">
+                                        <span>{{ opt.label }}</span>
+                                    </label>
+                                    <!-- Champ texte si c'est une option ouverte et qu'elle est cochée -->
+                                    <div v-if="opt.is_open_ended == 1 && Array.isArray(reponses[q.id]) && reponses[q.id].includes(opt.id)" style="margin-left: 36px; margin-top: 8px;">
+                                         <input type="text" v-model="autreReponses[q.id]" class="text-input" placeholder="Veuillez préciser...">
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Short Text -->
                             <div v-else-if="q.type === 'short_text'">
-                                <input type="text" v-model="reponses[q.id]" class="text-input" placeholder="Votre réponse...">
+                                <input type="text" v-model="reponses[q.id]" class="text-input"
+                                    placeholder="Votre réponse...">
                             </div>
 
                             <!-- Long Text -->
                             <div v-else-if="q.type === 'long_text'">
-                                <textarea v-model="reponses[q.id]" @input="autoResize" class="text-area" rows="4" placeholder="Votre réponse..."></textarea>
+                                <textarea v-model="reponses[q.id]" @input="autoResize" class="text-area" rows="4"
+                                    placeholder="Votre réponse..."></textarea>
                             </div>
 
                             <!-- Scale -->
                             <div v-else-if="q.type === 'scale'" class="scale-container">
                                 <div style="width: 100%; max-width: 90%; margin: 0 auto;">
-                                    <input type="range" min="1" max="5" step="1" v-model="reponses[q.id]" style="width: 100%; margin-bottom: 8px; display: block; accent-color: var(--primary);">
-                                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 500; color: #666; padding: 0 2px;">
+                                    <input type="range" min="1" max="5" step="1" v-model="reponses[q.id]"
+                                        style="width: 100%; margin-bottom: 8px; display: block; accent-color: var(--primary);">
+                                    <div
+                                        style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 500; color: #666; padding: 0 2px;">
                                         <span>1</span>
                                         <span>2</span>
                                         <span>3</span>
                                         <span>4</span>
                                         <span>5</span>
                                     </div>
-                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
+                                    <div
+                                        style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
                                         <span>{{ q.scale_min_label || 'Pas du tout' }}</span>
                                         <span>{{ q.scale_max_label || 'Tout à fait' }}</span>
                                     </div>
@@ -308,16 +333,18 @@
             methods: {
                 loadData() {
                     const dataFromPHP = <?php echo json_encode($questionQuestionnaire ?? null); ?>;
-                    
+
                     if (dataFromPHP) {
                         this.questionnaire = dataFromPHP;
-                        // Initialize responses
+                        // Initialisation des réponses
                         this.questionnaire.questions.forEach(q => {
                             if (q.type === 'multiple_choice') {
                                 this.reponses[q.id] = [];
                             } else {
                                 this.reponses[q.id] = null;
                             }
+                            // Initialisation du champ texte "Autre"
+                            this.autreReponses[q.id] = '';
                         });
                         this.loading = false;
                     } else {
@@ -335,7 +362,51 @@
                 },
                 async confirmSubmission() {
                     this.showModal = false;
-                    this.loading = true; // Show loading state
+                    this.loading = true; // Afficher le chargement
+
+                    // Préparation des données pour inclure le texte "Autre" si nécessaire
+                    const reponsesPayload = {};
+
+                    for (const [qId, valeur] of Object.entries(this.reponses)) {
+                        const question = this.questionnaire.questions.find(q => q.id == qId);
+                        if (!question) continue;
+
+                        // Gestion spéciale pour les questions avec option "Autre"
+                        if (['single_choice', 'multiple_choice'].includes(question.type)) {
+                            // On cherche si une option sélectionnée est "open_ended"
+                            const optionsSelectionnees = [];
+                            let aOptionAutreSelectionnee = false;
+
+                            if (Array.isArray(valeur)) { // Checkbox
+                                // On récupère les objets options complets correspondant aux IDs sélectionnés
+                                const opts = question.options.filter(o => valeur.includes(o.id));
+                                opts.forEach(o => {
+                                    optionsSelectionnees.push(o.id);
+                                    if (o.is_open_ended == 1) aOptionAutreSelectionnee = true;
+                                });
+                            } else { // Radio
+                                const opt = question.options.find(o => o.id == valeur);
+                                if (opt) {
+                                    optionsSelectionnees.push(opt.id);
+                                    if (opt.is_open_ended == 1) aOptionAutreSelectionnee = true;
+                                }
+                            }
+
+                            if (aOptionAutreSelectionnee && this.autreReponses[qId]) {
+                                // On structure la réponse pour le backend
+                                reponsesPayload[qId] = {
+                                    options: optionsSelectionnees,
+                                    text_value: this.autreReponses[qId]
+                                };
+                            } else {
+                                // Format standard
+                                reponsesPayload[qId] = valeur;
+                            }
+                        } else {
+                            // Questions texte standard
+                            reponsesPayload[qId] = valeur;
+                        }
+                    }
 
                     try {
                         const response = await fetch('index.php?c=home&a=saveReponse', {
@@ -345,7 +416,7 @@
                             },
                             body: JSON.stringify({
                                 survey_id: this.questionnaire.id,
-                                answers: this.reponses
+                                answers: reponsesPayload
                             })
                         });
 

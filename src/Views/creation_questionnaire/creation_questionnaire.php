@@ -84,11 +84,28 @@
                                 <div v-for="(opt, optIndex) in element.options" :key="optIndex" class="option-row">
                                     <i
                                         :class="element.type === 'Cases à cocher' ? 'fa-regular fa-square' : 'fa-regular fa-circle'"></i>
-                                    <input type="text" v-model="opt.label" placeholder="Option">
+
+                                    <!-- Affichage différent pour l'option Autre -->
+                                    <template v-if="opt.is_open_ended">
+                                        <div style="flex:1; display:flex; gap:10px; align-items:center;">
+                                            <span style="font-size: 0.9rem; color: #666;">Autre :</span>
+                                            <input type="text" disabled placeholder="Réponse libre de l'utilisateur"
+                                                style="border-style: dashed; background: #fafafa;">
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <input type="text" v-model="opt.label" placeholder="Option">
+                                    </template>
+
                                     <button @click="supprimerOption(element, optIndex)" class="btn-icon"><i
                                             class="fa-solid fa-xmark"></i></button>
                                 </div>
-                                <button @click="ajouterOption(element)" class="btn-text">+ Ajouter une option</button>
+                                <div style="display:flex; gap: 15px; margin-top: 10px;">
+                                    <button @click="ajouterOption(element)" class="btn-text">+ Ajouter une
+                                        option</button>
+                                    <button v-if="!aUneOptionAutre(element)" @click="ajouterOptionAutre(element)"
+                                        class="btn-text" style="color: #666;">+ Ajouter option "Autre"</button>
+                                </div>
                             </div>
 
                             <div v-if="element.type === 'Jauge'" class="preview-input">

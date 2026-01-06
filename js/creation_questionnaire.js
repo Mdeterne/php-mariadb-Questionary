@@ -44,7 +44,10 @@ const app = createApp({
                         type: type,
                         title: q.label,
                         required: q.is_required == 1,
-                        options: q.options ? q.options.map(o => ({ label: o.label })) : [],
+                        options: q.options ? q.options.map(o => ({
+                            label: o.label,
+                            is_open_ended: o.is_open_ended == 1 // Conversion DB 1/0 en bool 
+                        })) : [],
                         scale_min_label: q.scale_min_label || 'Pas du tout',
                         scale_max_label: q.scale_max_label || 'Tout à fait'
                     };
@@ -62,7 +65,7 @@ const app = createApp({
                 id: Date.now() + Math.random(),
                 type: type,
                 title: '',
-                options: ['Cases à cocher', 'Choix multiples'].includes(type) ? [{ label: 'Option 1' }] : [],
+                options: ['Cases à cocher', 'Choix multiples'].includes(type) ? [{ label: 'Option 1', is_open_ended: false }] : [],
                 required: false,
                 scale_min_label: type === 'Jauge' ? 'Pas du tout' : '',
                 scale_max_label: type === 'Jauge' ? 'Tout à fait' : ''
@@ -72,10 +75,28 @@ const app = createApp({
             this.questions.splice(index, 1);
         },
         ajouterOption(question) {
-            question.options.push({ label: `Option ${question.options.length + 1}` });
+            // On ajoute une option standard avant l'option "Autre" si elle existe
+            const nouvelleOption = { label: `Option ${question.options.filter(o => !o.is_open_ended).length + 1}`, is_open_ended: false };
+
+            // Si la dernière option est "Autre", on insère avant
+            if (question.options.length > 0 && question.options[question.options.length - 1].is_open_ended) {
+                question.options.splice(question.options.length - 1, 0, nouvelleOption);
+            } else {
+                question.options.push(nouvelleOption);
+            }
+        },
+        ajouterOptionAutre(question) {
+            // Vérifie s'il y a déjà une option "Autre"
+            const existeDeja = question.options.some(o => o.is_open_ended);
+            if (!existeDeja) {
+                question.options.push({ label: 'Autre', is_open_ended: true });
+            }
         },
         supprimerOption(question, index) {
             question.options.splice(index, 1);
+        },
+        aUneOptionAutre(question) {
+            return question.options && question.options.some(o => o.is_open_ended);
         },
         sauvegarderFormulaire() {
             const donneesFormulaire = new FormData();

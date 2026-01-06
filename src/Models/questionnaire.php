@@ -39,7 +39,8 @@ class questionnaire
                 $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required, scale_min_label, scale_max_label) VALUES (:survey_id, :type, :label, :order_index, :is_required, :scale_min_label, :scale_max_label)";
                 $stmtQ = $this->conn->prepare($sqlQ);
 
-                $sqlOpt = "INSERT INTO question_options (question_id, label, order_index) VALUES (:question_id, :label, :order_index)";
+                // Ajout de la colonne is_open_ended
+                $sqlOpt = "INSERT INTO question_options (question_id, label, order_index, is_open_ended) VALUES (:question_id, :label, :order_index, :is_open_ended)";
                 $stmtOpt = $this->conn->prepare($sqlOpt);
 
                 foreach ($questions as $index => $q) {
@@ -49,7 +50,7 @@ class questionnaire
                         $label = 'Question sans titre';
                     $isRequired = isset($q['required']) && $q['required'] ? 1 : 0;
 
-                    // Mapping types
+                    // Mapping des types pour la DB
                     $dbType = 'short_text';
                     if ($type === 'Réponse courte')
                         $dbType = 'short_text';
@@ -75,14 +76,18 @@ class questionnaire
 
                     $questionId = $this->conn->lastInsertId();
 
-                    // Insert Options
+                    // Insertion des options
                     if (in_array($type, ['Cases à cocher', 'Choix multiples']) && !empty($q['options'])) {
                         foreach ($q['options'] as $optIndex => $opt) {
                             $optLabel = $opt['label'];
+                            // Gestion de l'option "Autre"
+                            $isOpenEnded = isset($opt['is_open_ended']) && $opt['is_open_ended'] ? 1 : 0;
+
                             $stmtOpt->execute([
                                 ':question_id' => $questionId,
                                 ':label' => $optLabel,
-                                ':order_index' => $optIndex
+                                ':order_index' => $optIndex,
+                                ':is_open_ended' => $isOpenEnded
                             ]);
                         }
                     }
@@ -150,7 +155,7 @@ class questionnaire
                 $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required, scale_min_label, scale_max_label) VALUES (:survey_id, :type, :label, :order_index, :is_required, :scale_min_label, :scale_max_label)";
                 $stmtQ = $this->conn->prepare($sqlQ);
 
-                $sqlOpt = "INSERT INTO question_options (question_id, label, order_index) VALUES (:question_id, :label, :order_index)";
+                $sqlOpt = "INSERT INTO question_options (question_id, label, order_index, is_open_ended) VALUES (:question_id, :label, :order_index, :is_open_ended)";
                 $stmtOpt = $this->conn->prepare($sqlOpt);
 
                 foreach ($questions as $index => $q) {
@@ -189,10 +194,13 @@ class questionnaire
                     if (in_array($type, ['Cases à cocher', 'Choix multiples']) && !empty($q['options'])) {
                         foreach ($q['options'] as $optIndex => $opt) {
                             $optLabel = $opt['label'];
+                            $isOpenEnded = isset($opt['is_open_ended']) && $opt['is_open_ended'] ? 1 : 0;
+
                             $stmtOpt->execute([
                                 ':question_id' => $questionId,
                                 ':label' => $optLabel,
-                                ':order_index' => $optIndex
+                                ':order_index' => $optIndex,
+                                ':is_open_ended' => $isOpenEnded
                             ]);
                         }
                     }

@@ -111,7 +111,7 @@
                         <div class="card-q">
                             <div class="card-q-title">{{ q.titre }}</div>
                             <div class="card-q-qr" @click.prevent.stop="afficherQrCode(q.access_pin, q.titre)">
-                                <i class="fa-solid fa-qrcode"></i>
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
                             </div>
                         </div>
                     </a>

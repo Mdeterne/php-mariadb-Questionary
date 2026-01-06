@@ -90,7 +90,7 @@
 }
 
 .card-q-qr {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     /* Taille du QR Code */
     color: #252525;
     flex-shrink: 0;
@@ -99,7 +99,7 @@
     /* Fixed width container */
     display: flex;
     justify-content: center;
-    margin-right: 15px;
+    margin-right: 5px;
     /* Add spacing from trash icon */
 }
 

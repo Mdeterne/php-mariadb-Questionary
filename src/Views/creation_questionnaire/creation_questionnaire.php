@@ -30,15 +30,12 @@
         <aside class="editor-toolbox">
             <div class="sidebar-header-box">Éléments</div>
             <!-- Draggable Source Group -->
-            <draggable class="toolbox-list sidebar-nav" :list="outils"
-                :group="{ name: 'questions', pull: 'clone', put: false }" :clone="clonerQuestion" :sort="false"
-                item-key="type">
-                <template #item="{ element }">
-                    <div class="tool-item" @click="ajouterQuestion(element.type)">
-                        <i :class="['fa-solid', element.icon]"></i> {{ element.label }}
-                    </div>
-                </template>
-            </draggable>
+            <div class="toolbox-list sidebar-nav">
+                <div class="tool-item" v-for="element in outils" :key="element.type"
+                    @click="ajouterQuestion(element.type)">
+                    <i :class="['fa-solid', element.icon]"></i> {{ element.label }}
+                </div>
+            </div>
         </aside>
 
         <main class="editor-workspace">
@@ -52,105 +49,101 @@
             </div>
 
 
-            <!-- Zone de drop et canvas -->
-            <draggable class="zone-depot" v-model="questions" group="questions" item-key="id" handle=".drag-handle"
-                ghost-class="ghost">
+            <!-- Zone de depot et canvas -->
+            <div class="zone-depot">
+                <div v-if="questions.length === 0" class="empty-placeholder">
+                    <i class="fa-solid fa-cloud-arrow-down placeholder-icon"></i>
+                    <span class="placeholder-text">Cliquez sur un élément à gauche pour l'ajouter</span>
+                </div>
 
-                <template #item="{ element, index }">
-                    <div class="question-card" :class="{ 'active-card': indexQuestionActive === index }"
-                        @click="definirActif(index)">
+                <div v-for="(element, index) in questions" :key="element.id" 
+                     class="question-card" 
+                     :class="{ 'active-card': indexQuestionActive === index }"
+                     @click="definirActif(index)">
 
-                        <div class="question-header">
-                            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
-                            <div class="question-type-badge">{{ element.type }}</div>
-                            <button class="btn-icon delete" @click.stop="supprimerQuestion(index)"><i
-                                    class="fa-solid fa-trash"></i></button>
+                    <div class="question-header">
+                        <!-- Drag handle removed -->
+                        <div class="question-type-badge">{{ element.type }}</div>
+                        <button class="btn-icon delete" @click.stop="supprimerQuestion(index)">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+
+                    <div class="question-body">
+                        <input type="text" class="input-field question-title" v-model="element.title"
+                            placeholder="Question sans titre">
+
+                        <!-- Texte dynamique basé sur le type de question -->
+                        <div v-if="element.type === 'Réponse courte'" class="preview-input">
+                            <input disabled type="text" placeholder="Réponse courte">
                         </div>
 
-                        <div class="question-body">
-                            <input type="text" class="input-field question-title" v-model="element.title"
-                                placeholder="Question sans titre">
+                        <div v-if="element.type === 'Paragraphe'" class="preview-input">
+                            <textarea disabled class="area-drop" placeholder="Réponse longue"></textarea>
+                        </div>
 
-                            <!-- Texte dynamique basé sur le type de question -->
-                            <div v-if="element.type === 'Réponse courte'" class="preview-input">
-                                <input disabled type="text" placeholder="Réponse courte">
-                            </div>
+                        <div v-if="['Cases à cocher', 'Choix multiples'].includes(element.type)">
+                            <div v-for="(opt, optIndex) in element.options" :key="optIndex" class="option-row">
+                                <i :class="element.type === 'Cases à cocher' ? 'fa-regular fa-square' : 'fa-regular fa-circle'"></i>
 
-                            <div v-if="element.type === 'Paragraphe'" class="preview-input">
-                                <textarea disabled class="area-drop" placeholder="Réponse longue"></textarea>
-                            </div>
-
-                            <div v-if="['Cases à cocher', 'Choix multiples'].includes(element.type)">
-                                <div v-for="(opt, optIndex) in element.options" :key="optIndex" class="option-row">
-                                    <i
-                                        :class="element.type === 'Cases à cocher' ? 'fa-regular fa-square' : 'fa-regular fa-circle'"></i>
-
-                                    <!-- Affichage différent pour l'option Autre -->
-                                    <template v-if="opt.is_open_ended">
-                                        <div style="flex:1; display:flex; gap:10px; align-items:center;">
-                                            <span style="font-size: 0.9rem; color: #666;">Autre :</span>
-                                            <input type="text" disabled placeholder="Réponse libre de l'utilisateur"
-                                                style="border-style: dashed; background: #fafafa;">
-                                        </div>
-                                    </template>
-                                    <template v-else>
-                                        <input type="text" v-model="opt.label" placeholder="Option">
-                                    </template>
-
-                                    <button @click="supprimerOption(element, optIndex)" class="btn-icon"><i
-                                            class="fa-solid fa-xmark"></i></button>
-                                </div>
-                                <div style="display:flex; gap: 15px; margin-top: 10px;">
-                                    <button @click="ajouterOption(element)" class="btn-text">+ Ajouter une
-                                        option</button>
-                                    <button v-if="!aUneOptionAutre(element)" @click="ajouterOptionAutre(element)"
-                                        class="btn-text" style="color: #666;">+ Ajouter option "Autre"</button>
-                                </div>
-                            </div>
-
-                            <div v-if="element.type === 'Jauge'" class="preview-input">
-                                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                                    <input type="text" v-model="element.scale_min_label"
-                                        placeholder="Label Min (ex: Pas du tout)" class="input-field"
-                                        style="font-size: 0.9rem;">
-                                    <input type="text" v-model="element.scale_max_label"
-                                        placeholder="Label Max (ex: Tout à fait)" class="input-field"
-                                        style="font-size: 0.9rem;">
-                                </div>
-                                <div style="width: 100%;">
-                                    <input type="range" min="1" max="5" value="3"
-                                        style="width: 100%; margin-bottom: 8px; display: block;">
-                                    <div
-                                        style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 500; color: var(--muted); padding: 0 2px;">
-                                        <span>1</span>
-                                        <span>2</span>
-                                        <span>3</span>
-                                        <span>4</span>
-                                        <span>5</span>
+                                <!-- Affichage différent pour l'option Autre -->
+                                <template v-if="opt.is_open_ended">
+                                    <div style="flex:1; display:flex; gap:10px; align-items:center;">
+                                        <span style="font-size: 0.9rem; color: #666;">Autre :</span>
+                                        <input type="text" disabled placeholder="Réponse libre de l'utilisateur"
+                                            style="border-style: dashed; background: #fafafa;">
                                     </div>
-                                    <div
-                                        style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
-                                        <span>{{ element.scale_min_label || 'Pas du tout' }}</span>
-                                        <span>{{ element.scale_max_label || 'Tout à fait' }}</span>
-                                    </div>
-                                </div>
-                            </div>
+                                </template>
+                                <template v-else>
+                                    <input type="text" v-model="opt.label" placeholder="Option">
+                                </template>
 
-                            <!-- Bar d'actions pour la question active -->
-                            <div class="question-actions" v-if="indexQuestionActive === index">
+                                <button @click="supprimerOption(element, optIndex)" class="btn-icon"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <div style="display:flex; gap: 15px; margin-top: 10px;">
+                                <button @click="ajouterOption(element)" class="btn-text">+ Ajouter une
+                                    option</button>
+                                <button v-if="!aUneOptionAutre(element)" @click="ajouterOptionAutre(element)"
+                                    class="btn-text" style="color: #666;">+ Ajouter option "Autre"</button>
                             </div>
                         </div>
 
-                    </div>
-                </template>
+                        <div v-if="element.type === 'Jauge'" class="preview-input">
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <input type="text" v-model="element.scale_min_label"
+                                    placeholder="Label Min (ex: Pas du tout)" class="input-field"
+                                    style="font-size: 0.9rem;">
+                                <input type="text" v-model="element.scale_max_label"
+                                    placeholder="Label Max (ex: Tout à fait)" class="input-field"
+                                    style="font-size: 0.9rem;">
+                            </div>
+                            <div style="width: 100%;">
+                                <input type="range" min="1" max="5" value="3"
+                                    style="width: 100%; margin-bottom: 8px; display: block;">
+                                <div
+                                    style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 500; color: var(--muted); padding: 0 2px;">
+                                    <span>1</span>
+                                    <span>2</span>
+                                    <span>3</span>
+                                    <span>4</span>
+                                    <span>5</span>
+                                </div>
+                                <div
+                                    style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
+                                    <span>{{ element.scale_min_label || 'Pas du tout' }}</span>
+                                    <span>{{ element.scale_max_label || 'Tout à fait' }}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                <template #footer>
-                    <div class="empty-placeholder">
-                        <i class="fa-solid fa-cloud-arrow-down placeholder-icon"></i>
-                        <span class="placeholder-text">Glissez des éléments ici</span>
+                        <!-- Bar d'actions pour la question active -->
+                        <div class="question-actions" v-if="indexQuestionActive === index">
+                        </div>
                     </div>
-                </template>
-            </draggable>
+
+                </div>
+            </div>
         </main>
 
         <aside class="editor-actions">
@@ -182,9 +175,6 @@
         window.existingSurvey = <?php echo isset($existingSurvey) ? json_encode($existingSurvey) : 'null'; ?>;
     </script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <script src="https://unpkg.com/vuedraggable@4.1.0/dist/vuedraggable.umd.min.js"></script>
-
     <!-- Logique de l'app -->
     <script src="js/creation_questionnaire.js"></script>
 

@@ -1,10 +1,6 @@
 const { createApp } = Vue;
-const draggable = window.vuedraggable;
 
 const app = createApp({
-    components: {
-        draggable: draggable
-    },
     data() {
         return {
             titreFormulaire: '',
@@ -131,10 +127,6 @@ const app = createApp({
         fermerModaleSauvegarde() {
             this.afficherModaleSauvegarde = false;
             window.location.href = '?c=tableauDeBord';
-        },
-        clonerQuestion(outil) {
-            // Fonction utiliser par draggable lors du clonage depuis la boîte à outils
-            return this.creerObjetQuestion(outil.type);
         },
         definirActif(index) {
             this.indexQuestionActive = index;

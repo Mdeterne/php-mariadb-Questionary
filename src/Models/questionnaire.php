@@ -218,13 +218,30 @@ class questionnaire
     function existsAndOpen($pin)
     {
         $req = $this->conn->prepare("
-            SELECT id, title, description 
+            SELECT id, title, description, settings 
             FROM surveys 
             WHERE access_pin = :pin AND status = 'active'
         ");
         $req->bindParam(':pin', $pin, PDO::PARAM_STR);
         $req->execute();
-        return $req->fetch(PDO::FETCH_ASSOC);
+        $survey = $req->fetch(PDO::FETCH_ASSOC);
+
+        if ($survey) {
+            $settings = json_decode($survey['settings'], true);
+            $today = date('Y-m-d');
+
+            if (!empty($settings['dateStart']) && $today < $settings['dateStart']) {
+                return false;
+            }
+
+            if (!empty($settings['dateEnd']) && $today > $settings['dateEnd']) {
+                return false;
+            }
+
+            return $survey;
+        }
+
+        return false;
     }
 
     function exists($pin)

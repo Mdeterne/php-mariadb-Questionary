@@ -7,20 +7,19 @@ createApp({
     },
     data() {
         return {
-            // Initialisation avec les données injectées par PHP (window.serverQuestionnaires)
+            // Initialisation 
             questionnaires: (typeof window.serverQuestionnaires !== 'undefined') ? window.serverQuestionnaires : [],
             termeRecherche: '',
             isLoading: false,
-            showUserMenu: false, // IMPORTANT : Par défaut le menu est caché
+            showUserMenu: false,
 
-            // --- NOUVEAUX CHAMPS POUR L'IMPORTATION ---
-            showImportModal: false, // Contrôle l'affichage de la modale floutée
+            showImportModal: false,
             showImportSuccess: false,
             showImportError: false,
-            lienImport: '',          // Stocke le texte du lien entré par l'utilisateur
-            questionnaireToDelete: null, // ID du questionnaire à supprimer
+            lienImport: '',
+            questionnaireToDelete: null,
 
-            // --- QR CODE MODAL ---
+            // QR code 
             showQrModal: false,
             qrLink: '',
             qrTitle: '',
@@ -42,23 +41,19 @@ createApp({
     },
 
     methods: {
-        // La méthode appelée quand on clique sur l'image
         toggleUserMenu() {
             this.showUserMenu = !this.showUserMenu;
         },
 
         creerNouveau() {
-            // Appel du bon contrôleur pour la création
             fetch('?c=tableauDeBord&a=creerNouveau', { headers: { 'Accept': 'application/json' } })
                 .then(res => res.json())
                 .then(donnees => {
-                    // Si le backend fonctionne, utiliser le vrai ID, sinon simuler
                     const nouveauId = (donnees && donnees.nouveau_id) ? donnees.nouveau_id : 99;
                     window.location.href = `?c=createur&a=index&id=${nouveauId}`;
                 })
                 .catch(erreur => {
                     console.error("Erreur lors de la création", erreur);
-                    // Si y'a un problème, on simule un ID
                     const nouveauIdSimule = 99;
                     window.location.href = `?c=createur&a=index&id=${nouveauIdSimule}`;
                 });
@@ -82,7 +77,6 @@ createApp({
                     method: 'GET',
                     headers: { 'Accept': 'application/json' }
                 });
-                // Mise à jour optimiste de l'interface
                 this.questionnaires = this.questionnaires.filter(q => q.id !== id);
             } catch (erreur) {
                 console.error("Erreur lors de la suppression", erreur);

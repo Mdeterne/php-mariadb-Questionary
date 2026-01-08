@@ -12,9 +12,7 @@ $_SESSION['mail'] = $infoSESSION['mail'];
 $_SESSION['name'] = $infoSESSION['cn'];
 $_SESSION['id'] = $infoSESSION['uid'];
 
-if (!isset($_SESSION['role'])) {
-  $_SESSION['role'] = 'etudiant';
-}
+$_SESSION['role'] = 'enseignant';
 
 
 // Controllers

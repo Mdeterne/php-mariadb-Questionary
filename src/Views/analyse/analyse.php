@@ -64,6 +64,19 @@
         window.surveyData = <?php echo $questionsData ?? '[]'; ?>;
     </script>
     <script src="js/analyse.js?v=<?php echo time(); ?>"></script>
+
+    <!-- Modal for Text Answers -->
+    <div id="text-answers-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title-text">Réponses</h3>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul id="modal-text-list" class="text-answers-list-modal"></ul>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

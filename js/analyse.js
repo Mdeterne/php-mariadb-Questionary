@@ -303,3 +303,40 @@ function afficherNuageMots(canvas, liste) {
         backgroundColor: '#ffffff'
     });
 }
+
+// PDF Export Logic
+const btnExportPdf = document.getElementById('btn-export-pdf');
+if (btnExportPdf) {
+    btnExportPdf.addEventListener('click', () => {
+        const element = document.querySelector('main');
+        const originalBtnText = btnExportPdf.innerHTML;
+
+        // Hide buttons during export
+        const controls = document.querySelector('.top-controls');
+        if (controls) controls.style.display = 'none';
+
+        btnExportPdf.innerHTML = 'Génération...';
+        btnExportPdf.disabled = true;
+
+        const opt = {
+            margin: [10, 10, 10, 10], // top, left, bottom, right
+            filename: 'analyse-questionnaire.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            // Restore UI
+            if (controls) controls.style.display = '';
+            btnExportPdf.innerHTML = originalBtnText;
+            btnExportPdf.disabled = false;
+        }).catch(err => {
+            console.error(err);
+            alert("Erreur lors de la génération du PDF");
+            if (controls) controls.style.display = '';
+            btnExportPdf.innerHTML = originalBtnText;
+            btnExportPdf.disabled = false;
+        });
+    });
+}

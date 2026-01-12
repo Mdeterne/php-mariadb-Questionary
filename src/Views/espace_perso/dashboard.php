@@ -70,9 +70,7 @@
                         </div>
                         <h3 class="modal-username"><?php echo $_SESSION['name'] ?? 'Utilisateur'; ?></h3>
 
-                        <!--<a href="?c=home" class="modal-logout-btn">
-                            Se déconnecter <i class="fa-solid fa-right-from-bracket"></i>
-                        </a>-->
+
 
                         <div class="modal-footer">
                             <a href="?c=home&a=conditionGenerales">Conditions générales</a> | <a
@@ -119,7 +117,7 @@
 
             </section>
 
-            <!-- IMPORT MODAL -->
+            <!-- MODALE D'IMPORTATION -->
             <div class="modal-blur-overlay" v-if="showImportModal" @click.self="showImportModal = false">
                 <div class="modal-card">
                     <div>
@@ -139,7 +137,7 @@
                 </div>
             </div>
 
-            <!-- IMPORT SUCCESS MODAL -->
+            <!-- MODALE DE SUCCÈS D'IMPORTATION -->
             <div class="modal-blur-overlay" v-if="showImportSuccess" @click.self="showImportSuccess = false">
                 <div class="modal-card">
                     <div>
@@ -156,7 +154,7 @@
                 </div>
             </div>
 
-            <!-- IMPORT ERROR MODAL -->
+            <!-- MODALE D'ERREUR D'IMPORTATION -->
             <div class="modal-blur-overlay" v-if="showImportError" @click.self="showImportError = false">
                 <div class="modal-card">
                     <div>
@@ -173,7 +171,7 @@
                 </div>
             </div>
 
-            <!-- DELETE CONFIRMATION MODAL -->
+            <!-- MODALE DE CONFIRMATION DE SUPPRESSION -->
             <div class="modal-blur-overlay" v-if="questionnaireToDelete" @click.self="annulerSuppression">
                 <div class="modal-card">
                     <div>
@@ -189,7 +187,7 @@
                 </div>
             </div>
 
-            <!-- QR CODE MODAL -->
+            <!-- MODALE QR CODE -->
             <div class="modal-blur-overlay" v-if="showQrModal" @click.self="closeQrModal">
                 <div class="modal-card" style="text-align: center;">
                     <button class="modal-close-btn" @click="closeQrModal">

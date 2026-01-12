@@ -7,7 +7,7 @@ createApp({
     },
     data() {
         return {
-            // Initialisation 
+            // Initialisation des données réactives 
             questionnaires: (typeof window.serverQuestionnaires !== 'undefined') ? window.serverQuestionnaires : [],
             termeRecherche: '',
             isLoading: false,
@@ -19,7 +19,7 @@ createApp({
             lienImport: '',
             questionnaireToDelete: null,
 
-            // QR code 
+            // Gestion du QR Code 
             showQrModal: false,
             qrLink: '',
             qrTitle: '',
@@ -59,7 +59,7 @@ createApp({
                 });
         },
 
-        // Demande de suppression (popup)
+        // Gestion de la modale de suppression
         supprimer(id) {
             this.questionnaireToDelete = id;
         },
@@ -85,7 +85,7 @@ createApp({
             }
         },
 
-        // Importation d'un questionnaire
+        // Logique d'importation d'un questionnaire via PIN
         validerImport() {
             if (this.lienImport.trim() === '') {
                 alert("Veuillez entrer un code PIN valide.");
@@ -94,7 +94,7 @@ createApp({
             window.location.href = '?c=tableauDeBord&a=importer&pin=' + this.lienImport;
         },
 
-        // QR Code, url du questionnaire et lien
+        // Affichage du QR Code et génération du lien d'accès
         afficherQrCode(pin, titre) {
 
             const urlBase = window.location.origin + window.location.pathname;
@@ -108,7 +108,7 @@ createApp({
         async downloadQrImage() {
             const originalCanvas = document.querySelector('.modal-card canvas');
             if (originalCanvas) {
-                // Créer un nouveau canvas plus grand pour contenir le texte
+                // Création d'un nouveau canvas temporaire incluant le texte
                 const nouveauCanvas = document.createElement('canvas');
                 const ctx = nouveauCanvas.getContext('2d');
 
@@ -118,20 +118,20 @@ createApp({
                 nouveauCanvas.width = originalCanvas.width + (padding * 2);
                 nouveauCanvas.height = originalCanvas.height + (padding * 2) + texteHauteur;
 
-                // Fond blanc
+                // Application d'un fond blanc
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(0, 0, nouveauCanvas.width, nouveauCanvas.height);
 
-                // Dessiner le QR Code
+                // Dessin du QR Code source
                 ctx.drawImage(originalCanvas, padding, padding);
 
-                // Configurer le style du texte du PIN
+                // Configuration du style pour le texte du PIN
                 ctx.font = 'bold 24px Arial';
                 ctx.fillStyle = '#000000';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
 
-                // Dessiner le PIN en dessous
+                // Ajout du code PIN en bas de l'image
                 const textX = nouveauCanvas.width / 2;
                 const textY = originalCanvas.height + padding + (texteHauteur / 2);
                 ctx.fillText(`Code: ${this.qrPin}`, textX, textY);
@@ -158,12 +158,12 @@ createApp({
 
         if (statutImport === 'success') {
             this.showImportSuccess = true;
-            // Nettoyage de l'URL
+            // Nettoyage de l'URL pour retirer le paramètre 'import' après traitement
             const nouvelleUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=tableauDeBord';
             window.history.replaceState({ path: nouvelleUrl }, '', nouvelleUrl);
         } else if (statutImport === 'error') {
             this.showImportError = true;
-            // Nettoyage de l'URL
+            // Nettoyage de l'URL pour retirer le paramètre 'import' après traitement
             const nouvelleUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?c=tableauDeBord';
             window.history.replaceState({ path: nouvelleUrl }, '', nouvelleUrl);
         }

@@ -107,7 +107,7 @@
         </div>
     </div>
 
-    <!-- DELETE MODAL -->
+    <!-- MODALE DE CONFIRMATION DE SUPPRESSION -->
     <div class="modal-blur-overlay" id="modal-delete" style="display: none;">
         <div class="modal-card">
             <div>

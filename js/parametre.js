@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Bouton copier
+    // Gestion du bouton de copie
     const btnCopy = document.getElementById('btn-copy');
     const inputLink = document.getElementById('share-link');
 
     btnCopy.addEventListener('click', () => {
         const textToCopy = inputLink.value;
 
-        // Fonction pour gérer le feedback visuel
+        // Affichage du retour visuel après copie
         const showSuccessFeedback = () => {
-            const originalText = "Copier"; // Hardcodé car btnCopy.innerText change
+            const originalText = "Copier";
             btnCopy.innerText = "Copié !";
-            btnCopy.style.backgroundColor = "#d4edda"; // Vert clair
+            btnCopy.style.backgroundColor = "#d4edda";
 
             setTimeout(() => {
                 btnCopy.innerText = originalText;
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         };
 
-        // Tentative 1 : API Clipboard moderne
+        // Méthode principale : Utilisation de l'API Clipboard
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(textToCopy).then(() => {
                 showSuccessFeedback();
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 fallbackCopyTextToClipboard(textToCopy);
             });
         } else {
-            // Tentative 2 : Fallback immédiat si API non dispo
+            // Méthode de secours : Utilisation de execCommand
             fallbackCopyTextToClipboard(textToCopy);
         }
 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const textArea = document.createElement("textarea");
                 textArea.value = text;
 
-                // S'assurer que le textarea n'est pas visible mais fait partie du DOM
+                // Création d'un élément textarea invisible pour la sélection
                 textArea.style.position = "fixed";
                 textArea.style.left = "-9999px";
                 textArea.style.top = "0";
@@ -62,30 +62,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Bouton supprimer
+    // Gestion de la modale de suppression
     const btnDelete = document.getElementById('btn-delete');
     const modalDelete = document.getElementById('modal-delete');
     const btnCancelDelete = document.getElementById('btn-cancel-delete');
     const btnConfirmDelete = document.getElementById('btn-confirm-delete');
 
-    // Ouvrir la popup supprimer
+    // Ouverture de la modale
     btnDelete.addEventListener('click', () => {
         modalDelete.style.display = 'flex';
     });
 
-    // Fermer la popup supprimer
+    // Fermeture de la modale
     btnCancelDelete.addEventListener('click', () => {
         modalDelete.style.display = 'none';
     });
 
-    // Fermer si clic en dehors
+    // Fermeture au clic sur l'arrière-plan
     modalDelete.addEventListener('click', (e) => {
         if (e.target === modalDelete) {
             modalDelete.style.display = 'none';
         }
     });
 
-    // Confirmer suppression
+    // Traitement de la suppression du questionnaire
     btnConfirmDelete.addEventListener('click', () => {
         const surveyId = document.querySelector('.settings-main').dataset.surveyId;
 
@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Redirection vers le tableau de bord après suppression
                     window.location.href = '?c=tableauDeBord';
                 } else {
                     alert("Erreur lors de la suppression : " + (data.message || "Erreur inconnue"));
@@ -107,13 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
 
-    // Bouton enregistrer
+    // Gestion du bouton de sauvegarde
     const btnSave = document.getElementById('btn-save');
     const toggleAccess = document.getElementById('toggle-access');
     const modalSuccess = document.getElementById('modal-success');
     const btnConfirmSuccess = document.getElementById('btn-confirm-success');
 
-    // Redirection après clic sur OK
+    // Redirection après validation de la modale de succès
     btnConfirmSuccess.addEventListener('click', () => {
         const surveyId = document.querySelector('.settings-main').dataset.surveyId;
         window.location.href = '?c=createur&a=editer&id=' + surveyId;
@@ -147,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 if (data.status === 'success') {
                     if (showSuccessAlert) {
-                        // Afficher la modale de succès
                         modalSuccess.style.display = 'flex';
                     }
                 } else {
@@ -165,12 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     btnSave.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevenir en cas de clic sur un lien
+        e.preventDefault(); // Empêche le comportement par défaut si nécessaire
         saveSettings(true);
     });
 
 
-    // Bouton Annuler
+    // Gestion du bouton d'annulation
     const btnCancel = document.getElementById('btn-cancel');
     if (btnCancel) {
         btnCancel.addEventListener('click', () => {

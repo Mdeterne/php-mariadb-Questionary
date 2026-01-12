@@ -25,7 +25,7 @@ const app = createApp({
             this.titreFormulaire = s.title;
             this.descriptionFormulaire = s.description;
 
-            // Adaptation des questions pour le frontend
+            // Initialisation de l'état du composant des questions pour le frontend
             if (s.questions && s.questions.length > 0) {
                 this.questions = s.questions.map(q => {
                     let type = 'Réponse courte';
@@ -36,13 +36,13 @@ const app = createApp({
                     else if (q.type === 'scale') type = 'Jauge';
 
                     return {
-                        id: Date.now() + Math.random(), // Id temporaire pour la boucle vue
+                        id: Date.now() + Math.random(),
                         type: type,
                         title: q.label,
                         required: q.is_required == 1,
                         options: q.options ? q.options.map(o => ({
                             label: o.label,
-                            is_open_ended: o.is_open_ended == 1 // Conversion DB 1/0 en bool 
+                            is_open_ended: o.is_open_ended == 1
                         })) : [],
                         scale_min_label: q.scale_min_label || 'Pas du tout',
                         scale_max_label: q.scale_max_label || 'Tout à fait'
@@ -53,7 +53,6 @@ const app = createApp({
     },
     methods: {
         ajouterQuestion(type) {
-            // Logique pour le bouton d'ajout manuel
             this.questions.push(this.creerObjetQuestion(type));
         },
         creerObjetQuestion(type) {
@@ -71,10 +70,8 @@ const app = createApp({
             this.questions.splice(index, 1);
         },
         ajouterOption(question) {
-            // On ajoute une option standard avant l'option "Autre" si elle existe
             const nouvelleOption = { label: `Option ${question.options.filter(o => !o.is_open_ended).length + 1}`, is_open_ended: false };
 
-            // Si la dernière option est "Autre", on insère avant
             if (question.options.length > 0 && question.options[question.options.length - 1].is_open_ended) {
                 question.options.splice(question.options.length - 1, 0, nouvelleOption);
             } else {
@@ -88,9 +85,11 @@ const app = createApp({
                 question.options.push({ label: 'Autre', is_open_ended: true });
             }
         },
+
         supprimerOption(question, index) {
             question.options.splice(index, 1);
         },
+
         aUneOptionAutre(question) {
             return question.options && question.options.some(o => o.is_open_ended);
         },
@@ -103,7 +102,7 @@ const app = createApp({
             donneesFormulaire.append('description', this.descriptionFormulaire);
             donneesFormulaire.append('questions', JSON.stringify(this.questions));
 
-            console.log('Sauvegarde du formulaire :', this.titreFormulaire, this.descriptionFormulaire, this.questions);
+
 
             // Envoi au backend
             fetch('?c=createur&a=save', {

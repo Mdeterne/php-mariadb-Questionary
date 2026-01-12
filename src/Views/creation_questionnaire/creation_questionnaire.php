@@ -29,7 +29,7 @@
 
         <aside class="editor-toolbox">
             <div class="sidebar-header-box">Éléments</div>
-            <!-- Draggable Source Group -->
+
             <div class="toolbox-list sidebar-nav">
                 <div class="tool-item" v-for="element in outils" :key="element.type"
                     @click="ajouterQuestion(element.type)">
@@ -49,20 +49,18 @@
             </div>
 
 
-            <!-- Zone de depot et canvas -->
+            <!-- Zone de construction du questionnaire -->
             <div class="zone-depot">
                 <div v-if="questions.length === 0" class="empty-placeholder">
                     <i class="fa-solid fa-cloud-arrow-down placeholder-icon"></i>
                     <span class="placeholder-text">Cliquez sur un élément à gauche pour l'ajouter</span>
                 </div>
 
-                <div v-for="(element, index) in questions" :key="element.id" 
-                     class="question-card" 
-                     :class="{ 'active-card': indexQuestionActive === index }"
-                     @click="definirActif(index)">
+                <div v-for="(element, index) in questions" :key="element.id" class="question-card"
+                    :class="{ 'active-card': indexQuestionActive === index }" @click="definirActif(index)">
 
                     <div class="question-header">
-                        <!-- Drag handle removed -->
+
                         <div class="question-type-badge">{{ element.type }}</div>
                         <button class="btn-icon delete" @click.stop="supprimerQuestion(index)">
                             <i class="fa-solid fa-trash"></i>
@@ -84,7 +82,8 @@
 
                         <div v-if="['Cases à cocher', 'Choix multiples'].includes(element.type)">
                             <div v-for="(opt, optIndex) in element.options" :key="optIndex" class="option-row">
-                                <i :class="element.type === 'Cases à cocher' ? 'fa-regular fa-square' : 'fa-regular fa-circle'"></i>
+                                <i
+                                    :class="element.type === 'Cases à cocher' ? 'fa-regular fa-square' : 'fa-regular fa-circle'"></i>
 
                                 <!-- Affichage différent pour l'option Autre -->
                                 <template v-if="opt.is_open_ended">
@@ -138,8 +137,7 @@
                         </div>
 
                         <!-- Bar d'actions pour la question active -->
-                        <div class="question-actions" v-if="indexQuestionActive === index">
-                        </div>
+
                     </div>
 
                 </div>
@@ -155,7 +153,7 @@
 
         </aside>
 
-        <!-- Pop up de sauvegarde -->
+        <!-- MODALE DE SUCCÈS DE SAUVEGARDE -->
         <div class="modal-blur-overlay" v-if="afficherModaleSauvegarde" @click.self="fermerModaleSauvegarde">
             <div class="modal-card">
                 <div>

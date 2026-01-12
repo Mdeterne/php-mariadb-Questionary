@@ -65,7 +65,7 @@
     </script>
     <script src="js/analyse.js?v=<?php echo time(); ?>"></script>
 
-    <!-- Modal for Text Answers -->
+    <!-- Modale d'affichage des réponses textuelles -->
     <div id="text-answers-modal" class="modal-overlay" style="display:none;">
         <div class="modal-content">
             <div class="modal-header">

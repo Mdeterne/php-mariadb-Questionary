@@ -3,22 +3,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const donneesQuestions = window.surveyData || [];
     const conteneur = document.getElementById('cards-wrapper');
 
-    // MODAL LOGIC
+    // Logique de gestion de la modale de réponse
     const modalOverlay = document.getElementById('text-answers-modal');
     const modalTitle = document.getElementById('modal-title-text');
     const modalList = document.getElementById('modal-text-list');
     const modalCloseBtn = document.querySelector('.modal-close-btn');
 
-    // Make function global so onclick in HTML works
+    // Exposition de la fonction pour l'accès global via HTML
     window.openTextModal = function (questionIndex) {
         const q = donneesQuestions[questionIndex];
         if (!q || !q.text_answers) return;
 
-        // Set Title
         if (modalTitle) modalTitle.innerText = q.label;
 
-        // Build List
-        // Filter empty strings just in case
         const validAnswers = q.text_answers.filter(a => a && a.trim() !== "");
 
         if (modalList) {
@@ -29,10 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Show Modal
         if (modalOverlay) {
             modalOverlay.style.display = 'flex';
-            // Trick for animation opacity
+            // Activation de l'animation CSS via un léger délai
             setTimeout(() => {
                 modalOverlay.classList.add('active');
             }, 10);
@@ -45,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             modalOverlay.style.display = 'none';
             if (modalList) modalList.innerHTML = '';
-        }, 200); // Wait for transition
+        }, 200);
     }
 
     if (modalCloseBtn) {
@@ -56,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target === modalOverlay) closeModal();
         });
     }
-    // Escape key
+    // Gestion de la touche Échap pour fermer la modale
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) {
             closeModal();
@@ -89,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const estTexteLong = ['paragraph', 'long_text', 'text', 'Paragraphe'].includes(q.type);
 
         if (estEchelle) {
-            // ... (Scale Logic Unchanged) ...
+            // Calcul des statistiques pour les questions de type Échelle
             let scoreTotal = 0;
             let votesTotaux = 0;
             if (q.stats) {
@@ -124,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>`;
         }
         else if (estTexteCourt) {
-            // CHART + MODAL BUTTON
+            // Affichage du graphique et du bouton pour les réponses courtes
             const nbRep = q.text_answers ? q.text_answers.length : 0;
             contenuHTML = `
                 <div class="chart-container" style="height:200px; margin-bottom:15px;">
@@ -135,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>`;
         }
         else if (estTexteLong) {
-            // WORDCLOUD + MODAL BUTTON
+            // Affichage du nuage de mots et du bouton pour les réponses longues
             const nbRep = q.text_answers ? q.text_answers.length : 0;
             contenuHTML = `
                 <div class="chart-container" style="height:300px; margin-bottom:20px;">
@@ -164,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (conteneur) conteneur.innerHTML = htmlAcc;
 
 
-    // Initialisation des graphiques (Helper and Loop - Unchanged Logic)
+    // Initialisation et configuration des graphiques (Chart.js)
     function afficherGraphique(idCanvas, etiquettes, valeursDonnees, couleurBase, nomEtiquette) {
         const canvas = document.getElementById(idCanvas);
         if (!canvas) return;
@@ -248,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Word Freq & Cloud Helpers (Unchanged)
+    // Utilitaires pour le calcul de fréquence et le nuage de mots
     function calculerFrequenceMots(reponses) {
         const motsVides = ['le', 'la', 'les', 'de', 'du', 'des', 'un', 'une', 'et', 'à', 'en', 'ce', 'pour', 'que', 'qui', 'dans', 'sur', 'par', 'a', 'plus', 'est', 'sont', 'c\'est', 'j\'ai', 'je', 'mon', 'ma', 'mes', 'au', 'aux', 'ne', 'se', 'ce', 'ces', 'son', 'sa', 'ses', 'vos', 'votre', 'nous', 'vous', 'il', 'elle', 'ils', 'elles', 'on', 'mais', 'ou', 'où', 'donc', 'or', 'ni', 'car', 'tout', 'tous', 'toute', 'toutes', 'cela', 'ça', 'comme', 'si', 'y', 'sans', 'sous', 'vers', 'avec', 'rien', 'aucun', 'aucune', 'très', 'trop', 'peu', 'pas', 'assez', 'bien', 'mal'];
         const compteurs = {};

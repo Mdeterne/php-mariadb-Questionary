@@ -12,8 +12,6 @@ $_SESSION['mail'] = $infoSESSION['mail'];
 $_SESSION['name'] = $infoSESSION['cn'];
 $_SESSION['id'] = $infoSESSION['uid'];
 
-$_SESSION['role'] = 'enseignant';
-
 
 // Controllers
 require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "homeControleur.php";

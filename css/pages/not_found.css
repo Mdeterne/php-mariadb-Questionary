@@ -1,0 +1,37 @@
+.error-container {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.error-icon {
+    font-size: 80px;
+    color: var(--secondary);
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.error-title {
+    font-size: 2rem;
+    color: var(--dark);
+    margin-bottom: 10px;
+}
+
+.error-desc {
+    color: var(--gray);
+    margin-bottom: 30px;
+}
+
+.btn-home {
+    background-color: #252525;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-home:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(19, 19, 19, 0.4);
+}

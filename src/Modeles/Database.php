@@ -1,6 +1,6 @@
 <?php
 
-class Bdd
+class Database
 {
     private $conn;
     private $db_name = "questionary";

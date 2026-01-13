@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bdd.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Database.php';
 
 class Utilisateur
 {
@@ -8,7 +8,7 @@ class Utilisateur
 
     public function __construct()
     {
-        $database = new Bdd();
+        $database = new Database();
         $this->conn = $database->getConnection();
         if ($this->conn === null) {
             throw new Exception('Erreur de connexion à la base de données.');

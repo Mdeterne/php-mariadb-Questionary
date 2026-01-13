@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bdd.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Database.php';
 
 class Reponse
 {
@@ -8,7 +8,7 @@ class Reponse
 
     public function __construct()
     {
-        $database = new Bdd();
+        $database = new Database();
         $this->bdd = $database->getConnection();
     }
     private function generateUuidV4()

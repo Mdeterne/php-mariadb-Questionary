@@ -97,7 +97,6 @@ class Reponse
             return true;
         } catch (Exception $e) {
             $this->bdd->rollBack();
-            echo "Error saving response: " . $e->getMessage() . "\n"; // DEBUG
             return false;
         }
     }

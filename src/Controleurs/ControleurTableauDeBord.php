@@ -26,18 +26,6 @@ class ControleurTableauDeBord
         exit;
     }
 
-    function creerNouveau()
-    {
-
-        // TODO (Back-End): Créer en BDD et renvoyer le vrai ID
-        header('Content-Type: application/json');
-        echo json_encode([
-            'status' => 'success_mock',
-            'nouveau_id' => 999
-        ]);
-        exit;
-    }
-
     function supprimer()
     {
         header('Content-Type: application/json');

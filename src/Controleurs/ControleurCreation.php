@@ -65,7 +65,12 @@ class ControleurCreation
     function save()
     {
         $modelQuestionnaire = new Questionnaire();
-        $titre = $_POST['titre'];
+        $titre = trim($_POST['titre'] ?? '');
+        if (empty($titre)) {
+            http_response_code(400);
+            echo "Le titre est obligatoire.";
+            exit;
+        }
         $description = $_POST['description'];
         $user_id = $_SESSION['id'];
         $questions = isset($_POST['questions']) ? json_decode($_POST['questions'], true) : [];

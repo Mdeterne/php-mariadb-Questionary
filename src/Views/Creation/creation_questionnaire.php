@@ -167,6 +167,21 @@
             </div>
         </div>
 
+        <!-- MODALE ERREUR TITRE MANQUANT -->
+        <div class="modal-blur-overlay" v-if="afficherModaleErreurTitre"
+            @click.self="afficherModaleErreurTitre = false">
+            <div class="modal-card">
+                <div>
+                    <h3 class="modal-title">Titre manquant</h3>
+                    <p class="modal-desc">Veuillez donner un nom à votre questionnaire avant de le sauvegarder.</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-confirm" @click="afficherModaleErreurTitre = false">D'accord</button>
+                </div>
+            </div>
+        </div>
+
     </div>
     <script>
         // Ajout des données existantes si elles sont disponibles

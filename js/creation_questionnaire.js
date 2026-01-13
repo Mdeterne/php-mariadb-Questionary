@@ -15,7 +15,8 @@ const app = createApp({
                 { type: 'Jauge', label: 'Jauge', icon: 'fa-sliders' }
             ],
             indexQuestionActive: null,
-            afficherModaleSauvegarde: false
+            afficherModaleSauvegarde: false,
+            afficherModaleErreurTitre: false
         };
     },
     mounted() {
@@ -94,6 +95,10 @@ const app = createApp({
             return question.options && question.options.some(o => o.is_open_ended);
         },
         sauvegarderFormulaire() {
+            if (!this.titreFormulaire.trim()) {
+                this.afficherModaleErreurTitre = true;
+                return;
+            }
             const donneesFormulaire = new FormData();
             if (this.idQuestionnaire) {
                 donneesFormulaire.append('id', this.idQuestionnaire);

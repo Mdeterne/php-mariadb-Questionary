@@ -68,12 +68,15 @@
         document.addEventListener("DOMContentLoaded", function () {
 
           const clearButtons = document.querySelectorAll('.clear');
+
           clearButtons.forEach(button => {
             button.addEventListener('click', function () {
+              // Récupération du conteneur parent
               const inputWrapper = this.closest('.input-wrap');
               if (inputWrapper) {
                 const inputField = inputWrapper.querySelector('input');
                 if (inputField) {
+                  // Effacement du champ et focus
                   inputField.value = '';
                   inputField.focus();
                 }

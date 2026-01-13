@@ -68,9 +68,7 @@
             height: 20px;
         }
 
-        /* Submit button replaced by .btn .btn-primary */
-
-        /* New Styles for Inputs */
+        /* Nouveaux styles pour les champs de saisie */
         .text-input,
         .text-area {
             width: 100%;
@@ -94,7 +92,7 @@
             outline: none;
         }
 
-        /* Scale styles removed (replaced by standard range input) */
+        /* Styles pour l'échelle */
         .option-checkbox {
             margin-right: 10px;
             accent-color: var(--primary);
@@ -114,7 +112,7 @@
             }
         }
 
-        /* Modal Styles */
+        /* Styles de la modale */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -220,51 +218,54 @@
                         </div>
 
                         <div class="answer-area">
-                            <!-- Single Choice -->
+                            <!-- Choix unique (Radio) -->
                             <div v-if="q.type === 'single_choice'" class="options-list">
                                 <div v-for="opt in q.options" :key="opt.id">
-                                    <label class="option-item"
-                                        :class="{ selected: reponses[q.id] === opt.id }">
+                                    <label class="option-item" :class="{ selected: reponses[q.id] === opt.id }">
                                         <input type="radio" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]"
                                             class="option-radio">
                                         <span>{{ opt.label }}</span>
                                     </label>
                                     <!-- Champ texte si c'est une option ouverte et qu'elle est sélectionnée -->
-                                    <div v-if="opt.is_open_ended == 1 && reponses[q.id] === opt.id" style="margin-left: 36px; margin-top: 8px;">
-                                         <input type="text" v-model="autreReponses[q.id]" class="text-input" placeholder="Veuillez préciser...">
+                                    <div v-if="opt.is_open_ended == 1 && reponses[q.id] === opt.id"
+                                        style="margin-left: 36px; margin-top: 8px;">
+                                        <input type="text" v-model="autreReponses[q.id]" class="text-input"
+                                            placeholder="Veuillez préciser...">
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Multiple Choice -->
+                            <!-- Choix multiples (Checkbox) -->
                             <div v-else-if="q.type === 'multiple_choice'" class="options-list">
                                 <div v-for="opt in q.options" :key="opt.id">
                                     <label class="option-item"
                                         :class="{ selected: Array.isArray(reponses[q.id]) && reponses[q.id].includes(opt.id) }">
-                                        <input type="checkbox" :name="'q_' + q.id" :value="opt.id" v-model="reponses[q.id]"
-                                            class="option-checkbox">
+                                        <input type="checkbox" :name="'q_' + q.id" :value="opt.id"
+                                            v-model="reponses[q.id]" class="option-checkbox">
                                         <span>{{ opt.label }}</span>
                                     </label>
                                     <!-- Champ texte si c'est une option ouverte et qu'elle est cochée -->
-                                    <div v-if="opt.is_open_ended == 1 && Array.isArray(reponses[q.id]) && reponses[q.id].includes(opt.id)" style="margin-left: 36px; margin-top: 8px;">
-                                         <input type="text" v-model="autreReponses[q.id]" class="text-input" placeholder="Veuillez préciser...">
+                                    <div v-if="opt.is_open_ended == 1 && Array.isArray(reponses[q.id]) && reponses[q.id].includes(opt.id)"
+                                        style="margin-left: 36px; margin-top: 8px;">
+                                        <input type="text" v-model="autreReponses[q.id]" class="text-input"
+                                            placeholder="Veuillez préciser...">
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Short Text -->
+                            <!-- Texte court -->
                             <div v-else-if="q.type === 'short_text'">
                                 <input type="text" v-model="reponses[q.id]" class="text-input"
                                     placeholder="Votre réponse...">
                             </div>
 
-                            <!-- Long Text -->
+                            <!-- Texte long (Paragraphe) -->
                             <div v-else-if="q.type === 'long_text'">
                                 <textarea v-model="reponses[q.id]" @input="autoResize" class="text-area" rows="4"
                                     placeholder="Votre réponse..."></textarea>
                             </div>
 
-                            <!-- Scale -->
+                            <!-- Échelle (Jauge) -->
                             <div v-else-if="q.type === 'scale'" class="scale-container">
                                 <div style="width: 100%; max-width: 90%; margin: 0 auto;">
                                     <input type="range" min="1" max="5" step="1" v-model="reponses[q.id]"
@@ -295,7 +296,7 @@
 
         </main>
 
-        <!-- Custom Confirmation Modal -->
+        <!-- Modale de confirmation personnalisée -->
         <div v-if="showModal" class="modal-overlay">
             <div class="modal-card">
                 <h3>Confirmer l'envoi</h3>
@@ -317,7 +318,7 @@
                 return {
                     loading: true,
                     showModal: false,
-                    // Récupération des données PHP injectées ou mock
+                    // Récupération des données du questionnaire (injectées via PHP)
                     questionnaire: {
                         title: "Titre du questionnaire",
                         description: "Description...",
@@ -327,7 +328,7 @@
                 }
             },
             mounted() {
-                // Simulation de chargement de données (réelles ou injectées)
+                // Chargement initial des données
                 this.loadData();
             },
             methods: {
@@ -373,12 +374,12 @@
 
                         // Gestion spéciale pour les questions avec option "Autre"
                         if (['single_choice', 'multiple_choice'].includes(question.type)) {
-                            // On cherche si une option sélectionnée est "open_ended"
+                            // Vérification de la présence d'une option "Réponse libre"
                             const optionsSelectionnees = [];
                             let aOptionAutreSelectionnee = false;
 
                             if (Array.isArray(valeur)) { // Checkbox
-                                // On récupère les objets options complets correspondant aux IDs sélectionnés
+                                // Récupération des objets options complets correspondant aux IDs sélectionnés
                                 const opts = question.options.filter(o => valeur.includes(o.id));
                                 opts.forEach(o => {
                                     optionsSelectionnees.push(o.id);
@@ -393,13 +394,13 @@
                             }
 
                             if (aOptionAutreSelectionnee && this.autreReponses[qId]) {
-                                // On structure la réponse pour le backend
+                                // Structuration de la réponse pour le traitement backend
                                 reponsesPayload[qId] = {
                                     options: optionsSelectionnees,
                                     text_value: this.autreReponses[qId]
                                 };
                             } else {
-                                // Format standard
+                                // Format de réponse standard (sans texte additionnel)
                                 reponsesPayload[qId] = valeur;
                             }
                         } else {

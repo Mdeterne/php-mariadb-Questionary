@@ -193,7 +193,7 @@
 <body>
     <?php
     $logoHref = 'javascript:void(0)';
-    require_once __DIR__ . '/../components/header.php';
+    require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Composants' . DIRECTORY_SEPARATOR . 'header.php';
     ?>
 
     <div class="app-container" id="app-student">

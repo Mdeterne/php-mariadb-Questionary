@@ -1,11 +1,11 @@
 <?php
-require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'questionnaire.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Questionnaire.php';
 
-class creationQuestionnaireControleur
+class ControleurCreation
 {
     function nouveauFormulaire()
     {
-        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
     }
 
     function index()
@@ -21,7 +21,7 @@ class creationQuestionnaireControleur
         }
 
         $id = $_GET['id'];
-        $model = new questionnaire();
+        $model = new Questionnaire();
 
         // Verify ownership (or existence)
         $survey = $model->getAnalysisData($id); // Re-use analysis data fetching so we get everything
@@ -36,12 +36,12 @@ class creationQuestionnaireControleur
 
         // Pass data to view
         $existingSurvey = $survey;
-        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
     }
 
     function import($pin)
     {
-        $model = new questionnaire();
+        $model = new Questionnaire();
         if ($model->exists($pin)) {
             $questionnaire = $model->getSurveyByPin($pin);
             if ($questionnaire['user_id'] != $_SESSION['id']) {
@@ -64,7 +64,7 @@ class creationQuestionnaireControleur
 
     function save()
     {
-        $modelQuestionnaire = new questionnaire();
+        $modelQuestionnaire = new Questionnaire();
         $titre = $_POST['titre'];
         $description = $_POST['description'];
         $user_id = $_SESSION['id'];
@@ -75,7 +75,7 @@ class creationQuestionnaireControleur
             $id = $_POST['id'];
             try {
                 $modelQuestionnaire->updateSurvey($id, $user_id, $titre, $description, $questions);
-                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
+                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
             } catch (Exception $e) {
                 http_response_code(500);
                 echo "Erreur lors de la mise à jour : " . $e->getMessage();
@@ -93,7 +93,7 @@ class creationQuestionnaireControleur
             try {
                 $modelQuestionnaire->saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token, $questions);
                 // Redirection ou confirmation (ici on inclut la vue, le JS recevra le HTML 200 OK)
-                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'creation_questionnaire' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
+                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
             } catch (Exception $e) {
                 http_response_code(500);
                 echo "Erreur lors de la sauvegarde : " . $e->getMessage();

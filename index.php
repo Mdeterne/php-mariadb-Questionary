@@ -6,7 +6,7 @@ ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Configues" . DIRECTORY_SEPARATOR . "configue_CAS.php";
+require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Configs" . DIRECTORY_SEPARATOR . "ConfigCas.php";
 
 $_SESSION['mail'] = $infoSESSION['mail'];
 $_SESSION['name'] = $infoSESSION['cn'];
@@ -14,10 +14,10 @@ $_SESSION['id'] = $infoSESSION['uid'];
 
 
 // Controllers
-require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "homeControleur.php";
-require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "tableauDeBordControlleur.php";
-require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "creationQuestionnaireControleur.php";
-require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "espaceAnalyseControleur.php";
+require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "ControleurAccueil.php";
+require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "ControleurTableauDeBord.php";
+require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "ControleurCreation.php";
+require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "ControleurAnalyse.php";
 
 $controleur = isset($_GET['c']) ? $_GET['c'] : 'home';
 $action = isset($_GET['a']) ? $_GET['a'] : 'index';
@@ -28,7 +28,7 @@ $pin = isset($_GET['pin']) ? $_GET['pin'] : '';
 switch ($controleur) {
 
   case 'home':
-    $homeControleur = new homeControleur();
+    $homeControleur = new ControleurAccueil();
     switch ($action) {
       case 'index':
         $homeControleur->index();
@@ -61,8 +61,8 @@ switch ($controleur) {
     break;
 
   case 'tableauDeBord':
-    $tableauDeBordControlleur = new tableauDeBordControlleur();
-    $creationQuestionnaireControleur = new creationQuestionnaireControleur();
+    $tableauDeBordControlleur = new ControleurTableauDeBord();
+    $creationQuestionnaireControleur = new ControleurCreation();
     if ($_SESSION['role'] != 'enseignant') {
       $controleur = 'home';
       $action = null;
@@ -106,7 +106,7 @@ switch ($controleur) {
     break;
 
   case 'espaceAnalyse':
-    $espaceAnalyseControleur = new espaceAnalyseControleur();
+    $espaceAnalyseControleur = new ControleurAnalyse();
     if ($_SESSION['role'] != 'enseignant') {
       $controleur = 'home';
       $action = null;
@@ -121,7 +121,7 @@ switch ($controleur) {
     break;
 
   case 'createur':
-    $creationQuestionnaireControleur = new creationQuestionnaireControleur();
+    $creationQuestionnaireControleur = new ControleurCreation();
     if ($_SESSION['role'] != 'enseignant') {
       $controleur = 'home';
       $action = null;
@@ -151,7 +151,7 @@ switch ($controleur) {
       $controleur = 'home';
       $action = null;
     }
-    $tableauDeBordControlleur = new tableauDeBordControlleur();
+    $tableauDeBordControlleur = new ControleurTableauDeBord();
     $tableauDeBordControlleur->parametres();
     break;
 }

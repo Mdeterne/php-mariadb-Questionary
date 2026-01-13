@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     btnSave.addEventListener('click', (e) => {
-        e.preventDefault(); // Empêche le comportement par défaut si nécessaire
+        e.preventDefault();
         saveSettings(true);
     });
 

@@ -6,12 +6,11 @@ ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Configs" . DIRECTORY_SEPARATOR . "ConfigCas.php";
+require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Configues" . DIRECTORY_SEPARATOR . "Configues_CAS.php";
 
 $_SESSION['mail'] = $infoSESSION['mail'];
 $_SESSION['name'] = $infoSESSION['cn'];
 $_SESSION['id'] = $infoSESSION['uid'];
-$_SESSION['role'] = $infoSESSION['role'];
 
 
 // Controllers

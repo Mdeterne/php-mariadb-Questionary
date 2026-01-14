@@ -3,16 +3,25 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Model
 
 class ControleurCreation
 {
+    /**
+     * Affiche le formulaire de création d'un nouveau questionnaire.
+     */
     function nouveauFormulaire()
     {
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
     }
 
+    /**
+     * Point d'entrée par défaut.
+     */
     function index()
     {
         $this->nouveauFormulaire();
     }
 
+    /**
+     * Affiche le formulaire d'édition pour un questionnaire existant.
+     */
     function editer()
     {
         if (!isset($_GET['id'])) {
@@ -21,32 +30,35 @@ class ControleurCreation
         }
 
         $id = $_GET['id'];
-        $model = new Questionnaire();
+        $modeleQuestionnaire = new Questionnaire();
 
-        // Verify ownership (or existence)
-        $survey = $model->getAnalysisData($id); // Re-use analysis data fetching so we get everything
-        if (!$survey) {
+        // Vérifie la propriété ou l'existence du questionnaire
+        // Réutilise la récupération des données d'analyse pour avoir toutes les infos
+        $questionnaire = $modeleQuestionnaire->getAnalysisData($id); 
+        if (!$questionnaire) {
             header('Location: ?c=tableauDeBord');
             exit;
         }
 
-        // Ideally check user_id if we want stricter security here, but getSurveysByUserId on dashboard already filters access.
-        // But for direct URL access:
-        // if ($survey['user_id'] != $_SESSION['user_id']) die('Unauthorized');
-
-        // Pass data to view
-        $existingSurvey = $survey;
+        // Variable transmise à la vue : $existingSurvey
+        $existingSurvey = $questionnaire;
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
     }
 
+    /**
+     * Importe un questionnaire via son code PIN.
+     * 
+     * @param string $pin Le code PIN du questionnaire à importer.
+     */
     function import($pin)
     {
-        $model = new Questionnaire();
-        if ($model->exists($pin)) {
-            $questionnaire = $model->getSurveyByPin($pin);
+        $modeleQuestionnaire = new Questionnaire();
+        if ($modeleQuestionnaire->exists($pin)) {
+            $questionnaire = $modeleQuestionnaire->getSurveyByPin($pin);
+            // Vérifie si l'utilisateur n'est pas déjà le propriétaire
             if ($questionnaire['user_id'] != $_SESSION['id']) {
                 $id = $questionnaire['id'];
-                $model->import($id);
+                $modeleQuestionnaire->import($id);
                 // Redirection vers le tableau de bord avec succès
                 header('Location: ?c=tableauDeBord&import=success');
                 exit;
@@ -62,9 +74,12 @@ class ControleurCreation
         }
     }
 
+    /**
+     * Enregistre un nouveau questionnaire ou met à jour un existant.
+     */
     function save()
     {
-        $modelQuestionnaire = new Questionnaire();
+        $modeleQuestionnaire = new Questionnaire();
         $titre = trim($_POST['titre'] ?? '');
         if (empty($titre)) {
             http_response_code(400);
@@ -72,31 +87,33 @@ class ControleurCreation
             exit;
         }
         $description = $_POST['description'];
-        $user_id = $_SESSION['id'];
+        $idUtilisateur = $_SESSION['id'];
         $questions = isset($_POST['questions']) ? json_decode($_POST['questions'], true) : [];
 
-        // Check if updating
+        // Vérifie s'il s'agit d'une mise à jour
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $id = $_POST['id'];
             try {
-                $modelQuestionnaire->updateSurvey($id, $user_id, $titre, $description, $questions);
+                $modeleQuestionnaire->updateSurvey($id, $idUtilisateur, $titre, $description, $questions);
                 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
             } catch (Exception $e) {
                 http_response_code(500);
                 echo "Erreur lors de la mise à jour : " . $e->getMessage();
             }
         } else {
-            // New creation
-            $access_pin = rand(100000, 999999);
-            $qr_code_token = bin2hex(random_bytes(16));
+            // Création d'un nouveau questionnaire
+            $codePinAcces = rand(100000, 999999);
+            $jetonQrCode = bin2hex(random_bytes(16));
+            
+            // Garantit l'unicité du PIN
             while (true) {
-                if (!$modelQuestionnaire->exists($access_pin)) {
+                if (!$modeleQuestionnaire->exists($codePinAcces)) {
                     break;
                 }
-                $access_pin = rand(100000, 999999);
+                $codePinAcces = rand(100000, 999999);
             }
             try {
-                $modelQuestionnaire->saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token, $questions);
+                $modeleQuestionnaire->saveSurvey($idUtilisateur, $titre, $description, $codePinAcces, $jetonQrCode, $questions);
                 // Redirection ou confirmation (ici on inclut la vue, le JS recevra le HTML 200 OK)
                 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
             } catch (Exception $e) {

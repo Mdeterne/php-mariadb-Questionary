@@ -1,6 +1,6 @@
 
 
 
-src/Configues/configue_CAS.php
+src/Configs/ConfigCas.php
 
-src/Models/Database.php
+src/Modeles/Database.php

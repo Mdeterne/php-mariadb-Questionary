@@ -78,10 +78,6 @@ switch ($controleur) {
         $tableauDeBordControlleur->getMesQuestionnaires();
         break;
 
-      case 'creerNouveau':
-        $tableauDeBordControlleur->creerNouveau();
-        break;
-
       case 'supprimer':
         $tableauDeBordControlleur->supprimer();
         break;

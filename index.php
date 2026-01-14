@@ -6,7 +6,7 @@ ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Configurations" . DIRECTORY_SEPARATOR . "Configuration_CAS.php";
+require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Configurations" . DIRECTORY_SEPARATOR . "Configurations_CAS.php";
 
 $_SESSION['mail'] = $infoSESSION['mail'];
 $_SESSION['name'] = $infoSESSION['cn'];

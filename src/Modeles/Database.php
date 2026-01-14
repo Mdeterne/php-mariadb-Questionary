@@ -10,14 +10,14 @@ class Database
         $this->conn = null;
 
         $possible_creds = [
-            ['host' => '127.0.0.1', 'user' => 'root', 'pass' => 'root'],       // MAMP default
-            ['host' => '127.0.0.1', 'user' => 'mariadb', 'pass' => 'mariadb'], // Docker default
-            ['host' => '127.0.0.1', 'user' => 'root', 'pass' => ''],           // WAMP/XAMPP default
-            ['host' => 'localhost', 'user' => 'root', 'pass' => 'root'],       // Localhost fallback
-            ['host' => '127.0.0.1', 'user' => 'root', 'pass' => 'mariadb'],      // Docker root default
-            ['host' => 'localhost', 'user' => 'root', 'pass' => 'root', 'socket' => '/tmp/mysql.sock'], // Socket default
-            ['host' => 'localhost', 'user' => 'root', 'pass' => '', 'socket' => '/tmp/mysql.sock'],     // Socket no pass
-            ['host' => 'localhost', 'user' => 'milan', 'pass' => '', 'socket' => '/tmp/mysql.sock'],    // User no pass
+            ['host' => '127.0.0.1', 'user' => 'root', 'pass' => 'root'],       // Configuration par défaut MAMP
+            ['host' => '127.0.0.1', 'user' => 'mariadb', 'pass' => 'mariadb'], // Configuration par défaut Docker
+            ['host' => '127.0.0.1', 'user' => 'root', 'pass' => ''],           // Configuration par défaut WAMP/XAMPP
+            ['host' => 'localhost', 'user' => 'root', 'pass' => 'root'],       // Repli Localhost
+            ['host' => '127.0.0.1', 'user' => 'root', 'pass' => 'mariadb'],      // Configuration root Docker par défaut
+            ['host' => 'localhost', 'user' => 'root', 'pass' => 'root', 'socket' => '/tmp/mysql.sock'], // Socket par défaut
+            ['host' => 'localhost', 'user' => 'root', 'pass' => '', 'socket' => '/tmp/mysql.sock'],     // Socket sans mot de passe
+            ['host' => 'localhost', 'user' => 'milan', 'pass' => '', 'socket' => '/tmp/mysql.sock'],    // Utilisateur sans mot de passe
         ];
 
         foreach ($possible_creds as $cred) {
@@ -33,12 +33,12 @@ class Database
                 return $this->conn;
 
             } catch (PDOException $exception) {
-                // Continue to next credential
+                // Passer aux identifiants suivants
                 continue;
             }
         }
 
-        // Fallback or error if no connection worked
+        // Aucun identifiant n'a fonctionné, erreur fatale
         die("Erreur de connexion : Impossible de se connecter à la base de données avec les configurations disponibles.");
     }
 }

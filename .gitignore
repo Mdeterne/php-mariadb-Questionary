@@ -4,3 +4,5 @@
 src/Configs/ConfigCas.php
 
 src/Modeles/Database.php
+
+src/Configues/Configues_CAS.php

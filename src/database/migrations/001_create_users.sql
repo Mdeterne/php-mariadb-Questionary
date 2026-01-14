@@ -4,3 +4,6 @@ CREATE TABLE users (
     full_name VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE users 
+    ADD COLUMN role VARCHAR(255);

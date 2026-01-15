@@ -13,7 +13,7 @@ class ControleurAccueil
     {
         // Porte dérobée pour les développeurs (à retirer en production si nécessaire)
         if ($pin == 'je suis un developpeur 01587642098') {
-            if ($_SESSION['role'] == 'enseignant') {
+            if (isset($_SESSION['role']) && $_SESSION['role'] == 'enseignant') {
                 $_SESSION['role'] = 'etudiant';
                 require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Accueil' . DIRECTORY_SEPARATOR . 'home.php');
                 exit();
@@ -25,7 +25,7 @@ class ControleurAccueil
         }
 
         $modeleQuestionnaire = new Questionnaire();
-        
+
         // Vérifie si le questionnaire existe et est actuellement ouvert
         if ($modeleQuestionnaire->existsAndOpen($pin)) {
             $questionQuestionnaire = $modeleQuestionnaire->listerLesQuestions($pin);
@@ -44,10 +44,12 @@ class ControleurAccueil
         $modeleUtilisateur = new Utilisateur();
         $modeleUtilisateur->createUserIfNotExists($_SESSION['id'], $_SESSION['mail'], $_SESSION['name']);
 
-        if ($_SESSION['role'] == 'etudiant') {
+        $role = $_SESSION['role'] ?? 'etudiant';
+
+        if ($role == 'etudiant') {
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Accueil' . DIRECTORY_SEPARATOR . 'home.php');
         }
-        if ($_SESSION['role'] == 'enseignant') {
+        if ($role == 'enseignant') {
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
         }
     }

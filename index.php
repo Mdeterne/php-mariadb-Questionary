@@ -8,10 +8,6 @@ error_reporting(0);
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Configurations" . DIRECTORY_SEPARATOR . "Configurations_CAS.php";
 
-$_SESSION['mail'] = $infoSESSION['mail'];
-$_SESSION['name'] = $infoSESSION['cn'];
-$_SESSION['id'] = $infoSESSION['uid'];
-
 
 // Controllers
 require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "ControleurAccueil.php";

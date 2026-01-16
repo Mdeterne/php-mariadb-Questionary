@@ -19,7 +19,7 @@ class ControleurAccueil
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Qcm' . DIRECTORY_SEPARATOR . 'questionnaireVueEleve.php');
         } else {
             // Affiche la page d'erreur si le questionnaire n'est pas trouvé
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php');
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php');
         }
     }
 

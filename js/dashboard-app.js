@@ -9,6 +9,7 @@ createApp({
         return {
             // Initialisation des données réactives 
             questionnaires: (typeof window.serverQuestionnaires !== 'undefined') ? window.serverQuestionnaires : [],
+            notifications: (typeof window.serverNotifications !== 'undefined') ? window.serverNotifications : [],
             termeRecherche: '',
             isLoading: false,
             showUserMenu: false,
@@ -37,6 +38,9 @@ createApp({
             return this.questionnaires.filter(q =>
                 q.titre.toLowerCase().includes(recherche)
             );
+        },
+        unreadNotificationsCount() {
+            return this.notifications.filter(n => !n.read).length;
         }
     },
 

@@ -145,7 +145,8 @@
                         description: "Description...",
                         questions: []
                     },
-                    reponses: {}
+                    reponses: {},
+                    autreReponses: {}
                 }
             },
             mounted() {

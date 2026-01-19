@@ -57,7 +57,10 @@ class ControleurAccueil
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Reponse.php';
         $modeleReponse = new Reponse();
 
-        if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses)) {
+        // Récupération de l'ID utilisateur s'il est connecté
+        $userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+
+        if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses, $userId)) {
             echo json_encode(['success' => true]);
         } else {
             http_response_code(500);

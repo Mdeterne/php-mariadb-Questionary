@@ -19,7 +19,7 @@ class Reponse
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
-    public function saveFullResponse($surveyId, $answers)
+    public function saveFullResponse($surveyId, $answers, $userId = null)
     {
         if (!$this->bdd) {
             return false;
@@ -28,8 +28,8 @@ class Reponse
         $this->bdd->beginTransaction();
         try {
             // $responseId = $this->generateUuidV4(); // Fixed: DB uses INT AUTO_INCREMENT
-            $reqResponse = $this->bdd->prepare("INSERT INTO responses (survey_id, submitted_at) VALUES (:survey_id, NOW())");
-            if (!$reqResponse->execute([':survey_id' => $surveyId])) {
+            $reqResponse = $this->bdd->prepare("INSERT INTO responses (survey_id, user_id, submitted_at) VALUES (:survey_id, :user_id, NOW())");
+            if (!$reqResponse->execute([':survey_id' => $surveyId, ':user_id' => $userId])) {
                 throw new Exception("Impossible d'insérer la ligne responses");
             }
             $responseId = $this->bdd->lastInsertId();

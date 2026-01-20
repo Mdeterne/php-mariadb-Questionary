@@ -118,7 +118,7 @@
         </main>
 
         <!-- Modale de confirmation personnalisée -->
-        <div v-if="showModal" class="modal-overlay">
+        <div v-if="showModal" class="modal-overlay" style="display: flex !important;">
             <div class="modal-card">
                 <h3>Confirmer l'envoi</h3>
                 <p>Êtes-vous sûr de vouloir envoyer vos réponses ?<br>Cette action est définitive.</p>
@@ -131,8 +131,16 @@
     </div>
 
     <!-- Vue.js 3 -->
-    <script type="module">
-        import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+    <script>
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            alert('Global Error: ' + msg + '\nLine: ' + lineNo);
+            return false;
+        };
+    </script>
+    <!-- Vue.js 3 Global Build -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
 
         createApp({
             data() {
@@ -150,6 +158,8 @@
                 }
             },
             mounted() {
+                console.log("Vue Mounted Successfully");
+                // alert("Vue est chargé correctement. Si ce message s'affiche, le JS fonctionne.");
                 // Chargement initial des données
                 this.loadData();
             },
@@ -181,57 +191,59 @@
                     textarea.style.height = textarea.scrollHeight + 'px';
                 },
                 submitAnswers() {
+                    console.log("submitAnswers called");
                     this.showModal = true;
                 },
                 async confirmSubmission() {
-                    this.showModal = false;
-                    this.loading = true; // Afficher le chargement
-
-                    // Préparation des données pour inclure le texte "Autre" si nécessaire
-                    const reponsesPayload = {};
-
-                    for (const [qId, valeur] of Object.entries(this.reponses)) {
-                        const question = this.questionnaire.questions.find(q => q.id == qId);
-                        if (!question) continue;
-
-                        // Gestion spéciale pour les questions avec option "Autre"
-                        if (['single_choice', 'multiple_choice'].includes(question.type)) {
-                            // Vérification de la présence d'une option "Réponse libre"
-                            const optionsSelectionnees = [];
-                            let aOptionAutreSelectionnee = false;
-
-                            if (Array.isArray(valeur)) { // Checkbox
-                                // Récupération des objets options complets correspondant aux IDs sélectionnés
-                                const opts = question.options.filter(o => valeur.includes(o.id));
-                                opts.forEach(o => {
-                                    optionsSelectionnees.push(o.id);
-                                    if (o.is_open_ended == 1) aOptionAutreSelectionnee = true;
-                                });
-                            } else { // Radio
-                                const opt = question.options.find(o => o.id == valeur);
-                                if (opt) {
-                                    optionsSelectionnees.push(opt.id);
-                                    if (opt.is_open_ended == 1) aOptionAutreSelectionnee = true;
-                                }
-                            }
-
-                            if (aOptionAutreSelectionnee && this.autreReponses[qId]) {
-                                // Structuration de la réponse pour le traitement backend
-                                reponsesPayload[qId] = {
-                                    options: optionsSelectionnees,
-                                    text_value: this.autreReponses[qId]
-                                };
-                            } else {
-                                // Format de réponse standard (sans texte additionnel)
-                                reponsesPayload[qId] = valeur;
-                            }
-                        } else {
-                            // Questions texte standard
-                            reponsesPayload[qId] = valeur;
-                        }
-                    }
+                    console.log("confirmSubmission called");
+                    // this.showModal = false; // Optional: keep it open until redirect or close it immediately
+                    
+                    this.loading = true; 
 
                     try {
+                        const reponsesPayload = {};
+
+                        for (const [qId, valeur] of Object.entries(this.reponses)) {
+                            const question = this.questionnaire.questions.find(q => q.id == qId);
+                            if (!question) continue;
+
+                            if (['single_choice', 'multiple_choice'].includes(question.type)) {
+                                const optionsSelectionnees = [];
+                                let aOptionAutreSelectionnee = false;
+
+                                if (Array.isArray(valeur)) { 
+                                    if (question.options) {
+                                         const opts = question.options.filter(o => valeur.includes(o.id));
+                                         opts.forEach(o => {
+                                             optionsSelectionnees.push(o.id);
+                                             if (o.is_open_ended == 1) aOptionAutreSelectionnee = true;
+                                         });
+                                    }
+                                } else { 
+                                    if (question.options) {
+                                        const opt = question.options.find(o => o.id == valeur);
+                                        if (opt) {
+                                            optionsSelectionnees.push(opt.id);
+                                            if (opt.is_open_ended == 1) aOptionAutreSelectionnee = true;
+                                        }
+                                    }
+                                }
+
+                                if (aOptionAutreSelectionnee && this.autreReponses[qId]) {
+                                    reponsesPayload[qId] = {
+                                        options: optionsSelectionnees,
+                                        text_value: this.autreReponses[qId]
+                                    };
+                                } else {
+                                    reponsesPayload[qId] = valeur;
+                                }
+                            } else {
+                                reponsesPayload[qId] = valeur;
+                            }
+                        }
+
+                        console.log("Payload:", JSON.stringify(reponsesPayload));
+
                         const response = await fetch('index.php?c=home&a=saveReponse', {
                             method: 'POST',
                             headers: {
@@ -243,7 +255,15 @@
                             })
                         });
 
-                        const result = await response.json();
+                        const text = await response.text();
+                        console.log("Raw response:", text);
+
+                        let result;
+                        try {
+                            result = JSON.parse(text);
+                        } catch (e) {
+                            throw new Error("Invalid JSON response: " + text);
+                        }
 
                         if (result.success) {
                             window.location.href = "index.php?c=home&a=merci";
@@ -252,8 +272,8 @@
                             this.loading = false;
                         }
                     } catch (error) {
-                        console.error("Erreur réseau:", error);
-                        alert("Une erreur est survenue lors de l'envoi.");
+                        console.error("Erreur JS:", error);
+                        alert("Erreur technique: " + error.message);
                         this.loading = false;
                     }
                 }

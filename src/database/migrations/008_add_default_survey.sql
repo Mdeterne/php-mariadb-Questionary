@@ -1,73 +1,172 @@
 -- Création d'un questionnaire par défaut avec des questions de test
 
-INSERT IGNORE INTO users (id, email, full_name) VALUES (1, 'demo@example.com', 'Utilisateur Démo');
+INSERT IGNORE INTO
+    users (id, email, full_name)
+VALUES (
+        1,
+        'demo@example.com',
+        'Utilisateur Démo'
+    );
 
-INSERT INTO surveys (id, user_id, title, description, access_pin, status, created_at) 
-VALUES (1, 1, 'Questionnaire Par Défaut', 'Un questionnaire de démonstration avec des questions de test', '123456', 'active', NOW());
+INSERT INTO
+    surveys (
+        id,
+        user_id,
+        title,
+        description,
+        access_pin,
+        status,
+        created_at
+    )
+VALUES (
+        1,
+        1,
+        'Questionnaire Par Défaut',
+        'Un questionnaire de démonstration avec des questions de test',
+        '123456',
+        'active',
+        NOW()
+    );
 
 -- Questions pour le questionnaire par défaut
-INSERT INTO questions (survey_id, type, label, order_index, is_required) 
-VALUES 
-(1, 'long_text', 'envoie tes coordonnées bancaires ?', 1, true),
-(1, 'scale', 'Êtes-vous satisfait du service ?', 2, true),
-(1, 'short_text', 'Quel est votre nom ?', 1, true),
-(1, 'single_choice', 'Êtes-vous satisfait du service ?', 2, true),
-(1, 'multiple_choice', 'Quels sujets vous intéressent ?', 3, false);
-
--- Options pour la question à choix unique (question 2)
-INSERT INTO question_options (question_id, label, order_index, is_open_ended)
-SELECT id, label, order_index, is_open_ended FROM (
-    SELECT 
-        (SELECT id FROM questions WHERE survey_id = 1 AND order_index = 2) as id,
-        'Très satisfait' as label,
-        1 as order_index,
-        false as is_open_ended
-    UNION ALL
-    SELECT 
-        (SELECT id FROM questions WHERE survey_id = 1 AND order_index = 2),
-        'Satisfait',
+INSERT INTO
+    questions (
+        survey_id,
+        type,
+        label,
+        order_index,
+        is_required
+    )
+VALUES (
+        1,
+        'long_text',
+        'envoie tes coordonnées bancaires ?',
+        1,
+        true
+    ),
+    (
+        1,
+        'scale',
+        'Êtes-vous satisfait du service ?',
         2,
-        false
-    UNION ALL
-    SELECT 
-        (SELECT id FROM questions WHERE survey_id = 1 AND order_index = 2),
-        'Peu satisfait',
+        true
+    ),
+    (
+        1,
+        'short_text',
+        'Quel est votre nom ?',
         3,
-        false
-    UNION ALL
-    SELECT 
-        (SELECT id FROM questions WHERE survey_id = 1 AND order_index = 2),
-        'Pas du tout satisfait',
-        4,
-        false
-) AS options
-WHERE id IS NOT NULL;
-
--- Options pour la question à choix multiples (question 3)
-INSERT INTO question_options (question_id, label, order_index, is_open_ended)
-SELECT id, label, order_index, is_open_ended FROM (
-    SELECT 
-        (SELECT id FROM questions WHERE survey_id = 1 AND order_index = 3) as id,
-        'Technologie' as label,
-        1 as order_index,
-        false as is_open_ended
-    UNION ALL
-    SELECT 
-        (SELECT id FROM questions WHERE survey_id = 1 AND order_index = 3),
-        'Design',
-        2,
-        false
-    UNION ALL
-    SELECT 
-        (SELECT id FROM questions WHERE survey_id = 1 AND order_index = 3),
-        'Éducation',
-        3,
-        false
-    UNION ALL
-    SELECT 
-        (SELECT id FROM questions WHERE survey_id = 1 AND order_index = 3),
-        'Autre',
+        true
+    ),
+    (
+        1,
+        'single_choice',
+        'Êtes-vous satisfait du service ?',
         4,
         true
-) AS options
-WHERE id IS NOT NULL;
+    ),
+    (
+        1,
+        'multiple_choice',
+        'Quels sujets vous intéressent ?',
+        5,
+        false
+    );
+
+-- Options pour la question à choix unique (question 2)
+INSERT INTO
+    question_options (
+        question_id,
+        label,
+        order_index,
+        is_open_ended
+    )
+SELECT
+    id,
+    label,
+    order_index,
+    is_open_ended
+FROM (
+        SELECT (
+                SELECT id
+                FROM questions
+                WHERE
+                    survey_id = 1
+                    AND order_index = 4
+            ) as id, 'Très satisfait' as label, 1 as order_index, false as is_open_ended
+        UNION ALL
+        SELECT (
+                SELECT id
+                FROM questions
+                WHERE
+                    survey_id = 1
+                    AND order_index = 4
+            ), 'Satisfait', 2, false
+        UNION ALL
+        SELECT (
+                SELECT id
+                FROM questions
+                WHERE
+                    survey_id = 1
+                    AND order_index = 4
+            ), 'Peu satisfait', 3, false
+        UNION ALL
+        SELECT (
+                SELECT id
+                FROM questions
+                WHERE
+                    survey_id = 1
+                    AND order_index = 4
+            ), 'Pas du tout satisfait', 4, false
+    ) AS options
+WHERE
+    id IS NOT NULL;
+
+-- Options pour la question à choix multiples (question 5)
+INSERT INTO
+    question_options (
+        question_id,
+        label,
+        order_index,
+        is_open_ended
+    )
+SELECT
+    id,
+    label,
+    order_index,
+    is_open_ended
+FROM (
+        SELECT (
+                SELECT id
+                FROM questions
+                WHERE
+                    survey_id = 1
+                    AND order_index = 5
+            ) as id, 'Technologie' as label, 1 as order_index, false as is_open_ended
+        UNION ALL
+        SELECT (
+                SELECT id
+                FROM questions
+                WHERE
+                    survey_id = 1
+                    AND order_index = 5
+            ), 'Design', 2, false
+        UNION ALL
+        SELECT (
+                SELECT id
+                FROM questions
+                WHERE
+                    survey_id = 1
+                    AND order_index = 5
+            ), 'Éducation', 3, false
+        UNION ALL
+        SELECT (
+                SELECT id
+                FROM questions
+                WHERE
+                    survey_id = 1
+                    AND order_index = 5
+            ), 'Autre', 4, true
+    ) AS options
+WHERE
+    id IS NOT NULL;

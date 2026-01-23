@@ -42,9 +42,8 @@ class ControleurAccueil
     function index()
     {
         $modeleUtilisateur = new Utilisateur();
-        $modeleUtilisateur->createUserIfNotExists($_SESSION['id'], $_SESSION['mail'], $_SESSION['name']);
-
         $role = $_SESSION['role'] ?? 'etudiant';
+        $modeleUtilisateur->createUserIfNotExists($_SESSION['id'], $_SESSION['mail'], $_SESSION['name'], $role);
 
         if ($role == 'etudiant') {
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Accueil' . DIRECTORY_SEPARATOR . 'home.php');

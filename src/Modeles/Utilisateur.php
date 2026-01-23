@@ -33,7 +33,13 @@ class Utilisateur
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    function createUserIfNotExists($id, $email, $name)
+    function getUserRole($id)
+    {
+        $user = $this->findById($id);
+        return $user ? $user['role'] : null;
+    }
+
+    function createUserIfNotExists($id, $email, $name, $role)
     {
         // Check by ID first (primary key from CAS)
         $existingUserById = $this->findById($id);
@@ -46,11 +52,12 @@ class Utilisateur
         if ($existingUser) {
             return $existingUser['id'];
         } else {
-            $query = "INSERT INTO users (id,email, full_name) VALUES (:id, :email, :full_name)";
+            $query = "INSERT INTO users (id,email, full_name, role) VALUES (:id, :email, :full_name, :role)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':full_name', $name);
+            $stmt->bindParam(':role', $role);
             $stmt->execute();
             return $id;
         }

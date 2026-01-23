@@ -29,10 +29,10 @@ class ControleurAccueil
         // Vérifie si le questionnaire existe et est actuellement ouvert
         if ($modeleQuestionnaire->existsAndOpen($pin)) {
             $questionQuestionnaire = $modeleQuestionnaire->listerLesQuestions($pin);
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Qcm' . DIRECTORY_SEPARATOR . 'questionnaireVueEleve.php');
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'qcm' . DIRECTORY_SEPARATOR . 'questionnaireVueEleve.php');
         } else {
             // Affiche la page d'erreur si le questionnaire n'est pas trouvé
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php');
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php');
         }
     }
 
@@ -75,7 +75,10 @@ class ControleurAccueil
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Reponse.php';
         $modeleReponse = new Reponse();
 
-        if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses)) {
+        // Récupération de l'ID utilisateur s'il est connecté
+        $userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+
+        if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses, $userId)) {
             echo json_encode(['success' => true]);
         } else {
             http_response_code(500);

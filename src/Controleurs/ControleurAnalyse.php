@@ -58,6 +58,6 @@ class ControleurAnalyse
             $questionsData = '[]';
         }
 
-        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Analyse' . DIRECTORY_SEPARATOR . 'analyse.php');
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'analyse' . DIRECTORY_SEPARATOR . 'analyse.php');
     }
 }

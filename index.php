@@ -8,6 +8,10 @@ error_reporting(0);
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Configurations" . DIRECTORY_SEPARATOR . "Configurations_CAS.php";
 
+$_SESSION['mail'] = $infoSESSION['mail'];
+$_SESSION['name'] = $infoSESSION['cn'];
+$_SESSION['id'] = $infoSESSION['uid'];
+// Role is managed by ConfigCas.php (local) or CAS (production)
 
 // Controllers
 require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Controleurs" . DIRECTORY_SEPARATOR . "ControleurAccueil.php";
@@ -59,7 +63,7 @@ switch ($controleur) {
   case 'tableauDeBord':
     $tableauDeBordControlleur = new ControleurTableauDeBord();
     $creationQuestionnaireControleur = new ControleurCreation();
-    if ($_SESSION['role'] != 'enseignant') {
+    if (($_SESSION['role'] ?? '') != 'enseignant') {
       $controleur = 'home';
       $action = null;
     }
@@ -86,6 +90,10 @@ switch ($controleur) {
         $tableauDeBordControlleur->parametres();
         break;
 
+      case 'notifications':
+        $tableauDeBordControlleur->notifications();
+        break;
+
       case 'saveSettings':
         $tableauDeBordControlleur->saveSettings();
         break;
@@ -99,7 +107,7 @@ switch ($controleur) {
 
   case 'espaceAnalyse':
     $espaceAnalyseControleur = new ControleurAnalyse();
-    if ($_SESSION['role'] != 'enseignant') {
+    if (($_SESSION['role'] ?? '') != 'enseignant') {
       $controleur = 'home';
       $action = null;
       exit();
@@ -114,7 +122,7 @@ switch ($controleur) {
 
   case 'createur':
     $creationQuestionnaireControleur = new ControleurCreation();
-    if ($_SESSION['role'] != 'enseignant') {
+    if (($_SESSION['role'] ?? '') != 'enseignant') {
       $controleur = 'home';
       $action = null;
     }
@@ -139,7 +147,7 @@ switch ($controleur) {
     break;
 
   case 'parametre':
-    if ($_SESSION['role'] != 'enseignant') {
+    if (($_SESSION['role'] ?? '') != 'enseignant') {
       $controleur = 'home';
       $action = null;
     }

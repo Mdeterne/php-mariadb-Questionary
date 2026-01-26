@@ -54,8 +54,10 @@
                     </div>
                 </div>
 
-                <div class="user-profile" @click="toggleUserMenu" style="cursor: pointer;">
+                <div class="user-profile" @click="toggleUserMenu" style="cursor: pointer; position: relative;">
                     <i class="fa-solid fa-circle-user"></i>
+                    <div class="notification-badge" v-if="unreadNotificationsCount > 0">{{ unreadNotificationsCount }}
+                    </div>
                 </div>
 
                 <div class="modal-overlay" v-if="showUserMenu" @click.self="toggleUserMenu">
@@ -69,6 +71,14 @@
                             <i class="fa-solid fa-user"></i>
                         </div>
                         <h3 class="modal-username"><?php echo $_SESSION['name'] ?? 'Utilisateur'; ?></h3>
+
+                        <a href="?c=tableauDeBord&a=notifications" class="modal-logout-btn"
+                            style="width: 100%; justify-content: center; margin-bottom: 5px;">
+                            <i class="fa-solid fa-bell"></i> Notifications
+                            <span v-if="unreadNotificationsCount > 0"
+                                style="background: var(--red); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7em; margin-left: 5px;">{{
+                                unreadNotificationsCount }}</span>
+                        </a>
 
 
 
@@ -218,6 +228,10 @@
 
     <script>
         window.serverQuestionnaires = <?php echo json_encode($mesQuestionnaires ?? []) ?: '[]'; ?>;
+        // Mock notifications for now
+        window.serverNotifications = [
+            { id: 1, message: "LOI Milan a repondu au questionnaire : Questionnaire 1", read: false }
+        ];
     </script>
     <script type="importmap">
     {

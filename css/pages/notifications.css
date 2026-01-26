@@ -1,0 +1,74 @@
+/* Conteneur principal */
+.conteneur-page-notifications {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Styles du lien de retour */
+.conteneur-lien-retour {
+    margin-bottom: 20px;
+}
+
+.lien-retour {
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Styles existants du bloc style */
+.conteneur-notifications {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.carte-notification {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.carte-notification.non-lu {
+    border-left: 5px solid var(--red);
+    background-color: #fff9f9;
+}
+
+.contenu-notification {
+    font-size: 1rem;
+    color: #333;
+}
+
+.btn-marquer-lu {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #666;
+    transition: all 0.2s;
+}
+
+.btn-marquer-lu:hover {
+    background: #f5f5f5;
+}
+
+/* État vide */
+.notifications-vides {
+    color: #888;
+    text-align: center;
+    margin-top: 50px;
+}
+
+/* Indicateur de statut de lecture */
+.statut-lecture {
+    color: green;
+    font-size: 0.8rem;
+}

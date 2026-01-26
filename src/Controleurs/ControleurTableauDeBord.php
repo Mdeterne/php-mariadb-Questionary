@@ -9,12 +9,25 @@ class ControleurTableauDeBord
     {
         require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Questionnaire.php');
         $modeleQuestionnaire = new Questionnaire();
-        
+
         // On suppose que l'ID utilisateur est en session
         $idUtilisateur = isset($_SESSION['id']) ? $_SESSION['id'] : 1;
         $mesQuestionnaires = $modeleQuestionnaire->getSurveysByUserId($idUtilisateur);
 
         require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
+    }
+
+    /**
+     * Affiche la page de notifications.
+     */
+    function notifications()
+    {
+        // Mock notifications for now (same as in dashboard)
+        $notifications = [
+            ['id' => 1, 'message' => "LOI Milan a repondu au questionnaire : Questionnaire 1", 'read' => false]
+        ];
+
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'notifications.php');
     }
 
     /**

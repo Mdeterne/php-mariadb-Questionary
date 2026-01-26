@@ -30,7 +30,7 @@ class Reponse
             // $responseId = $this->generateUuidV4(); // Fixed: DB uses INT AUTO_INCREMENT
             $reqResponse = $this->bdd->prepare("INSERT INTO responses (survey_id, submitted_at) VALUES (:survey_id, NOW())");
             if (!$reqResponse->execute([':survey_id' => $surveyId])) {
-                throw new Exception("Impossible d'insérer la ligne responses: " . implode(" ", $reqResponse->errorInfo()));
+                throw new Exception("Impossible d'insérer la ligne responses");
             }
             $responseId = $this->bdd->lastInsertId();
 
@@ -84,7 +84,7 @@ class Reponse
                         $optionId = (int) $optionId;
                         $stmtValidateOption->execute([':option_id' => $optionId, ':question_id' => $questionId]);
                         if ($stmtValidateOption->fetchColumn() == 0) {
-                            throw new Exception("Option ID $optionId invalide pour la question ID $questionId");
+                            throw new Exception("Option $optionId invalide pour la question $questionId");
                         }
                         if (!$reqChoices->execute([':answer_id' => $answerId, ':option_id' => $optionId])) {
                             throw new Exception("Erreur lors de l'enregistrement du choix pour OptionID: $optionId");
@@ -97,8 +97,7 @@ class Reponse
             return true;
         } catch (Exception $e) {
             $this->bdd->rollBack();
-            // Re-throw the exception so the controller can handle it and display the message
-            throw $e;
+            return false;
         }
     }
 

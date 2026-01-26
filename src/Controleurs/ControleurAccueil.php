@@ -42,39 +42,26 @@ class ControleurAccueil
     function saveReponse()
     {
         header('Content-Type: application/json');
-        
-        // DEBUG: Logging request
-        $logFile = __DIR__ . '/../../debug_submission.log';
-        $input = file_get_contents('php://input');
-        file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "Received: " . $input . "\n", FILE_APPEND);
+        $donnees = json_decode(file_get_contents('php://input'), true);
 
-        try {
-            $donnees = json_decode($input, true);
+        // Validation des données reçues
+        if (!$donnees || !isset($donnees['survey_id']) || !isset($donnees['answers'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Données invalides']);
+            return;
+        }
 
-            // Validation des données reçues
-            if (!$donnees || !isset($donnees['survey_id']) || !isset($donnees['answers'])) {
-                file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "Error: Invalid Data\n", FILE_APPEND);
-                throw new Exception('Données invalides ou incomplètes.');
-            }
+        $idQuestionnaire = $donnees['survey_id'];
+        $reponses = $donnees['answers'];
 
-            $idQuestionnaire = $donnees['survey_id'];
-            $reponses = $donnees['answers'];
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Reponse.php';
+        $modeleReponse = new Reponse();
 
-            require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Reponse.php';
-            $modeleReponse = new Reponse();
-
-            $modeleReponse->saveFullResponse($idQuestionnaire, $reponses);
-            
-            file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "Success: Saved\n", FILE_APPEND);
+        if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses)) {
             echo json_encode(['success' => true]);
-
-        } catch (Exception $e) {
-            file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "Exception: " . $e->getMessage() . "\n", FILE_APPEND);
+        } else {
             http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'error' => $e->getMessage()
-            ]);
+            echo json_encode(['error' => 'Erreur lors de la sauvegarde']);
         }
     }
 
@@ -110,3 +97,4 @@ class ControleurAccueil
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Legal' . DIRECTORY_SEPARATOR . 'utilisationCookie.php';
     }
 }
+?>

@@ -73,10 +73,26 @@
                 }
             },
             methods: {
-                marquerLu(notification) {
-                    notification.read = true;
-                    // Mock server call
-                    console.log("Marqué comme lu:", notification.id);
+                async marquerLu(notification) {
+                    try {
+                        const response = await fetch('?c=tableauDeBord&a=marquerNotificationLue', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ id: notification.id })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.status === 'success') {
+                            notification.read = true;
+                        } else {
+                            console.error("Erreur serveur:", result.message);
+                        }
+                    } catch (error) {
+                        console.error("Erreur réseau:", error);
+                    }
                 }
             }
         }).mount('#app-notifications');

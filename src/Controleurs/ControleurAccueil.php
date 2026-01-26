@@ -78,6 +78,20 @@ class ControleurAccueil
         $userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
 
         if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses, $userId)) {
+            // Création de la notification pour le propriétaire du questionnaire
+            // 1. Récupérer les infos du questionnaire pour avoir l'ID du propriétaire
+            $modeleQuestionnaire = new Questionnaire(); // Ensure $modeleQuestionnaire is available here
+            $survey = $modeleQuestionnaire->getSurveyById($idQuestionnaire);
+            if ($survey && isset($survey['user_id'])) {
+                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Notification.php';
+                $modeleNotification = new Notification();
+
+                $nomRepondant = isset($_SESSION['name']) ? $_SESSION['name'] : 'Anonyme';
+                $message = "{$nomRepondant} a répondu au questionnaire : {$survey['title']}";
+
+                $modeleNotification->creerNotification($survey['user_id'], $message);
+            }
+
             echo json_encode(['success' => true]);
         } else {
             http_response_code(500);

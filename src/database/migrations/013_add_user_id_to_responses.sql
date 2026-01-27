@@ -1,0 +1,4 @@
+ALTER TABLE responses ADD COLUMN user_id VARCHAR(50);
+
+ALTER TABLE responses
+ADD FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL;

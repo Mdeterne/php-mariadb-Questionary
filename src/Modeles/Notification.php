@@ -50,4 +50,15 @@ class Notification
         $stmt->bindParam(':user_id', $idUtilisateur);
         return $stmt->execute();
     }
+
+    /**
+     * Marque toutes les notifications comme lues pour un utilisateur.
+     */
+    public function marquerToutesCommeLues($idUtilisateur)
+    {
+        $requete = "UPDATE notifications SET is_read = 1 WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($requete);
+        $stmt->bindParam(':user_id', $idUtilisateur);
+        return $stmt->execute();
+    }
 }

@@ -81,6 +81,31 @@ class ControleurTableauDeBord
     }
 
     /**
+     * Marque toutes les notifications comme lues (AJAX).
+     */
+    function marquerToutesNotificationsLues()
+    {
+        header('Content-Type: application/json');
+        if (!isset($_SESSION['id'])) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Non autorisé']);
+            return;
+        }
+
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Notification.php');
+        $modeleNotification = new Notification();
+        $idUtilisateur = $_SESSION['id'];
+
+        if ($modeleNotification->marquerToutesCommeLues($idUtilisateur)) {
+            echo json_encode(['success' => true]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Erreur lors de la mise à jour']);
+        }
+        exit;
+    }
+
+    /**
      * Récupère la liste des questionnaires au format JSON.
      */
     function getMesQuestionnaires()

@@ -101,7 +101,9 @@ switch ($controleur) {
       case 'marquerNotificationLue':
         $tableauDeBordControlleur->marquerNotificationLue();
         break;
-
+      case 'marquerToutesNotificationsLues':
+        $tableauDeBordControlleur->marquerToutesNotificationsLues();
+        break;
 
 
 

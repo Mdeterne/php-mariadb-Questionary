@@ -29,7 +29,13 @@
         </div>
 
         <main id="app-notifications" v-cloak>
-            <h2 class="section-title">Notifications</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 class="section-title" style="margin-bottom: 0;">Notifications</h2>
+                <button v-if="aDesNonLues" @click="marquerToutesLues" class="btn-marquer-lu"
+                    style="background-color: var(--dark); color: white;">
+                    <i class="fa-solid fa-check-double"></i> Tout marquer comme lu
+                </button>
+            </div>
 
             <div class="conteneur-notifications">
                 <div v-if="notifications.length === 0" class="notifications-vides">
@@ -72,10 +78,15 @@
                     notifications: window.notificationsServeur || []
                 }
             },
+            computed: {
+                aDesNonLues() {
+                    return this.notifications.some(n => !n.read);
+                }
+            },
             methods: {
                 async marquerLu(notification) {
                     try {
-                        const response = await fetch('?c=tableauDeBord&a=marquerNotificationLue', {
+                        const reponse = await fetch('?c=tableauDeBord&a=marquerNotificationLue', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -83,15 +94,36 @@
                             body: JSON.stringify({ id: notification.id })
                         });
 
-                        const result = await response.json();
+                        const resultat = await reponse.json();
 
-                        if (result.status === 'success') {
+                        if (resultat.success) {
                             notification.read = true;
                         } else {
-                            console.error("Erreur serveur:", result.message);
+                            console.error("Erreur serveur:", resultat.error);
                         }
-                    } catch (error) {
-                        console.error("Erreur réseau:", error);
+                    } catch (erreur) {
+                        console.error("Erreur réseau:", erreur);
+                    }
+                },
+                async marquerToutesLues() {
+                    if (!confirm("Voulez-vous vraiment marquer toutes les notifications comme lues ?")) return;
+
+                    try {
+                        const reponse = await fetch('?c=tableauDeBord&a=marquerToutesNotificationsLues', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+
+                        const resultat = await reponse.json();
+
+                        if (resultat.success) {
+                            this.notifications.forEach(n => n.read = true);
+                        } else {
+                            alert("Erreur : " + resultat.error);
+                        }
+                    } catch (erreur) {
+                        console.error("Erreur réseau:", erreur);
+                        alert("Impossible de contacter le serveur.");
                     }
                 }
             }

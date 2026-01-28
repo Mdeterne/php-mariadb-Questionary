@@ -32,7 +32,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 class="section-title" style="margin-bottom: 0;">Notifications</h2>
                 <button v-if="aDesNonLues" @click="marquerToutesLues" class="btn-marquer-lu"
-                    style="background-color: var(--dark); color: white;">
+                    style="background-color: #f1f1f1; color: #333;">
                     <i class="fa-solid fa-check-double"></i> Tout marquer comme lu
                 </button>
             </div>
@@ -106,8 +106,6 @@
                     }
                 },
                 async marquerToutesLues() {
-                    if (!confirm("Voulez-vous vraiment marquer toutes les notifications comme lues ?")) return;
-
                     try {
                         const reponse = await fetch('?c=tableauDeBord&a=marquerToutesNotificationsLues', {
                             method: 'POST',

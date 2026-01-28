@@ -14,6 +14,19 @@ class ControleurTableauDeBord
         $idUtilisateur = isset($_SESSION['id']) ? $_SESSION['id'] : 1;
         $mesQuestionnaires = $modeleQuestionnaire->getSurveysByUserId($idUtilisateur);
 
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Notification.php');
+        $modeleNotification = new Notification();
+        $mesNotifications = $modeleNotification->recupererNotificationsUtilisateur($idUtilisateur);
+
+        // Map fields for JS
+        $notificationsJs = array_map(function ($n) {
+            return [
+                'id' => $n['id'],
+                'message' => $n['message'],
+                'read' => (bool) $n['is_read']
+            ];
+        }, $mesNotifications);
+
         require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
     }
 

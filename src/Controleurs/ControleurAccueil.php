@@ -19,7 +19,7 @@ class ControleurAccueil
                 exit();
             } else {
                 $_SESSION['role'] = 'enseignant';
-                require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
+                header('Location: ?c=tableauDeBord');
                 exit();
             }
         }
@@ -49,7 +49,8 @@ class ControleurAccueil
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Accueil' . DIRECTORY_SEPARATOR . 'home.php');
         }
         if ($role == 'enseignant') {
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
+            header('Location: ?c=tableauDeBord');
+            exit;
         }
     }
 

@@ -181,7 +181,8 @@
                     textarea.style.height = textarea.scrollHeight + 'px';
                 },
                 submitAnswers() {
-                    this.showModal = true;
+                    // Bypass modal due to visibility issues
+                    this.confirmSubmission();
                 },
                 async confirmSubmission() {
                     this.showModal = false;

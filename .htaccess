@@ -9,3 +9,19 @@
         Header set X-Content-Type-Options "nosniff"
     </FilesMatch>
 </IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # If the requested filename exists, simply serve it.
+    RewriteCond %{REQUEST_FILENAME} -s [OR]
+    RewriteCond %{REQUEST_FILENAME} -l [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^.*$ - [NC,L]
+
+    # Otherwise, redirect to index.php (if that is the intent for the app routing)
+    # But specifically for JS/CSS/Images, we usually WANT a 404 if they don't exist, not index.php
+    # So we don't add a catch-all rewrite to index.php here unless the app relies on it for everything.
+    # Given the previous file didn't have it, we might just be protecting against server-level fallbacks.
+    # However, to be safe and "standard" for an SPA-like PHP app:
+    RewriteRule ^.*$ index.php [NC,L]
+</IfModule>

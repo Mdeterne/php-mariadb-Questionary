@@ -63,7 +63,7 @@
     <script>
         window.surveyData = <?php echo $questionsData ?? '[]'; ?>;
     </script>
-    <script src="js/analyse.js?v=<?php echo time(); ?>"></script>
+    <script src="js/load.php?f=analyse.js&v=<?php echo time(); ?>"></script>
 
     <!-- Modale d'affichage des réponses textuelles -->
     <div id="text-answers-modal" class="modal-overlay" style="display:none;">

@@ -14,6 +14,19 @@ class ControleurTableauDeBord
         $idUtilisateur = isset($_SESSION['id']) ? $_SESSION['id'] : 1;
         $mesQuestionnaires = $modeleQuestionnaire->getSurveysByUserId($idUtilisateur);
 
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Notification.php');
+        $modeleNotification = new Notification();
+        $mesNotifications = $modeleNotification->recupererNotificationsUtilisateur($idUtilisateur);
+
+        // Map fields for JS
+        $notificationsJs = array_map(function ($n) {
+            return [
+                'id' => $n['id'],
+                'message' => $n['message'],
+                'read' => (bool) $n['is_read']
+            ];
+        }, $mesNotifications);
+
         require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
     }
 
@@ -22,12 +35,74 @@ class ControleurTableauDeBord
      */
     function notifications()
     {
-        // Mock notifications for now (same as in dashboard)
-        $notifications = [
-            ['id' => 1, 'message' => "LOI Milan a repondu au questionnaire : Questionnaire 1", 'read' => false]
-        ];
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Notification.php');
+        $modeleNotification = new Notification();
+        $idUtilisateur = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+
+        $mesNotifications = $modeleNotification->recupererNotificationsUtilisateur($idUtilisateur);
+
+        // Map database fields to view expected fields if necessary (already matching: id, message, is_read -> read)
+        $notificationsMappees = array_map(function ($n) {
+            return [
+                'id' => $n['id'],
+                'message' => $n['message'],
+                'read' => (bool) $n['is_read']
+            ];
+        }, $mesNotifications);
+
+        $notifications = $notificationsMappees;
 
         require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'notifications.php');
+    }
+
+    /**
+     * Marque une notification comme lue via AJAX.
+     */
+    function marquerNotificationLue()
+    {
+        header('Content-Type: application/json');
+        $donnees = json_decode(file_get_contents('php://input'), true);
+
+        if (!$donnees || !isset($donnees['id'])) {
+            echo json_encode(['status' => 'error', 'message' => 'ID manquant']);
+            exit;
+        }
+
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Notification.php');
+        $modeleNotification = new Notification();
+        $idUtilisateur = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+
+        if ($modeleNotification->marquerCommeLu($donnees['id'], $idUtilisateur)) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Erreur lors de la mise à jour']);
+        }
+        exit;
+    }
+
+    /**
+     * Marque toutes les notifications comme lues (AJAX).
+     */
+    function marquerToutesNotificationsLues()
+    {
+        header('Content-Type: application/json');
+        if (!isset($_SESSION['id'])) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Non autorisé']);
+            return;
+        }
+
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Notification.php');
+        $modeleNotification = new Notification();
+        $idUtilisateur = $_SESSION['id'];
+
+        if ($modeleNotification->marquerToutesCommeLues($idUtilisateur)) {
+            echo json_encode(['success' => true]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Erreur lors de la mise à jour']);
+        }
+        exit;
     }
 
     /**

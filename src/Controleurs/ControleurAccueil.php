@@ -19,7 +19,7 @@ class ControleurAccueil
                 exit();
             } else {
                 $_SESSION['role'] = 'enseignant';
-                require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
+                header('Location: ?c=tableauDeBord');
                 exit();
             }
         }
@@ -29,10 +29,10 @@ class ControleurAccueil
         // Vérifie si le questionnaire existe et est actuellement ouvert
         if ($modeleQuestionnaire->existsAndOpen($pin)) {
             $questionQuestionnaire = $modeleQuestionnaire->listerLesQuestions($pin);
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Qcm' . DIRECTORY_SEPARATOR . 'questionnaireVueEleve.php');
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'qcm' . DIRECTORY_SEPARATOR . 'questionnaireVueEleve.php');
         } else {
             // Affiche la page d'erreur si le questionnaire n'est pas trouvé
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php');
+            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'questionnaireNonTrouve.php');
         }
     }
 
@@ -49,7 +49,8 @@ class ControleurAccueil
             require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Accueil' . DIRECTORY_SEPARATOR . 'home.php');
         }
         if ($role == 'enseignant') {
-            require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'TableauDeBord' . DIRECTORY_SEPARATOR . 'dashboard.php');
+            header('Location: ?c=tableauDeBord');
+            exit;
         }
     }
 
@@ -78,6 +79,20 @@ class ControleurAccueil
         $userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
 
         if ($modeleReponse->saveFullResponse($idQuestionnaire, $reponses, $userId)) {
+            // Création de la notification pour le propriétaire du questionnaire
+            // 1. Récupérer les infos du questionnaire pour avoir l'ID du propriétaire
+            $modeleQuestionnaire = new Questionnaire(); // Ensure $modeleQuestionnaire is available here
+            $survey = $modeleQuestionnaire->getSurveyById($idQuestionnaire);
+            if ($survey && isset($survey['user_id'])) {
+                require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Notification.php';
+                $modeleNotification = new Notification();
+
+                $nomRepondant = isset($_SESSION['name']) ? $_SESSION['name'] : 'Anonyme';
+                $message = "{$nomRepondant} a répondu au questionnaire : {$survey['title']}";
+
+                $modeleNotification->creerNotification($survey['user_id'], $message);
+            }
+
             echo json_encode(['success' => true]);
         } else {
             http_response_code(500);
@@ -90,7 +105,7 @@ class ControleurAccueil
      */
     function merci()
     {
-        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Confirmation' . DIRECTORY_SEPARATOR . 'merci.php');
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'confirmation' . DIRECTORY_SEPARATOR . 'merci.php');
     }
 
     /**
@@ -98,7 +113,7 @@ class ControleurAccueil
      */
     function conditionGenerales()
     {
-        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Legal' . DIRECTORY_SEPARATOR . 'conditionGenerales.php';
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'conditionGenerales.php';
     }
 
     /**
@@ -106,7 +121,7 @@ class ControleurAccueil
      */
     function confidentialite()
     {
-        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Legal' . DIRECTORY_SEPARATOR . 'confidentialite.php';
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'confidentialite.php';
     }
 
     /**
@@ -114,7 +129,7 @@ class ControleurAccueil
      */
     function utilisationCookie()
     {
-        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Legal' . DIRECTORY_SEPARATOR . 'utilisationCookie.php';
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'legal' . DIRECTORY_SEPARATOR . 'utilisationCookie.php';
     }
 }
 ?>

@@ -229,9 +229,7 @@
     <script>
         window.serverQuestionnaires = <?php echo json_encode($mesQuestionnaires ?? []) ?: '[]'; ?>;
         // Mock notifications for now
-        window.serverNotifications = [
-            { id: 1, message: "LOI Milan a repondu au questionnaire : Questionnaire 1", read: false }
-        ];
+        window.serverNotifications = <?php echo json_encode($notificationsJs ?? []) ?: '[]'; ?>;
     </script>
     <script type="importmap">
     {

@@ -98,6 +98,12 @@ switch ($controleur) {
         $tableauDeBordControlleur->saveSettings();
         break;
 
+      case 'marquerNotificationLue':
+        $tableauDeBordControlleur->marquerNotificationLue();
+        break;
+      case 'marquerToutesNotificationsLues':
+        $tableauDeBordControlleur->marquerToutesNotificationsLues();
+        break;
 
 
 

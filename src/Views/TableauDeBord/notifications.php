@@ -29,7 +29,13 @@
         </div>
 
         <main id="app-notifications" v-cloak>
-            <h2 class="section-title">Notifications</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 class="section-title" style="margin-bottom: 0;">Notifications</h2>
+                <button v-if="aDesNonLues" @click="marquerToutesLues" class="btn-marquer-lu"
+                    style="background-color: #f1f1f1; color: #333;">
+                    <i class="fa-solid fa-check-double"></i> Tout marquer comme lu
+                </button>
+            </div>
 
             <div class="conteneur-notifications">
                 <div v-if="notifications.length === 0" class="notifications-vides">
@@ -72,11 +78,51 @@
                     notifications: window.notificationsServeur || []
                 }
             },
+            computed: {
+                aDesNonLues() {
+                    return this.notifications.some(n => !n.read);
+                }
+            },
             methods: {
-                marquerLu(notification) {
-                    notification.read = true;
-                    // Mock server call
-                    console.log("Marqué comme lu:", notification.id);
+                async marquerLu(notification) {
+                    try {
+                        const reponse = await fetch('?c=tableauDeBord&a=marquerNotificationLue', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ id: notification.id })
+                        });
+
+                        const resultat = await reponse.json();
+
+                        if (resultat.success) {
+                            notification.read = true;
+                        } else {
+                            console.error("Erreur serveur:", resultat.error);
+                        }
+                    } catch (erreur) {
+                        console.error("Erreur réseau:", erreur);
+                    }
+                },
+                async marquerToutesLues() {
+                    try {
+                        const reponse = await fetch('?c=tableauDeBord&a=marquerToutesNotificationsLues', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+
+                        const resultat = await reponse.json();
+
+                        if (resultat.success) {
+                            this.notifications.forEach(n => n.read = true);
+                        } else {
+                            alert("Erreur : " + resultat.error);
+                        }
+                    } catch (erreur) {
+                        console.error("Erreur réseau:", erreur);
+                        alert("Impossible de contacter le serveur.");
+                    }
                 }
             }
         }).mount('#app-notifications');

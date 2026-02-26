@@ -138,9 +138,48 @@
 
                         <!-- Bar d'actions pour la question active -->
 
+                        <!-- Logique conditionnelle -->
+                        <div class="conditional-logic-section"
+                            style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+                            <div style="font-size: 0.85rem; font-weight: 500; color: #666; margin-bottom: 8px;">
+                                <i class="fa-solid fa-code-branch"></i> Condition d'affichage (Optionnel)
+                            </div>
+
+                            <div style="display: flex; gap: 15px; align-items: flex-end;">
+                                <div style="flex: 1;">
+                                    <label
+                                        style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Dépend
+                                        de la question :</label>
+                                    <select v-model="element.parent_question_id" class="input-field"
+                                        style="padding: 8px;">
+                                        <option :value="null">-- Aucune condition --</option>
+                                        <option v-for="qParent in questionsPossiblesCommeParent(index)"
+                                            :key="qParent.id" :value="qParent.id">
+                                            {{ qParent.title || 'Question sans titre' }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div style="flex: 1;" v-if="element.parent_question_id">
+                                    <label
+                                        style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Si
+                                        la réponse est :</label>
+                                    <select v-model="element.parent_option_label" class="input-field"
+                                        style="padding: 8px;">
+                                        <option :value="null">-- Choisir une option --</option>
+                                        <option v-for="opt in optionsPourQuestionParent(element.parent_question_id)"
+                                            :key="opt.label" :value="opt.label">
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
+
             </div>
         </main>
 

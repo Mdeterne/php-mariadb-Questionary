@@ -47,10 +47,7 @@
                     <div class="contenu-notification">
                         {{ notification.message }}
                     </div>
-                    <button class="btn-marquer-lu" @click="marquerLu(notification)" v-if="!notification.read">
-                        Marquer comme lu
-                    </button>
-                    <span v-else class="statut-lecture">
+                    <span v-if="notification.read" class="statut-lecture">
                         <i class="fa-solid fa-check"></i> Lu
                     </span>
                 </div>

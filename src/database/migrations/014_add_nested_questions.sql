@@ -16,6 +16,6 @@ CREATE TABLE IF NOT EXISTS `questions` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 ALTER TABLE questions
-ADD COLUMN IF NOT EXISTS parent_question_id INT DEFAULT NULL AFTER scale_max_label,
+ADD COLUMN IF NOT EXISTS parent_question_id INT DEFAULT NULL,
 ADD COLUMN IF NOT EXISTS parent_option_label VARCHAR(255) DEFAULT NULL AFTER parent_question_id,
 ADD CONSTRAINT fk_parent_question FOREIGN KEY (parent_question_id) REFERENCES questions (id) ON DELETE SET NULL;

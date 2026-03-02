@@ -37,6 +37,18 @@ try {
     die("Erreur de connexion base de données");
 }
 
+// Récupération des données du questionnaire et des questions associées
+$stmtSurvey = $conn->prepare("SELECT * FROM surveys WHERE id = :id");
+$stmtSurvey->execute([':id' => $surveyId]);
+$survey = $stmtSurvey->fetch(PDO::FETCH_ASSOC);
+
+if (!$survey) die("Questionnaire introuvable.");
+
+$stmtQuestions = $conn->prepare("SELECT * FROM questions WHERE survey_id = :sid ORDER BY order_index ASC");
+$stmtQuestions->execute([':sid' => $surveyId]);
+$questions = $stmtQuestions->fetchAll(PDO::FETCH_ASSOC);
+
+
 
 
 // Gestion des erreurs

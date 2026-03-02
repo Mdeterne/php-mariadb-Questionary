@@ -23,6 +23,21 @@ $css = '
     .footer { position: fixed; bottom: 0; left: 0; right: 0; font-size: 10px; text-align: center; color: #aaa; }
 </style>';
 
+// Vérifions d'abord si l'ID est bien fourni pour éviter les erreurs
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    die("Erreur: ID du questionnaire manquant.");
+}
+$surveyId = $_GET['id'];
+
+// Initialisation de la connexion sécurisée via PDO
+try {
+    $database = new Database();
+    $conn = $database->getConnection();
+} catch (Exception $e) {
+    die("Erreur de connexion base de données");
+}
+
+
 
 // Gestion des erreurs
 ini_set('display_errors', 1);

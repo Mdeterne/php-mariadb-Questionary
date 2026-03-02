@@ -1,5 +1,6 @@
 {
     "require": {
-        "apereo/phpcas": "^1.6"
+        "apereo/phpcas": "^1.6",
+        "dompdf/dompdf": "^3.1"
     }
 }

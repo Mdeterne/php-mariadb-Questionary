@@ -48,6 +48,16 @@ $stmtQuestions = $conn->prepare("SELECT * FROM questions WHERE survey_id = :sid 
 $stmtQuestions->execute([':sid' => $surveyId]);
 $questions = $stmtQuestions->fetchAll(PDO::FETCH_ASSOC);
 
+// Construction de l'en-tête HTML
+$headerHtml = '
+    <div class="header">
+        <h1>' . htmlspecialchars($survey['title']) . '</h1>
+        <div class="description">' . htmlspecialchars($survey['description']) . '</div>
+        <!-- Logo facultatif -->
+    </div>
+';
+
+
 
 
 

@@ -48,14 +48,29 @@ $stmtQuestions = $conn->prepare("SELECT * FROM questions WHERE survey_id = :sid 
 $stmtQuestions->execute([':sid' => $surveyId]);
 $questions = $stmtQuestions->fetchAll(PDO::FETCH_ASSOC);
 
-// Construction de l'en-tête HTML
-$headerHtml = '
-    <div class="header">
-        <h1>' . htmlspecialchars($survey['title']) . '</h1>
-        <div class="description">' . htmlspecialchars($survey['description']) . '</div>
-        <!-- Logo facultatif -->
-    </div>
-';
+
+// Boucle de génération des questions
+$content = '';
+foreach ($questions as $idx => $q) {
+    $content .= '<div class="question">';
+    $content .= '<div class="question-title">Q' . ($idx + 1) . '. ' . htmlspecialchars($q['label']) . '</div>';
+    
+    // Logique conditionnelle selon le type de question
+    if (in_array($q['type'], ['text', 'paragraph', 'long_text'])) {
+        $content .= '<div class="response-area"></div>';
+    } elseif (in_array($q['type'], ['single_choice', 'multiple_choice'])) {
+        // Récupération des options pour les QCM
+        $stmtOpt = $conn->prepare("SELECT * FROM question_options WHERE question_id = ? ORDER BY order_index");
+        $stmtOpt->execute([$q['id']]);
+        $content .= '<ul class="options-list">';
+        foreach ($stmtOpt->fetchAll() as $opt) {
+            $content .= '<li><span class="checkbox-box"></span> ' . htmlspecialchars($opt['label']) . '</li>';
+        }
+        $content .= '</ul>';
+    }
+    $content .= '</div>';
+}
+
 
 
 

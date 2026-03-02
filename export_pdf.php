@@ -68,8 +68,19 @@ foreach ($questions as $idx => $q) {
         }
         $content .= '</ul>';
     }
-    $content .= '</div>';
-}
+
+// Assemblage et rendu final PDF
+$fullHtml = '<html><head>' . $css . '</head><body>' . $headerHtml . $content . '</body></html>';
+
+$options = new Options();
+$options->set('isRemoteEnabled', true);
+$dompdf = new Dompdf($options);
+$dompdf->setPaper('A4', 'portrait');
+
+$dompdf->loadHtml($fullHtml);
+$dompdf->render();
+$dompdf->stream("questionnaire-{$surveyId}.pdf", ["Attachment" => true]);
+
 
 
 

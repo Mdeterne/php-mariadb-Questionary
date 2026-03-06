@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 require 'vendor/autoload.php';
 require_once 'src/Modeles/Database.php';
 

@@ -36,12 +36,15 @@ class Questionnaire
             $surveyId = $this->conn->lastInsertId();
 
             if (!empty($questions) && $surveyId) {
-                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required, scale_min_label, scale_max_label) VALUES (:survey_id, :type, :label, :order_index, :is_required, :scale_min_label, :scale_max_label)";
+                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required, scale_min_label, scale_max_label, parent_question_id, parent_option_label) VALUES (:survey_id, :type, :label, :order_index, :is_required, :scale_min_label, :scale_max_label, :parent_question_id, :parent_option_label)";
                 $stmtQ = $this->conn->prepare($sqlQ);
 
                 // Ajout de la colonne is_open_ended
                 $sqlOpt = "INSERT INTO question_options (question_id, label, order_index, is_open_ended) VALUES (:question_id, :label, :order_index, :is_open_ended)";
                 $stmtOpt = $this->conn->prepare($sqlOpt);
+
+                $tempIdToRealIdMap = [];
+
 
                 foreach ($questions as $index => $q) {
                     $type = $q['type'];
@@ -64,6 +67,19 @@ class Questionnaire
                         $dbType = 'scale';
 
 
+                    $parentQuestionId = null;
+                    if (!empty($q['parent_question_id'])) {
+                        $parentTempId = $q['parent_question_id'];
+                        if (isset($tempIdToRealIdMap[$parentTempId])) {
+                            $parentQuestionId = $tempIdToRealIdMap[$parentTempId];
+                        } else {
+                            // If it's already a real ID (e.g. from an existing question)
+                            $parentQuestionId = $parentTempId;
+                        }
+                    }
+
+                    $parentOptionLabel = !empty($q['parent_option_label']) ? $q['parent_option_label'] : null;
+
                     $stmtQ->execute([
                         ':survey_id' => $surveyId,
                         ':type' => $dbType,
@@ -71,10 +87,16 @@ class Questionnaire
                         ':order_index' => $index,
                         ':is_required' => $isRequired,
                         ':scale_min_label' => $q['scale_min_label'] ?? 'Pas du tout',
-                        ':scale_max_label' => $q['scale_max_label'] ?? 'Tout à fait'
+                        ':scale_max_label' => $q['scale_max_label'] ?? 'Tout à fait',
+                        ':parent_question_id' => $parentQuestionId,
+                        ':parent_option_label' => $parentOptionLabel
                     ]);
 
                     $questionId = $this->conn->lastInsertId();
+                    if (isset($q['id'])) {
+                        $tempIdToRealIdMap[$q['id']] = $questionId;
+                    }
+
 
                     // Insertion des options
                     if (in_array($type, ['Cases à cocher', 'Choix multiples']) && !empty($q['options'])) {
@@ -152,11 +174,14 @@ class Questionnaire
 
             // 3. Re-insert questions (same logic as saveSurvey)
             if (!empty($questions)) {
-                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required, scale_min_label, scale_max_label) VALUES (:survey_id, :type, :label, :order_index, :is_required, :scale_min_label, :scale_max_label)";
+                $sqlQ = "INSERT INTO questions (survey_id, type, label, order_index, is_required, scale_min_label, scale_max_label, parent_question_id, parent_option_label) VALUES (:survey_id, :type, :label, :order_index, :is_required, :scale_min_label, :scale_max_label, :parent_question_id, :parent_option_label)";
                 $stmtQ = $this->conn->prepare($sqlQ);
 
                 $sqlOpt = "INSERT INTO question_options (question_id, label, order_index, is_open_ended) VALUES (:question_id, :label, :order_index, :is_open_ended)";
                 $stmtOpt = $this->conn->prepare($sqlOpt);
+
+                $tempIdToRealIdMap = [];
+
 
                 foreach ($questions as $index => $q) {
                     $type = $q['type'];
@@ -178,6 +203,18 @@ class Questionnaire
                     elseif ($type === 'Jauge')
                         $dbType = 'scale';
 
+                    $parentQuestionId = null;
+                    if (!empty($q['parent_question_id'])) {
+                        $parentTempId = $q['parent_question_id'];
+                        if (isset($tempIdToRealIdMap[$parentTempId])) {
+                            $parentQuestionId = $tempIdToRealIdMap[$parentTempId];
+                        } else {
+                            $parentQuestionId = $parentTempId; // Already real ID
+                        }
+                    }
+
+                    $parentOptionLabel = !empty($q['parent_option_label']) ? $q['parent_option_label'] : null;
+
                     $stmtQ->execute([
                         ':survey_id' => $id,
                         ':type' => $dbType,
@@ -185,10 +222,16 @@ class Questionnaire
                         ':order_index' => $index,
                         ':is_required' => $isRequired,
                         ':scale_min_label' => $q['scale_min_label'] ?? 'Pas du tout',
-                        ':scale_max_label' => $q['scale_max_label'] ?? 'Tout à fait'
+                        ':scale_max_label' => $q['scale_max_label'] ?? 'Tout à fait',
+                        ':parent_question_id' => $parentQuestionId,
+                        ':parent_option_label' => $parentOptionLabel
                     ]);
 
                     $questionId = $this->conn->lastInsertId();
+                    if (isset($q['id'])) {
+                        $tempIdToRealIdMap[$q['id']] = $questionId;
+                    }
+
 
                     // Insert Options
                     if (in_array($type, ['Cases à cocher', 'Choix multiples']) && !empty($q['options'])) {
@@ -290,11 +333,12 @@ class Questionnaire
             return false;
         }
         $reqQuestions = $this->conn->prepare("
-            SELECT id, type, label, order_index, is_required 
+            SELECT id, type, label, order_index, is_required, scale_min_label, scale_max_label, parent_question_id, parent_option_label 
             FROM questions 
             WHERE survey_id = :surveyId 
             ORDER BY order_index ASC
         ");
+
         $reqQuestions->bindParam(':surveyId', $surveyId, PDO::PARAM_STR);
         $reqQuestions->execute();
         $questions = $reqQuestions->fetchAll(PDO::FETCH_ASSOC);
@@ -393,11 +437,12 @@ class Questionnaire
 
         // 2. Questions
         $reqQuestions = $this->conn->prepare("
-             SELECT id, type, label, order_index, is_required 
+             SELECT id, type, label, order_index, is_required, scale_min_label, scale_max_label, parent_question_id, parent_option_label 
              FROM questions 
              WHERE survey_id = :surveyId 
              ORDER BY order_index ASC
          ");
+
         $reqQuestions->bindParam(':surveyId', $surveyId);
         $reqQuestions->execute();
         $questions = $reqQuestions->fetchAll(PDO::FETCH_ASSOC);

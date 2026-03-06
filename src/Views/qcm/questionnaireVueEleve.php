@@ -32,11 +32,13 @@
                 </div>
 
                 <form @submit.prevent="submitAnswers">
-                    <div v-for="(q, index) in questionnaire.questions" :key="q.id" class="question-card">
+                    <div v-for="(q, index) in questionnaire.questions" :key="q.id" class="question-card"
+                        v-show="isQuestionVisible(q)">
                         <div class="question-title">
                             <span style="color: var(--primary); margin-right: 8px;">{{ index + 1 }}.</span>
                             {{ q.label }}
                         </div>
+
 
                         <div class="answer-area">
                             <!-- Choix unique (Radio) -->
@@ -173,6 +175,28 @@
                     } else {
                         console.error("Aucune donnée reçue de PHP");
                         this.loading = false;
+                    }
+                },
+                isQuestionVisible(q) {
+                    if (!q.parent_question_id) return true;
+
+                    const parentId = q.parent_question_id;
+                    const requiredLabel = q.parent_option_label;
+                    const parentAnswer = this.reponses[parentId];
+
+                    if (!parentAnswer) return false;
+
+                    const parentQ = this.questionnaire.questions.find(pq => pq.id == parentId);
+                    if (!parentQ) return false;
+
+                    if (Array.isArray(parentAnswer)) {
+                        // Checkbox: parentAnswer est un tableau d'IDs d'options
+                        const selectedOptions = parentQ.options.filter(o => parentAnswer.includes(o.id));
+                        return selectedOptions.some(o => o.label === requiredLabel);
+                    } else {
+                        // Radio (ou autre): parentAnswer est un ID
+                        const opt = parentQ.options.find(o => o.id == parentAnswer);
+                        return opt && opt.label === requiredLabel;
                     }
                 },
                 autoResize(event) {

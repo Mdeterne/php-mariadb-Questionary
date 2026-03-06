@@ -37,7 +37,7 @@ const app = createApp({
                     else if (q.type === 'scale') type = 'Jauge';
 
                     return {
-                        id: Date.now() + Math.random(),
+                        id: q.id || (Date.now() + Math.random()),
                         type: type,
                         title: q.label,
                         required: q.is_required == 1,
@@ -46,7 +46,9 @@ const app = createApp({
                             is_open_ended: o.is_open_ended == 1
                         })) : [],
                         scale_min_label: q.scale_min_label || 'Pas du tout',
-                        scale_max_label: q.scale_max_label || 'Tout à fait'
+                        scale_max_label: q.scale_max_label || 'Tout à fait',
+                        parent_question_id: q.parent_question_id || null,
+                        parent_option_label: q.parent_option_label || null
                     };
                 });
             }
@@ -64,7 +66,9 @@ const app = createApp({
                 options: ['Cases à cocher', 'Choix multiples'].includes(type) ? [{ label: 'Option 1', is_open_ended: false }] : [],
                 required: false,
                 scale_min_label: type === 'Jauge' ? 'Pas du tout' : '',
-                scale_max_label: type === 'Jauge' ? 'Tout à fait' : ''
+                scale_max_label: type === 'Jauge' ? 'Tout à fait' : '',
+                parent_question_id: null,
+                parent_option_label: null
             };
         },
         supprimerQuestion(index) {
@@ -139,8 +143,22 @@ const app = createApp({
             if (this.idQuestionnaire) {
                 window.location.href = `index.php?c=tableauDeBord&a=parametres&id=${this.idQuestionnaire}`;
             } else {
-                alert("Veuillez d'abord sauvegarder le questionnaire pour accéder aux paramètres.");
+                alert("Veuillez d'abord sauvegarder le questionnaire pour acceder aux parametres.");
             }
+        },
+        questionsPossiblesCommeParent(currentIndex) {
+            // A question can only depend on a previous question of type single/multiple choice
+            return this.questions
+                .slice(0, currentIndex)
+                .filter(q => ['Choix multiples', 'Cases à cocher', 'single_choice', 'multiple_choice'].includes(q.type));
+        },
+        optionsPourQuestionParent(questionId) {
+            if (!questionId) return [];
+            const parentQ = this.questions.find(q => q.id === questionId);
+            if (!parentQ || !parentQ.options) return [];
+            // Remove 'is_open_ended' options from being a condition if desired, 
+            // but for now let's just return all defined options.
+            return parentQ.options;
         }
     }
 });

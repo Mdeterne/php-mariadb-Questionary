@@ -10,6 +10,8 @@ $possible_creds = [
     ['host' => 'localhost', 'user' => 'root', 'pass' => 'root', 'socket' => '/tmp/mysql.sock'], // Socket default
     ['host' => 'localhost', 'user' => 'root', 'pass' => '', 'socket' => '/tmp/mysql.sock'],     // Socket no pass
     ['host' => 'localhost', 'user' => 'milan', 'pass' => '', 'socket' => '/tmp/mysql.sock'],    // User no pass
+    ['host' => 'localhost', 'user' => 'iut', 'pass' => 'iut'],         // VM IUT
+    ['host' => '127.0.0.1', 'user' => 'iut', 'pass' => 'iut'],         // VM IUT alternative IP
 ];
 
 $db_name = "questionary";

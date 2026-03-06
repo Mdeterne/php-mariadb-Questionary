@@ -27,7 +27,17 @@
                 <span class="page-label">Analyse des résultats</span>
                 <h1 class="page-title"><?php echo htmlspecialchars($pageTitle ?? 'Questionnaire sans titre'); ?></h1>
             </div>
-            <div class="buttons-group" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+            <div class="buttons-group" style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                <button type="button" id="btn-export" class="btn-secondary" style="background-color: #2e7d32; border-color: #2e7d32; color: white; cursor: pointer;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Exporter
+                </button>
                 <a href="?c=tableauDeBord" class="btn-secondary">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -74,6 +84,41 @@
             </div>
             <div class="modal-body">
                 <ul id="modal-text-list" class="text-answers-list-modal"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale d'exportation -->
+    <div id="export-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-header">
+                <h3>Exporter les réponses</h3>
+                <button type="button" id="btn-close-export" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+                <p>Choisissez le format d'exportation :</p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button onclick="window.location.href='export_csv.php?id=<?php echo $idQuestionnaire; ?>';" class="btn-secondary" style="background-color: #2e7d32; border-color: #2e7d32; color: white; flex: 1; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        CSV
+                    </button>
+                    <button onclick="window.location.href='export_xlsx.php?id=<?php echo $idQuestionnaire; ?>';" class="btn-secondary" style="background-color: #107c41; border-color: #107c41; color: white; flex: 1; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <circle cx="10" cy="13" r="2"></circle>
+                            <circle cx="14" cy="17" r="2"></circle>
+                            <path d="M14 13l-4 4"></path>
+                        </svg>
+                        Excel
+                    </button>
+                </div>
             </div>
         </div>
     </div>

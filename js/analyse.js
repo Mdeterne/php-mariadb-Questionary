@@ -66,6 +66,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Logique pour la modale d'export ---
+    const btnExport = document.getElementById('btn-export');
+    const exportModal = document.getElementById('export-modal');
+    const btnCloseExport = document.getElementById('btn-close-export');
+
+    if (btnExport && exportModal) {
+        btnExport.addEventListener('click', (e) => {
+            e.preventDefault();
+            exportModal.classList.add('active');
+        });
+    }
+
+    if (btnCloseExport && exportModal) {
+        btnCloseExport.addEventListener('click', (e) => {
+            e.preventDefault();
+            exportModal.classList.remove('active');
+        });
+    }
+
+    if (exportModal) {
+        exportModal.addEventListener('click', (e) => {
+            if (e.target === exportModal) exportModal.classList.remove('active');
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && exportModal.classList.contains('active')) {
+                exportModal.classList.remove('active');
+            }
+        });
+    }
+
 
     // Frequence de chaines pour texte court
     function calculerFrequence(reponses) {

@@ -24,7 +24,8 @@ createApp({
             showQrModal: false,
             qrLink: '',
             qrTitle: '',
-            qrPin: ''
+            qrPin: '',
+            qrId: null
         };
     },
 
@@ -99,14 +100,21 @@ createApp({
         },
 
         // Affichage du QR Code et génération du lien d'accès
-        afficherQrCode(pin, titre) {
+        afficherQrCode(pin, titre, id) {
 
             const urlBase = window.location.origin + window.location.pathname;
 
             this.qrLink = `${urlBase}?c=home&a=valider&pin=${pin}`;
             this.qrTitle = titre;
             this.qrPin = pin;
+            this.qrId = id;
             this.showQrModal = true;
+        },
+
+        downloadPdf() {
+            if (this.qrId) {
+                window.open('export_pdf.php?id=' + this.qrId, '_blank');
+            }
         },
 
         async downloadQrImage() {

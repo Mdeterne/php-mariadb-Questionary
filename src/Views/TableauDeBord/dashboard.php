@@ -118,7 +118,7 @@
                     <a :href="'?c=createur&a=editer&id=' + q.id" style="text-decoration:none; color:inherit;">
                         <div class="card-q">
                             <div class="card-q-title">{{ q.titre }}</div>
-                            <div class="card-q-qr" @click.prevent.stop="afficherQrCode(q.access_pin, q.titre)">
+                            <div class="card-q-qr" @click.prevent.stop="afficherQrCode(q.access_pin, q.titre, q.id)">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                             </div>
                         </div>
@@ -216,6 +216,9 @@
 
 
                     <div class="modal-actions" style="justify-content: center; margin-top: 20px;">
+                        <button class="btn-confirm" @click="downloadPdf" style="margin-right: 10px; background-color: #666;">
+                            <i class="fa-solid fa-file-pdf"></i> Exporter en PDF
+                        </button>
                         <button class="btn-confirm" @click="downloadQrImage"> <i class="fa-solid fa-download"></i>
                             Télécharger l'image</button>
                         <button class="btn-cancel" @click="closeQrModal" style="margin-left: 10px;">Fermer</button>

@@ -208,17 +208,18 @@
                     <h2 style="font-size: 2.5rem; font-weight: 800; color: #333; margin: 10px 0;">{{ qrPin }}</h2>
                     <h4 style="margin-bottom: 20px; color: #666; font-weight: normal;">{{ qrTitle }}</h4>
 
+                    <div style="margin-bottom: 20px;">
+                        <button class="btn-confirm" @click="downloadPdf" style="background-color: #666; min-width: 350px;">
+                            <i class="fa-solid fa-file-pdf"></i> Exporter le questionnaire en PDF
+                        </button>
+                    </div>
+
                     <div
                         style="background: white; padding: 20px; display: inline-block; border-radius: 10px; border: 1px solid #eee;">
                         <qrcode-vue :value="qrLink" :size="200" level="H"></qrcode-vue>
                     </div>
 
-
-
                     <div class="modal-actions" style="justify-content: center; margin-top: 20px;">
-                        <button class="btn-confirm" @click="downloadPdf" style="margin-right: 10px; background-color: #666;">
-                            <i class="fa-solid fa-file-pdf"></i> Exporter en PDF
-                        </button>
                         <button class="btn-confirm" @click="downloadQrImage"> <i class="fa-solid fa-download"></i>
                             Télécharger l'image</button>
                         <button class="btn-cancel" @click="closeQrModal" style="margin-left: 10px;">Fermer</button>

@@ -2,22 +2,22 @@
 
 .sidebar {
     width: 260px;
-    background-color: #fff;
+    background-color: var(--card);
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--card-border);
 }
 
 .sidebar-header-box {
-    background-color: white;
-    color: #252525;
+    background-color: var(--card);
+    color: var(--ink);
     font-size: 20px;
     font-weight: bold;
     padding-top: 23px;
     padding-bottom: 15px;
     padding-left: 30px;
     text-align: left;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--card-border);
 }
 
 .sidebar-nav {
@@ -64,7 +64,7 @@
 
 .sidebar-nav a:hover,
 .tool-item:hover {
-    background-color: #f3f4f6;
+    background-color: var(--bg);
     transform: translateX(2px);
     color: var(--red);
     border-color: var(--card-border);

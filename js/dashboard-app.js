@@ -17,6 +17,7 @@ createApp({
             showImportModal: false,
             showImportSuccess: false,
             showImportError: false,
+            showTemplateModal: false,
             lienImport: '',
             questionnaireToDelete: null,
 
@@ -161,6 +162,10 @@ createApp({
             this.showQrModal = false;
             this.qrLink = '';
             this.qrPin = '';
+        },
+
+        selectTemplate(templateId) {
+            window.location.href = `?c=createur&a=nouveauFormulaire&template=${templateId}`;
         }
     },
     mounted() {

@@ -11,7 +11,7 @@ main {
     align-items: flex-end;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #edf2f7;
+    border-bottom: 1px solid var(--card-border);
     margin-top: 40px;
 }
 
@@ -26,13 +26,13 @@ main {
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.05em;
-    color: #718096;
+    color: var(--muted);
 }
 
 .page-title {
     font-size: 28px;
     font-weight: 800;
-    color: #1a202c;
+    color: var(--ink);
     letter-spacing: -0.03em;
     margin: 0;
     line-height: 1.2;
@@ -43,33 +43,12 @@ main {
     align-items: center;
 }
 
-.btn-secondary {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
 
-.btn-secondary:hover {
-    background-color: #252525;
-    color: #fff;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
 
 .stats-box {
     margin-bottom: 40px;
-    background-color: #fce8e8;
-    color: #b52424;
+    background-color: rgba(181, 36, 36, 0.1);
+    color: var(--red);
     padding: 12px 20px;
     border-radius: 50px;
     display: inline-flex;
@@ -90,11 +69,11 @@ main {
 }
 
 .cards-container .card {
-    background-color: white;
+    background-color: var(--card);
     border-radius: 16px;
     padding: 30px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--card-border);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
@@ -103,7 +82,7 @@ main {
 
 .cards-container .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow);
 }
 
 .cards-container .input-group {
@@ -113,24 +92,17 @@ main {
     border: none;
     font-size: 18px;
     font-weight: 700;
-    color: #1a202c;
+    color: var(--ink);
     letter-spacing: -0.02em;
 }
 
 .response-box {
-    background: #f8fafc;
+    background: var(--bg);
     padding: 15px;
     border-radius: 8px;
     font-size: 14px;
-    color: #4a5568;
-    border: 1px solid #edf2f7;
-}
-
-.chart-container {
-    background: white;
-    height: 300px;
-    position: relative;
-    width: 100%;
+    color: var(--ink);
+    border: 1px solid var(--card-border);
 }
 
 .chart-container-small {
@@ -184,18 +156,19 @@ main {
 }
 
 .modal-content {
-    background: white;
+    background: var(--card);
     width: 90%;
     max-width: 600px;
     max-height: 80vh;
     /* Scroll inside if too long */
     border-radius: 12px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     transform: scale(0.95);
     transition: transform 0.2s ease;
+    border: 1px solid var(--card-border);
 }
 
 .modal-overlay.active .modal-content {
@@ -204,18 +177,18 @@ main {
 
 .modal-header {
     padding: 20px;
-    border-bottom: 1px solid #edf2f7;
+    border-bottom: 1px solid var(--card-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #f8fafc;
+    background: var(--bg);
 }
 
 .modal-header h3 {
     margin: 0;
     font-size: 18px;
     font-weight: 700;
-    color: #1a202c;
+    color: var(--ink);
 }
 
 .modal-close-btn {
@@ -224,13 +197,13 @@ main {
     font-size: 28px;
     line-height: 1;
     cursor: pointer;
-    color: #a0aec0;
+    color: var(--muted);
     padding: 0;
     transition: color 0.2s;
 }
 
 .modal-close-btn:hover {
-    color: #e53e3e;
+    color: var(--red);
 }
 
 .modal-body {
@@ -246,9 +219,9 @@ main {
 
 .text-answers-list-modal li {
     padding: 15px 20px;
-    border-bottom: 1px solid #edf2f7;
+    border-bottom: 1px solid var(--card-border);
     font-size: 14px;
-    color: #4a5568;
+    color: var(--ink);
     line-height: 1.5;
 }
 
@@ -257,11 +230,11 @@ main {
 }
 
 .text-answers-list-modal li:nth-child(odd) {
-    background-color: #fff;
+    background-color: var(--card);
 }
 
 .text-answers-list-modal li:nth-child(even) {
-    background-color: #f8fafc;
+    background-color: var(--bg);
 }
 
 /* Premium Button Style for Modal Trigger */
@@ -269,7 +242,7 @@ main {
     width: 100%;
     margin-top: 15px;
     padding: 12px;
-    background-color: #2d3748;
+    background-color: var(--btn-dark);
     /* Dark premium grey */
     border: none;
     border-radius: 8px;
@@ -286,19 +259,8 @@ main {
 }
 
 .btn-view-answers:hover {
-    background-color: #1a202c;
+    background-color: var(--btn-dark-hover);
     /* Near black */
     transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.btn-view-answers:before {
-    content: '';
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z'%3E%3C/path%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3C/svg%3E");
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: 0.9;
+    box-shadow: var(--shadow);
 }

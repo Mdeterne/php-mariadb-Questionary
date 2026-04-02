@@ -17,11 +17,13 @@
 .page-title-label {
     font-size: 1.2rem;
     font-weight: 600;
+    color: var(--muted);
 }
 
 .page-title-value {
     font-size: 1.2rem;
     font-weight: bold;
+    color: var(--ink);
 }
 
 /* --- Sections & Cards --- */
@@ -36,7 +38,7 @@ h3 {
     font-size: 1.1rem;
     margin-bottom: 10px;
     font-weight: 600;
-    color: #222;
+    color: var(--ink);
 }
 
 /* --- Form Elements --- */
@@ -45,6 +47,7 @@ label.sub-label {
     margin-bottom: 8px;
     font-weight: 500;
     font-size: 0.9rem;
+    color: var(--muted);
 }
 
 .input-group {
@@ -68,6 +71,7 @@ label.sub-label {
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
+    color: var(--ink);
 }
 
 .date-row {

@@ -89,36 +89,55 @@ a.topbar__logo:hover {
 }
 
 .theme-toggle {
-    background: #333333;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
+    background: var(--bg);
+    border: 1px solid var(--card-border);
+    color: var(--ink);
     cursor: pointer;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 18px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin-right: 10px;
+    position: relative;
+    overflow: hidden;
 }
 
 .theme-toggle:hover {
-    background: #444444;
-    transform: scale(1.05);
+    background: var(--card-border);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
 }
 
 .theme-toggle:active {
     transform: scale(0.95);
 }
 
-.icon-sun { display: none; color: #FFD700; }
-.icon-moon { display: block; color: #A5A5A5; }
+.theme-toggle .icon-sun { 
+    display: none !important; 
+    color: #FFD700; 
+}
 
-[data-theme="dark"] .icon-sun { display: block; }
-[data-theme="dark"] .icon-moon { display: none; }
-[data-theme="dark"] .theme-toggle { background: #2c2c2c; }
+.theme-toggle .icon-moon { 
+    display: block !important; 
+    color: #64748b; 
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun { 
+    display: block !important; 
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon { 
+    display: none !important; 
+}
+
+[data-theme="dark"] .theme-toggle { 
+    background: #2d2d2d; 
+    border-color: #404040;
+}
 
 @media (max-width: 520px) {
     .topbar__right .uni-text {

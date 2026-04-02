@@ -124,35 +124,35 @@
                     </div>
 
                     <div class="template-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 25px;">
-                        <div class="template-item" @click="selectTemplate('iut_annuel')" style="border: 1px solid #eee; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafafa; text-align: left;">
+                        <div class="template-item" @click="selectTemplate('iut_annuel')" style="border: 1px solid var(--card-border); padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: var(--card); text-align: left;">
                             <i class="fa-solid fa-graduation-cap" style="font-size: 1.5rem; color: var(--red); margin-bottom: 15px; display: block;"></i>
-                            <h4 style="margin: 0 0 10px 0; font-size: 1rem;">Évaluation Annuelle</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4;">Sondage global sur l'année.</p>
+                            <h4 style="margin: 0 0 10px 0; font-size: 1rem; color: var(--ink);">Évaluation Annuelle</h4>
+                            <p style="font-size: 0.8rem; color: var(--muted); margin: 0; line-height: 1.4;">Sondage global sur l'année.</p>
                         </div>
-                        <div class="template-item" @click="selectTemplate('iut_stage')" style="border: 1px solid #eee; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafafa; text-align: left;">
+                        <div class="template-item" @click="selectTemplate('iut_stage')" style="border: 1px solid var(--card-border); padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: var(--card); text-align: left;">
                             <i class="fa-solid fa-briefcase" style="font-size: 1.5rem; color: var(--red); margin-bottom: 15px; display: block;"></i>
-                            <h4 style="margin: 0 0 10px 0; font-size: 1rem;">Retour de Stage</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4;">Bilan des missions en entreprise.</p>
+                            <h4 style="margin: 0 0 10px 0; font-size: 1rem; color: var(--ink);">Retour de Stage</h4>
+                            <p style="font-size: 0.8rem; color: var(--muted); margin: 0; line-height: 1.4;">Bilan des missions en entreprise.</p>
                         </div>
-                        <div class="template-item" @click="selectTemplate('iut_projet')" style="border: 1px solid #eee; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafafa; text-align: left;">
+                        <div class="template-item" @click="selectTemplate('iut_projet')" style="border: 1px solid var(--card-border); padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: var(--card); text-align: left;">
                             <i class="fa-solid fa-diagram-project" style="font-size: 1.5rem; color: var(--red); margin-bottom: 15px; display: block;"></i>
-                            <h4 style="margin: 0 0 10px 0; font-size: 1rem;">Projet Tuteuré</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4;">Auto-évaluation du travail d'équipe.</p>
+                            <h4 style="margin: 0 0 10px 0; font-size: 1rem; color: var(--ink);">Projet Tuteuré</h4>
+                            <p style="font-size: 0.8rem; color: var(--muted); margin: 0; line-height: 1.4;">Auto-évaluation du travail d'équipe.</p>
                         </div>
-                        <div class="template-item" @click="selectTemplate('iut_module')" style="border: 1px solid #eee; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafafa; text-align: left;">
+                        <div class="template-item" @click="selectTemplate('iut_module')" style="border: 1px solid var(--card-border); padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: var(--card); text-align: left;">
                             <i class="fa-solid fa-book-open" style="font-size: 1.5rem; color: var(--red); margin-bottom: 15px; display: block;"></i>
-                            <h4 style="margin: 0 0 10px 0; font-size: 1rem;">Évaluation de Matière</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4;">Feed-back sur un module spécifique.</p>
+                            <h4 style="margin: 0 0 10px 0; font-size: 1rem; color: var(--ink);">Évaluation de Matière</h4>
+                            <p style="font-size: 0.8rem; color: var(--muted); margin: 0; line-height: 1.4;">Feed-back sur un module spécifique.</p>
                         </div>
-                        <div class="template-item" @click="selectTemplate('iut_vie')" style="border: 1px solid #eee; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafafa; text-align: left;">
+                        <div class="template-item" @click="selectTemplate('iut_vie')" style="border: 1px solid var(--card-border); padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: var(--card); text-align: left;">
                             <i class="fa-solid fa-users" style="font-size: 1.5rem; color: var(--red); margin-bottom: 15px; display: block;"></i>
-                            <h4 style="margin: 0 0 10px 0; font-size: 1rem;">Vie Étudiante</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4;">Sondage sur l'ambiance et les services.</p>
+                            <h4 style="margin: 0 0 10px 0; font-size: 1rem; color: var(--ink);">Vie Étudiante</h4>
+                            <p style="font-size: 0.8rem; color: var(--muted); margin: 0; line-height: 1.4;">Sondage sur l'ambiance et les services.</p>
                         </div>
-                        <div class="template-item" @click="selectTemplate('iut_competences')" style="border: 1px solid #eee; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafafa; text-align: left;">
+                        <div class="template-item" @click="selectTemplate('iut_competences')" style="border: 1px solid var(--card-border); padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: var(--card); text-align: left;">
                             <i class="fa-solid fa-medal" style="font-size: 1.5rem; color: var(--red); margin-bottom: 15px; display: block;"></i>
-                            <h4 style="margin: 0 0 10px 0; font-size: 1rem;">Auto-Évaluation</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4;">Bilan pour le Portfolio BUT.</p>
+                            <h4 style="margin: 0 0 10px 0; font-size: 1rem; color: var(--ink);">Auto-Évaluation</h4>
+                            <p style="font-size: 0.8rem; color: var(--muted); margin: 0; line-height: 1.4;">Bilan pour le Portfolio BUT.</p>
                         </div>
                     </div>
                 </div>

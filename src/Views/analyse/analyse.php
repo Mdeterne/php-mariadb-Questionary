@@ -52,7 +52,7 @@
 
         <div class="filter-section card-box" style="margin-bottom: 25px; padding: 25px; background: var(--card); border: 1px solid var(--card-border); border-radius: 16px;">
             <form id="filter-form" method="GET" action="index.php" class="filter-form" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px;">
-                <input type="hidden" name="c" value="ControleurAnalyse">
+                <input type="hidden" name="c" value="espaceAnalyse">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($idQuestionnaire); ?>">
                 
                 <div class="filter-group" style="display: flex; flex-direction: column; gap: 10px;">
@@ -67,7 +67,7 @@
                 
                 <div class="filter-actions" style="display: flex; gap: 16px;">
                     <button type="submit" class="btn-primary" style="padding: 12px 28px; border-radius: 10px; cursor: pointer; border: none; font-weight: 600;">Filtrer</button>
-                    <a href="?c=ControleurAnalyse&id=<?php echo htmlspecialchars($idQuestionnaire); ?>" class="btn-secondary" style="padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Effacer</a>
+                    <a href="?c=espaceAnalyse&id=<?php echo htmlspecialchars($idQuestionnaire); ?>" class="btn-secondary" style="padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Effacer</a>
                 </div>
             </form>
         </div>

@@ -29,7 +29,9 @@ const app = createApp({
             // Initialisation de l'état du composant des questions pour le frontend
             if (s.questions && s.questions.length > 0) {
                 this.questions = s.questions.map(q => {
-                    let type = 'Réponse courte';
+                    let type = q.type; // Par défaut, on garde le type tel quel si c'est déjà le bon nom (ex: "Jauge")
+                    
+                    // Mapping depuis le format base de données si nécessaire
                     if (q.type === 'short_text') type = 'Réponse courte';
                     else if (q.type === 'long_text') type = 'Paragraphe';
                     else if (q.type === 'multiple_choice') type = 'Cases à cocher';
@@ -39,11 +41,11 @@ const app = createApp({
                     return {
                         id: q.id || (Date.now() + Math.random()),
                         type: type,
-                        title: q.label,
-                        required: q.is_required == 1,
+                        title: q.label || q.title || 'Question sans titre',
+                        required: (q.is_required == 1 || q.required === true),
                         options: q.options ? q.options.map(o => ({
                             label: o.label,
-                            is_open_ended: o.is_open_ended == 1
+                            is_open_ended: (o.is_open_ended == 1 || o.is_open_ended === true)
                         })) : [],
                         scale_min_label: q.scale_min_label || 'Pas du tout',
                         scale_max_label: q.scale_max_label || 'Tout à fait',

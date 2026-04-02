@@ -93,18 +93,45 @@
             <h2 class="section-title">Créer un questionnaire</h2>
             <section class="create-section">
                 <a href="?c=createur&a=nouveauFormulaire">
-                    <div class="card-create" @click="creerNouveau">
+                    <div class="card-create" title="Nouveau formulaire vide">
                         <div class="btn-plus">
                             <i class="fa-solid fa-plus"></i>
                         </div>
                     </div>
                 </a>
 
-                <div class="card-create" @click="showImportModal = true">
+                <div class="card-create" @click="showTemplateModal = true" title="Utiliser un modèle IUT">
+                    <div class="btn-import">
+                       <i class="fa-solid fa-layer-group"></i> Modèles IUT
+                    </div>
+                </div>
+
+                <div class="card-create" @click="showImportModal = true" title="Importer via PIN">
                     <div class="btn-import">Importer</div>
                 </div>
 
             </section>
+
+            <!-- MODALE DE SELECTION DE MODELE -->
+            <div class="modal-blur-overlay" v-if="showTemplateModal" @click.self="showTemplateModal = false">
+                <div class="modal-card" style="max-width: 800px; width: 90%;">
+                    <button class="modal-close-btn" @click="showTemplateModal = false" style="display: block;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <div>
+                        <h3 class="modal-title">Choisir un modèle IUT</h3>
+                        <p class="modal-desc">Sélectionnez un modèle pour commencer rapidement.</p>
+                    </div>
+
+                    <div class="template-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 25px;">
+                        <div class="template-item" @click="selectTemplate('iut_annuel')" style="border: 1px solid #eee; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafafa; text-align: left;">
+                            <i class="fa-solid fa-graduation-cap" style="font-size: 1.5rem; color: var(--red); margin-bottom: 15px; display: block;"></i>
+                            <h4 style="margin: 0 0 10px 0; font-size: 1rem;">Évaluation Annuelle</h4>
+                            <p style="font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4;">Sondage global sur l'année.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <h2 class="section-title">Vos Questionnaires</h2>
             <section class="questionnaire-grid">

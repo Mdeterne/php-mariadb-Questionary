@@ -27,15 +27,15 @@
 }
 
 .btn-primary {
-    background: #252525;
+    background: var(--btn-dark);
     color: #fff;
     margin-top: 15px;
-    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow);
 }
 
 .btn-primary:hover {
-    background: #333;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    background: var(--btn-dark-hover);
+    box-shadow: var(--shadow);
     transform: translateY(-1px);
 }
 
@@ -47,11 +47,11 @@
     background: var(--red);
     color: #fff;
     margin-top: -10px;
-    box-shadow: 0 10px 18px rgba(181, 36, 36, 0.25);
+    box-shadow: 0 10px 18px rgba(181, 36, 36, 0.15);
 }
 
 .btn-secondary:hover {
-    filter: brightness(1.03);
+    filter: brightness(1.1);
 }
 
 .btn-secondary:active {
@@ -61,21 +61,23 @@
 .btn-plus {
     width: 60px;
     height: 60px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: #252525;
+    color: var(--ink);
+    background: var(--card);
 }
 
 .btn-import {
     padding: 10px 25px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--card-border);
     border-radius: 5px;
     font-size: 1rem;
-    color: #252525;
+    color: var(--ink);
+    background: var(--card);
 }
 
 .btn-icon.delete {
@@ -112,7 +114,7 @@
 }
 
 .option-row .btn-icon:hover {
-    background: #fee2e2;
+    background: rgba(181, 36, 36, 0.1);
     color: var(--red);
     opacity: 1;
 }
@@ -139,7 +141,7 @@
 }
 
 .btn-add-question {
-    background-color: #444;
+    background-color: var(--btn-dark);
     color: white;
     padding: 12px 25px;
     border: none;
@@ -181,32 +183,32 @@
 
 /* SECONDARY: Paramètres */
 .btn-action.settings {
-    background-color: #ffffff;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: var(--card);
+    color: var(--ink);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow);
 }
 
 .btn-action.settings:hover {
-    background-color: #f9fafb;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    background-color: var(--bg);
+    box-shadow: var(--shadow);
     transform: translateY(-1px);
 }
 
 /* TERTIARY / DANGER : Quitter */
 .btn-action.quit {
-    background-color: #333;
+    background-color: var(--btn-dark);
     color: white;
     border: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow);
     font-size: 0.9rem;
     margin-top: auto;
 }
 
 .btn-action.quit:hover {
-    background-color: var(--topbar-bg);
-    /* Slightly lighter than #252525 */
+    background-color: var(--btn-dark-hover);
     color: #fff;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow);
     transform: translateY(-1px);
 }
 
@@ -216,17 +218,18 @@
     border: none;
     padding: 10px 20px;
     font-weight: 600;
-    color: #666;
+    color: var(--muted);
     cursor: pointer;
     border-radius: 8px;
 }
 
 .btn-cancel:hover {
-    background: #f0f0f0;
+    background: var(--bg);
+    color: var(--ink);
 }
 
 .btn-confirm-import {
-    background: #252525;
+    background: var(--btn-dark);
     color: white;
     border: none;
     padding: 10px 25px;
@@ -237,7 +240,7 @@
 }
 
 .btn-confirm-import:hover {
-    background: #444;
+    background: var(--btn-dark-hover);
 }
 
 .btn-confirm-import:active {
@@ -247,16 +250,17 @@
 /* Copy Button */
 button.btn-copy {
     padding: 8px 16px;
-    background-color: #f0f0f0;
-    border: 1px solid #999;
+    background-color: var(--bg);
+    border: 1px solid var(--card-border);
     border-radius: 4px;
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.2s;
+    color: var(--ink);
 }
 
 button.btn-copy:hover {
-    background-color: #e0e2e7;
+    background-color: var(--card);
 }
 
 .btn-delete-link {
@@ -311,26 +315,26 @@ button.btn-copy:hover {
 }
 
 .action-buttons .btn-cancel {
-    color: #000000;
-    background-color: #ffffff;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: var(--ink);
+    background-color: var(--card);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow);
 }
 
 .action-buttons .btn-cancel:hover {
-    background-color: #f9fafb;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    background-color: var(--bg);
+    box-shadow: var(--shadow);
     transform: translateY(-1px);
 }
 
 .action-buttons .btn-save {
-    background-color: #252525;
-    border: 1px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: var(--btn-dark);
+    border: none;
+    box-shadow: var(--shadow);
 }
 
 .action-buttons .btn-save:hover {
-    background-color: #333333;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    background-color: var(--btn-dark-hover);
+    box-shadow: var(--shadow);
     transform: translateY(-1px);
 }

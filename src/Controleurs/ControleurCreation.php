@@ -8,6 +8,24 @@ class ControleurCreation
      */
     function nouveauFormulaire()
     {
+        // On initialise $existingSurvey si un modèle est demandé
+        $existingSurvey = null;
+        if (isset($_GET['template'])) {
+            $templateId = $_GET['template'];
+            $templates = require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Configurations' . DIRECTORY_SEPARATOR . 'Templates_IUT.php';
+            
+            if (isset($templates[$templateId])) {
+                $templateData = $templates[$templateId];
+                // On formate les données pour l'éditeur (Vue.js)
+                $existingSurvey = [
+                    'id' => null, // C'est un nouveau questionnaire
+                    'title' => $templateData['title'],
+                    'description' => $templateData['description'],
+                    'questions' => $templateData['questions']
+                ];
+            }
+        }
+
         require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
     }
 

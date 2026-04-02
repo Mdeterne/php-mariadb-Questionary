@@ -3,13 +3,13 @@
     display: flex;
     height: calc(100vh - 60px);
     /* Toute la hauteur moins le header */
-    background-color: #fff;
+    background-color: var(--bg);
 }
 
 /* 1. BOÎTE À OUTILS (GAUCHE) */
 .editor-toolbox {
     width: 260px;
-    background-color: #fff;
+    background-color: var(--card);
     border-right: 1px solid var(--card-border);
     padding: 0;
     display: flex;
@@ -43,7 +43,7 @@
 }
 
 .tool-item:hover {
-    background-color: #f3f4f6;
+    background-color: var(--bg);
     /* Subtle hover */
     transform: translateX(2px);
     color: var(--red);
@@ -89,11 +89,11 @@
 .form-title-card {
     width: 100%;
     max-width: 900px;
-    background: #fff;
+    background: var(--card);
     border-radius: 16px;
     padding: 40px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid transparent;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--card-border);
     position: relative;
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
@@ -158,7 +158,7 @@
 
 
 .option-row i {
-    color: #d1d5db;
+    color: var(--card-border);
     font-size: 1.2rem;
 }
 
@@ -168,7 +168,7 @@
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
-    background: #fff;
+    background: var(--card);
     border-left: 1px solid var(--card-border);
     gap: 12px;
 }
@@ -191,9 +191,9 @@
 }
 
 .empty-placeholder {
-    border: 2px dashed #cfd3d7;
+    border: 2px dashed var(--card-border);
     border-radius: 16px;
-    background-color: #f9f9f9;
+    background-color: var(--bg);
     color: var(--muted);
     text-align: center;
     padding: 80px 20px;
@@ -208,11 +208,11 @@
 
 .empty-placeholder i {
     font-size: 2.5rem;
-    color: #d1d5db;
+    color: var(--muted);
     margin-bottom: 10px;
 }
 
 .empty-placeholder:hover {
-    background-color: #f0f0f0;
+    background-color: var(--card);
     border-color: var(--muted);
 }

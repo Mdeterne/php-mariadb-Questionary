@@ -123,7 +123,7 @@
                         <p class="modal-desc">Sélectionnez un modèle pour commencer rapidement.</p>
                     </div>
 
-                    <div class="template-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 25px;">
+                    <div class="template-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 25px;">
                         <div class="template-item" @click="selectTemplate('iut_annuel')" style="border: 1px solid #eee; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background: #fafafa; text-align: left;">
                             <i class="fa-solid fa-graduation-cap" style="font-size: 1.5rem; color: var(--red); margin-bottom: 15px; display: block;"></i>
                             <h4 style="margin: 0 0 10px 0; font-size: 1rem;">Évaluation Annuelle</h4>

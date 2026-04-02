@@ -1,37 +1,52 @@
 .error-container {
     text-align: center;
-    padding: 60px 20px;
+    padding: 60px 40px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
 }
 
 .error-icon {
     font-size: 80px;
-    color: var(--secondary);
-    margin-bottom: 20px;
-    opacity: 0.5;
+    color: var(--red);
+    margin-bottom: 25px;
+    opacity: 0.8;
 }
 
 .error-title {
-    font-size: 2rem;
-    color: var(--dark);
-    margin-bottom: 10px;
+    font-size: 2.5rem;
+    color: var(--ink);
+    margin-bottom: 15px;
+    font-weight: 800;
 }
 
 .error-desc {
-    color: var(--gray);
-    margin-bottom: 30px;
+    color: var(--muted);
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
 .btn-home {
-    background-color: #252525;
+    background-color: var(--btn-dark);
     color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
+    padding: 14px 32px;
+    border-radius: 12px;
     text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .btn-home:hover {
+    background-color: var(--btn-dark-hover);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(19, 19, 19, 0.4);
+    box-shadow: var(--shadow);
+}
+
+.btn-home i {
+    font-size: 1.1rem;
 }

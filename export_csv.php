@@ -6,6 +6,8 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("Erreur: ID du questionnaire manquant.");
 }
 $surveyId = $_GET['id'];
+$startDate = $_GET['startDate'] ?? null;
+$endDate = $_GET['endDate'] ?? null;
 
 try {
     $database = new Database();
@@ -47,11 +49,17 @@ $headerCsv = ['ID Réponse', 'Date de soumission'];
 foreach ($questionLabels as $label) {
     $headerCsv[] = $label;
 }
-fputcsv($output, $headerCsv, ';', '"', '\\'); // Utilisation du point-virgule pour Excel francophone, et on définit explicitement enclosure et escape pour éviter le warning PHP 8.4
+fputcsv($output, $headerCsv, ';', '"', '\\');
 
-// Récupération des réponses
-$stmtResponses = $conn->prepare("SELECT id, user_id, submitted_at FROM responses WHERE survey_id = :sid ORDER BY submitted_at ASC");
-$stmtResponses->execute([':sid' => $surveyId]);
+// Récupération des réponses filtrées
+$sqlResp = "SELECT id, user_id, submitted_at FROM responses WHERE survey_id = :sid AND submitted_at IS NOT NULL";
+$params = [':sid' => $surveyId];
+if ($startDate) { $sqlResp .= " AND DATE(submitted_at) >= :sd"; $params[':sd'] = $startDate; }
+if ($endDate) { $sqlResp .= " AND DATE(submitted_at) <= :ed"; $params[':ed'] = $endDate; }
+$sqlResp .= " ORDER BY submitted_at ASC";
+
+$stmtResponses = $conn->prepare($sqlResp);
+$stmtResponses->execute($params);
 $responses = $stmtResponses->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($responses as $response) {

@@ -30,21 +30,25 @@ class ControleurAnalyse
             return;
         }
 
-        // 4. Récupération du nombre total de réponses
-        // Variable utilisée dans la vue : $responseCount
-        $responseCount = $modeleReponse->getTotalResponsesCount($idQuestionnaire);
+        // 4. Récupération des filtres de date
+        $startDate = $_GET['startDate'] ?? null;
+        $endDate = $_GET['endDate'] ?? null;
 
-        // 5. Récupération des questions et réponses
+        // 5. Récupération du nombre total de réponses filtrées
+        $responseCount = $modeleReponse->getTotalResponsesCount($idQuestionnaire, $startDate, $endDate);
+
+        // 6. Récupération des questions et réponses
         $donneesAnalyse = $modeleQuestionnaire->getAnalysisData($idQuestionnaire);
 
-        // Enrichissement des questions avec les statistiques
+        // Enrichissement des questions avec les statistiques filtrées
         foreach ($donneesAnalyse['questions'] as &$question) {
+            $qId = $question['id'];
             if (in_array($question['type'], ['single_choice', 'multiple_choice'])) {
-                $question['stats'] = $modeleReponse->getQuestionStats($question['id']);
-            } elseif ($question['type'] === 'scale') {
-                $question['stats'] = $modeleReponse->getScaleStats($question['id']);
+                $question['stats'] = $modeleReponse->getQuestionStats($qId, $startDate, $endDate);
+            } elseif ($question['type'] === 'scale' || $question['type'] === 'jauge') {
+                $question['stats'] = $modeleReponse->getScaleStats($qId, $startDate, $endDate);
             } elseif (in_array($question['type'], ['text', 'paragraph', 'short_text', 'long_text'])) {
-                $question['text_answers'] = $modeleReponse->getTextAnswers($question['id']);
+                $question['text_answers'] = $modeleReponse->getTextAnswers($qId, $startDate, $endDate);
             }
         }
 

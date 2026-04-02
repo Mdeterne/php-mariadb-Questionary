@@ -101,64 +101,111 @@ class Reponse
         }
     }
 
-    public function getTotalResponsesCount($surveyId)
+    public function getTotalResponsesCount($surveyId, $startDate = null, $endDate = null)
     {
         if (!$this->bdd)
             return 0;
-        $req = $this->bdd->prepare("
-            SELECT COUNT(*) FROM responses 
-            WHERE survey_id = :surveyId AND submitted_at IS NOT NULL
-        ");
-        $req->bindParam(':surveyId', $surveyId, PDO::PARAM_STR);
-        $req->execute();
+        
+        $sql = "SELECT COUNT(*) FROM responses WHERE survey_id = :surveyId AND submitted_at IS NOT NULL";
+        $params = [':surveyId' => $surveyId];
+
+        if ($startDate) {
+            $sql .= " AND DATE(submitted_at) >= :startDate";
+            $params[':startDate'] = $startDate;
+        }
+        if ($endDate) {
+            $sql .= " AND DATE(submitted_at) <= :endDate";
+            $params[':endDate'] = $endDate;
+        }
+
+        $req = $this->bdd->prepare($sql);
+        $req->execute($params);
         return $req->fetchColumn();
     }
-    public function getQuestionStats($questionId)
+    public function getQuestionStats($questionId, $startDate = null, $endDate = null)
     {
         if (!$this->bdd)
             return [];
-        $req = $this->bdd->prepare("
-            SELECT 
-                qo.label, 
-                COUNT(ac.id) as count
-            FROM question_options qo
-            LEFT JOIN answer_choices ac ON qo.id = ac.option_id
-            WHERE qo.question_id = :questionId
-            GROUP BY qo.id, qo.label
-            ORDER BY qo.order_index ASC
-        ");
-        $req->bindParam(':questionId', $questionId, PDO::PARAM_INT);
-        $req->execute();
+
+        $sql = "SELECT 
+                    qo.label, 
+                    COUNT(ac.id) as count
+                FROM question_options qo
+                LEFT JOIN answer_choices ac ON qo.id = ac.option_id
+                LEFT JOIN answers a ON ac.answer_id = a.id
+                LEFT JOIN responses r ON a.response_id = r.id
+                WHERE qo.question_id = :questionId";
+        
+        $params = [':questionId' => $questionId];
+
+        if ($startDate) {
+            $sql .= " AND DATE(r.submitted_at) >= :startDate";
+            $params[':startDate'] = $startDate;
+        }
+        if ($endDate) {
+            $sql .= " AND DATE(r.submitted_at) <= :endDate";
+            $params[':endDate'] = $endDate;
+        }
+
+        $sql .= " GROUP BY qo.id, qo.label ORDER BY qo.order_index ASC";
+
+        $req = $this->bdd->prepare($sql);
+        $req->execute($params);
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function getTextAnswers($questionId)
+    public function getTextAnswers($questionId, $startDate = null, $endDate = null)
     {
         if (!$this->bdd)
             return [];
-        $req = $this->bdd->prepare("
-            SELECT text_value 
-            FROM answers 
-            WHERE question_id = :questionId AND text_value IS NOT NULL AND text_value != ''
-            ORDER BY id DESC
-        ");
-        $req->bindParam(':questionId', $questionId, PDO::PARAM_INT);
-        $req->execute();
+
+        $sql = "SELECT a.text_value 
+                FROM answers a
+                JOIN responses r ON a.response_id = r.id
+                WHERE a.question_id = :questionId AND a.text_value IS NOT NULL AND a.text_value != ''";
+        
+        $params = [':questionId' => $questionId];
+
+        if ($startDate) {
+            $sql .= " AND DATE(r.submitted_at) >= :startDate";
+            $params[':startDate'] = $startDate;
+        }
+        if ($endDate) {
+            $sql .= " AND DATE(r.submitted_at) <= :endDate";
+            $params[':endDate'] = $endDate;
+        }
+
+        $sql .= " ORDER BY a.id DESC";
+
+        $req = $this->bdd->prepare($sql);
+        $req->execute($params);
         return $req->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public function getScaleStats($questionId)
+    public function getScaleStats($questionId, $startDate = null, $endDate = null)
     {
         if (!$this->bdd)
             return [];
-        $req = $this->bdd->prepare("
-            SELECT text_value as label, COUNT(*) as count
-            FROM answers
-            WHERE question_id = :questionId AND text_value IS NOT NULL
-            GROUP BY text_value
-            ORDER BY CAST(text_value AS UNSIGNED) ASC
-        ");
-        $req->bindParam(':questionId', $questionId, PDO::PARAM_INT);
-        $req->execute();
+
+        $sql = "SELECT a.text_value as label, COUNT(*) as count
+                FROM answers a
+                JOIN responses r ON a.response_id = r.id
+                WHERE a.question_id = :questionId AND a.text_value IS NOT NULL";
+        
+        $params = [':questionId' => $questionId];
+
+        if ($startDate) {
+            $sql .= " AND DATE(r.submitted_at) >= :startDate";
+            $params[':startDate'] = $startDate;
+        }
+        if ($endDate) {
+            $sql .= " AND DATE(r.submitted_at) <= :endDate";
+            $params[':endDate'] = $endDate;
+        }
+
+        $sql .= " GROUP BY a.text_value ORDER BY CAST(a.text_value AS UNSIGNED) ASC";
+
+        $req = $this->bdd->prepare($sql);
+        $req->execute($params);
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 }

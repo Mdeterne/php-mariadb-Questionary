@@ -21,7 +21,7 @@
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #252525;
+    color: var(--ink);
 }
 
 /* --- BARRE D'OUTILS DU HAUT (Recherche + Profil) --- */
@@ -62,14 +62,14 @@
     /* Collée à droite */
     top: 50%;
     transform: translateY(-50%);
-    color: #252525;
+    color: var(--ink);
     font-size: 1.2rem;
     pointer-events: none;
 }
 
 .user-profile {
     font-size: 2.5rem;
-    color: #ccc;
+    color: var(--muted);
     cursor: pointer;
     flex-shrink: 0;
 }
@@ -102,10 +102,10 @@
     /* Au dessus de l'overlay */
 
     width: 300px;
-    background-color: #fff;
+    background-color: var(--card);
     border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--card-border);
 
     padding: 20px;
     display: flex;
@@ -138,13 +138,13 @@
 .modal-avatar {
     width: 60px;
     height: 60px;
-    background-color: #f1f3f4;
+    background-color: var(--bg);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
-    color: #5f6368;
+    color: var(--muted);
     font-size: 1.8rem;
 }
 
@@ -152,13 +152,13 @@
     margin: 5px 0 20px 0;
     font-size: 1.1rem;
     font-weight: 500;
-    color: #202124;
+    color: var(--ink);
 }
 
 .modal-logout-btn {
-    background-color: #fff;
-    border: 1px solid #dadce0;
-    color: #3c4043;
+    background-color: var(--card);
+    border: 1px solid var(--card-border);
+    color: var(--ink);
     text-decoration: none;
     padding: 8px 24px;
     border-radius: 100px;
@@ -172,21 +172,21 @@
 }
 
 .modal-logout-btn:hover {
-    background-color: #f8f9fa;
-    border-color: #dadce0;
+    background-color: var(--bg);
+    border-color: var(--card-border);
 }
 
 .modal-footer {
     margin-top: 10px;
     font-size: 0.75rem;
-    color: #70757a;
-    border-top: 1px solid #f1f3f4;
+    color: var(--muted);
+    border-top: 1px solid var(--card-border);
     padding-top: 15px;
     width: 100%;
 }
 
 .modal-footer a {
-    color: #70757a;
+    color: var(--muted);
     text-decoration: none;
     margin: 0 5px;
 }
@@ -214,13 +214,13 @@
     width: 100%;
     text-align: left;
     margin-bottom: 15px;
-    border-bottom: 1px solid #f1f3f4;
+    border-bottom: 1px solid var(--card-border);
     padding-bottom: 10px;
 }
 
 .notifications-title {
     font-size: 0.9rem;
-    color: #5f6368;
+    color: var(--muted);
     margin-bottom: 10px;
     font-weight: 600;
     padding-left: 5px;
@@ -244,7 +244,7 @@
 }
 
 .notification-item.unread {
-    background-color: #fff0f0; /* Light red/pinkish background */
+    background-color: rgba(181, 36, 36, 0.08); /* Light red background using variable */
     border-left: 3px solid var(--red);
 }
 

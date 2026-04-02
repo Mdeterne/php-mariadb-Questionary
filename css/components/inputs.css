@@ -24,9 +24,9 @@ input[type="password"] {
     /* Balanced padding for vertical centering */
     padding: 0 16px;
     line-height: 50px;
-    border: 1px solid #cfd3d7;
+    border: 1px solid var(--card-border);
     border-radius: 12px;
-    background: #eef0f1;
+    background: var(--bg);
     outline: none;
     font-size: 16px;
     color: var(--ink);
@@ -36,7 +36,7 @@ input[type="password"] {
 
 input[type="text"]:focus,
 input[type="password"]:focus {
-    background: #fff;
+    background: var(--card);
     border-color: var(--red);
     box-shadow: 0 0 0 4px rgba(181, 36, 36, 0.1);
     text-align: left;
@@ -63,30 +63,30 @@ input.search-input {
     background: transparent;
     cursor: pointer;
     border-radius: 8px;
-    color: #767b80;
+    color: var(--muted);
 }
 
 .clear:hover {
-    background: #e0e2e7;
+    background: var(--card-border);
 }
 
 /* Editor Input Field */
 .input-field {
     width: 100%;
     padding: 16px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     font-size: 1rem;
-    color: #111;
+    color: var(--ink);
     font-family: inherit;
     outline: none;
-    background-color: #fff;
+    background-color: var(--card);
     transition: all 0.2s;
     text-align: left;
 }
 
 .input-field:focus {
-    background: #fff;
+    background: var(--card);
     border-color: var(--red);
     box-shadow: 0 0 0 3px rgba(181, 36, 36, 0.1);
     text-align: left;
@@ -97,15 +97,17 @@ input.search-input {
     font-weight: 800;
     border: 1px solid transparent;
     padding: 10px 16px;
+    background: transparent;
+    color: var(--ink);
 }
 
 .title-input:hover {
-    background: #f9fafb;
+    background: var(--bg);
 }
 
 .title-input:focus {
-    background: #fff;
-    border-color: #e5e7eb;
+    background: var(--card);
+    border-color: var(--card-border);
     border-bottom: 2px solid var(--red);
     box-shadow: none;
 }
@@ -113,14 +115,15 @@ input.search-input {
 .question-title {
     font-size: 1.2rem;
     font-weight: 600;
-    border: 1px solid #f3f4f6;
-    background: #f9f9f9;
+    border: 1px solid var(--card-border);
+    background: var(--bg);
     padding: 16px;
     margin-bottom: 20px;
+    color: var(--ink);
 }
 
 .question-title:focus {
-    background: #fff;
+    background: var(--card);
     border-color: var(--red);
 }
 
@@ -129,12 +132,12 @@ input.search-input {
     resize: vertical;
     width: 100%;
     padding: 15px;
-    border: 1px solid #cfd3d7;
+    border: 1px solid var(--card-border);
     border-radius: 12px;
-    background-color: #eef0f1;
+    background-color: var(--bg);
     font-family: inherit;
     font-size: 1rem;
-    color: #111;
+    color: var(--ink);
     outline: none;
     transition: all 0.2s;
     line-height: 1.5;
@@ -163,9 +166,9 @@ input[type="range"]::-webkit-slider-runnable-track {
     width: 100%;
     height: 8px;
     cursor: pointer;
-    background: #eef0f1;
+    background: var(--bg);
     border-radius: 6px;
-    border: 1px solid #cfd3d7;
+    border: 1px solid var(--card-border);
 }
 
 /* Webkit Thumb */
@@ -179,7 +182,7 @@ input[type="range"]::-webkit-slider-thumb {
     margin-top: -7px;
     /* (height - track_height) / 2 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border: 2px solid #fff;
+    border: 2px solid var(--card);
 }
 
 /* Firefox Track */
@@ -187,16 +190,16 @@ input[type="range"]::-moz-range-track {
     width: 100%;
     height: 8px;
     cursor: pointer;
-    background: #eef0f1;
+    background: var(--bg);
     border-radius: 6px;
-    border: 1px solid #cfd3d7;
+    border: 1px solid var(--card-border);
 }
 
 /* Firefox Thumb */
 input[type="range"]::-moz-range-thumb {
     height: 20px;
     width: 20px;
-    border: 2px solid #fff;
+    border: 2px solid var(--card);
     border-radius: 50%;
     background: var(--red);
     cursor: pointer;
@@ -224,7 +227,7 @@ input[type="range"]::-moz-range-thumb {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: var(--card-border);
     transition: .4s;
     border-radius: 34px;
 }

@@ -88,6 +88,38 @@ a.topbar__logo:hover {
     font-size: 15px;
 }
 
+.theme-toggle {
+    background: #333333;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 10px;
+}
+
+.theme-toggle:hover {
+    background: #444444;
+    transform: scale(1.05);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.icon-sun { display: none; color: #FFD700; }
+.icon-moon { display: block; color: #A5A5A5; }
+
+[data-theme="dark"] .icon-sun { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="dark"] .theme-toggle { background: #2c2c2c; }
+
 @media (max-width: 520px) {
     .topbar__right .uni-text {
         display: none;

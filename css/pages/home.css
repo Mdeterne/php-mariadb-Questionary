@@ -43,6 +43,12 @@
     border-color: var(--red);
 }
 
+.template-item:hover {
+    border-color: var(--red) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
 /* --- GRILLE QUESTIONNAIRES --- */
 .questionnaire-grid {
     display: flex;

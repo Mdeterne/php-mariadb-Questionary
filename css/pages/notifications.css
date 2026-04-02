@@ -16,59 +16,70 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    color: var(--ink);
 }
 
-/* Styles existants du bloc style */
 .conteneur-notifications {
     max-width: 800px;
     margin: 0 auto;
 }
 
 .carte-notification {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 15px;
-    border: 1px solid #e0e0e0;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid var(--card-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
 }
 
 .carte-notification.non-lu {
-    border-left: 5px solid var(--red);
-    background-color: #fff9f9;
+    border-left: 4px solid var(--red);
+    background-color: var(--bg);
 }
 
 .contenu-notification {
-    font-size: 1rem;
-    color: #333;
+    font-size: 1.05rem;
+    color: var(--ink);
+    line-height: 1.5;
 }
 
 .btn-marquer-lu {
-    background: none;
-    border: 1px solid #ddd;
-    padding: 5px 10px;
-    border-radius: 5px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    padding: 8px 16px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 0.8rem;
-    color: #666;
+    font-size: 0.9rem;
+    color: var(--ink);
     transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
 }
 
 .btn-marquer-lu:hover {
-    background: #f5f5f5;
+    background: var(--card-border);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
 }
 
 /* État vide */
 .notifications-vides {
-    color: #888;
+    color: var(--muted);
     text-align: center;
-    margin-top: 50px;
+    margin-top: 60px;
+    font-size: 1.1rem;
 }
 
 /* Indicateur de statut de lecture */
 .statut-lecture {
-    color: green;
-    font-size: 0.8rem;
+    color: var(--green);
+    font-size: 0.85rem;
+    font-weight: 600;
 }

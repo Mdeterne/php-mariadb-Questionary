@@ -31,8 +31,7 @@
         <main id="app-notifications" v-cloak>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 class="section-title" style="margin-bottom: 0;">Notifications</h2>
-                <button v-if="aDesNonLues" @click="marquerToutesLues" class="btn-marquer-lu"
-                    style="background-color: #f1f1f1; color: #333;">
+                <button v-if="aDesNonLues" @click="marquerToutesLues" class="btn-marquer-lu">
                     <i class="fa-solid fa-check-double"></i> Tout marquer comme lu
                 </button>
             </div>

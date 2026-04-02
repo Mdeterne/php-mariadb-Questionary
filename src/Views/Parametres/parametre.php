@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/components/cards.css">
     <link rel="stylesheet" href="css/components/modals.css">
     <link rel="stylesheet" href="css/pages/settings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -38,7 +39,7 @@
                 <div class="input-group">
                     <input type="text" id="share-link"
                         value="<?php echo htmlspecialchars($survey['access_pin'] ?? ''); ?>" readonly
-                        style="cursor: default; caret-color: transparent; font-weight: bold; background-color: #f9f9f9;">
+                        style="font-weight: bold;">
                     <button class="btn-copy" id="btn-copy">Copier</button>
                 </div>
             </div>

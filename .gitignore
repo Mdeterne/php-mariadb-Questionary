@@ -9,4 +9,7 @@ src/Configues/Configues_CAS.php
 
 src/Configurations/Configuration_CAS.php
 
+
 src/Configurations/Configurations_CAS.php
+
+vendor/

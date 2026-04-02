@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/components/inputs.css">
     <link rel="stylesheet" href="css/components/cards.css">
     <link rel="stylesheet" href="css/pages/analysis.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
 </head>
@@ -25,7 +26,7 @@
         <div class="top-controls">
             <div class="header-content">
                 <span class="page-label">Analyse des résultats</span>
-                <h1 class="page-title"><?php echo htmlspecialchars($pageTitle ?? 'Questionnaire sans titre'); ?></h1>
+                <h1 class="page-title"><?php echo htmlspecialchars($pageTitle ?? 'Questionnaire sans titre', ENT_QUOTES, 'UTF-8'); ?></h1>
             </div>
             <div class="buttons-group" style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
                 <button type="button" id="btn-export" class="btn-secondary" style="background-color: #2e7d32; border-color: #2e7d32; color: white; cursor: pointer;">

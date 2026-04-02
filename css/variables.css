@@ -16,6 +16,21 @@
   --radius-xl: 18px;
 }
 
+[data-theme="dark"] {
+  --bg: #121212;
+  --topbar-bg: #1f1f1f;
+  --topbar-ink: #ffffff;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --btn-dark: #333333;
+  --btn-dark-hover: #444444;
+  --ink: #e0e0e0;
+  --muted: #a0a0a0;
+  --card: #1e1e1e;
+  --card-border: #2c2c2c;
+  --red: #ff5252;
+  --red-press: #e53935;
+}
+
 [v-cloak] {
   display: none !important;
 }

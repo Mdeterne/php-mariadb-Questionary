@@ -28,20 +28,19 @@
                 <span class="page-label">Analyse des résultats</span>
                 <h1 class="page-title"><?php echo htmlspecialchars($pageTitle ?? 'Questionnaire sans titre', ENT_QUOTES, 'UTF-8'); ?></h1>
             </div>
-            <div class="buttons-group" style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-                <button type="button" id="btn-export" class="btn-secondary" style="background-color: #2e7d32; border-color: #2e7d32; color: white; cursor: pointer;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="buttons-group" style="display: flex; gap: 12px; align-items: center;">
+                <button type="button" id="btn-export" style="background-color: #2e7d32; color: #fff; border: none; display: flex; gap: 8px; align-items: center; border-radius: 8px; padding: 0 20px; font-weight: 600; cursor: pointer; height: 44px; margin: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: opacity 0.2s;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
                         <line x1="16" y1="13" x2="8" y2="13"></line>
                         <line x1="16" y1="17" x2="8" y2="17"></line>
                         <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
-                    Exporter
+                    Exporter les résultats
                 </button>
-                <a href="?c=tableauDeBord" class="btn-secondary">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
+                <a href="?c=tableauDeBord" class="btn-primary" style="margin: 0; display: flex; gap: 8px; align-items: center; border-radius: 8px; padding: 0 20px; font-weight: 600; text-decoration: none; height: 44px; text-align: center; border: none; line-height: 44px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
                         <polyline points="12 19 5 12 12 5"></polyline>
                     </svg>
@@ -50,27 +49,7 @@
             </div>
         </div>
 
-        <div class="filter-section card-box" style="margin-bottom: 25px; padding: 25px; background: var(--card); border: 1px solid var(--card-border); border-radius: 16px;">
-            <form id="filter-form" method="GET" action="index.php" class="filter-form" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px;">
-                <input type="hidden" name="c" value="espaceAnalyse">
-                <input type="hidden" name="id" value="<?php echo htmlspecialchars($idQuestionnaire); ?>">
-                
-                <div class="filter-group" style="display: flex; flex-direction: column; gap: 10px;">
-                    <label for="startDate" style="font-weight: 600; font-size: 0.95rem; color: var(--muted);">Date de début :</label>
-                    <input type="date" id="startDate" name="startDate" value="<?php echo htmlspecialchars($startDate ?? ''); ?>" style="padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); background: var(--card); color: var(--ink); font-family: inherit;">
-                </div>
-                
-                <div class="filter-group" style="display: flex; flex-direction: column; gap: 10px;">
-                    <label for="endDate" style="font-weight: 600; font-size: 0.95rem; color: var(--muted);">Date de fin :</label>
-                    <input type="date" id="endDate" name="endDate" value="<?php echo htmlspecialchars($endDate ?? ''); ?>" style="padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); background: var(--card); color: var(--ink); font-family: inherit;">
-                </div>
-                
-                <div class="filter-actions" style="display: flex; gap: 16px;">
-                    <button type="submit" class="btn-primary" style="padding: 12px 28px; border-radius: 10px; cursor: pointer; border: none; font-weight: 600;">Filtrer</button>
-                    <a href="?c=espaceAnalyse&id=<?php echo htmlspecialchars($idQuestionnaire); ?>" class="btn-secondary" style="padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Effacer</a>
-                </div>
-            </form>
-        </div>
+
 
         <div class="stats-box" id="stats-area">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -121,7 +100,7 @@
             <div class="modal-body" style="padding: 20px; display: flex; flex-direction: column; gap: 15px;">
                 <p>Choisissez le format d'exportation :</p>
                 <div style="display: flex; gap: 10px; justify-content: center;">
-                    <button onclick="window.location.href='export_csv.php?id=<?php echo $idQuestionnaire; ?>&startDate=<?php echo $startDate; ?>&endDate=<?php echo $endDate; ?>';" class="btn-secondary" style="background-color: #2e7d32; border-color: #2e7d32; color: white; flex: 1; justify-content: center;">
+                    <button onclick="window.location.href='export_csv.php?id=<?php echo $idQuestionnaire; ?>';" style="background-color: #2e7d32; color: #fff; border: none; display: flex; align-items: center; justify-content: center; flex: 1; border-radius: 8px; padding: 12px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                             <polyline points="14 2 14 8 20 8"></polyline>
@@ -131,7 +110,7 @@
                         </svg>
                         CSV
                     </button>
-                    <button onclick="window.location.href='export_xlsx.php?id=<?php echo $idQuestionnaire; ?>&startDate=<?php echo $startDate; ?>&endDate=<?php echo $endDate; ?>';" class="btn-secondary" style="background-color: #107c41; border-color: #107c41; color: white; flex: 1; justify-content: center;">
+                    <button onclick="window.location.href='export_xlsx.php?id=<?php echo $idQuestionnaire; ?>';" style="background-color: #107c41; color: #fff; border: none; display: flex; align-items: center; justify-content: center; flex: 1; border-radius: 8px; padding: 12px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                             <polyline points="14 2 14 8 20 8"></polyline>

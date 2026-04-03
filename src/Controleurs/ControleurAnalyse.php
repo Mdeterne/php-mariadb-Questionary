@@ -30,25 +30,21 @@ class ControleurAnalyse
             return;
         }
 
-        // 4. Récupération des filtres de date
-        $startDate = $_GET['startDate'] ?? null;
-        $endDate = $_GET['endDate'] ?? null;
-
-        // 5. Récupération du nombre total de réponses filtrées
-        $responseCount = $modeleReponse->getTotalResponsesCount($idQuestionnaire, $startDate, $endDate);
+        // 5. Récupération du nombre total de réponses courantes
+        $responseCount = $modeleReponse->getTotalResponsesCount($idQuestionnaire, null, null);
 
         // 6. Récupération des questions et réponses
         $donneesAnalyse = $modeleQuestionnaire->getAnalysisData($idQuestionnaire);
 
-        // Enrichissement des questions avec les statistiques filtrées
+        // Enrichissement des questions avec les statistiques
         foreach ($donneesAnalyse['questions'] as &$question) {
             $qId = $question['id'];
             if (in_array($question['type'], ['single_choice', 'multiple_choice'])) {
-                $question['stats'] = $modeleReponse->getQuestionStats($qId, $startDate, $endDate);
+                $question['stats'] = $modeleReponse->getQuestionStats($qId, null, null);
             } elseif ($question['type'] === 'scale' || $question['type'] === 'jauge') {
-                $question['stats'] = $modeleReponse->getScaleStats($qId, $startDate, $endDate);
+                $question['stats'] = $modeleReponse->getScaleStats($qId, null, null);
             } elseif (in_array($question['type'], ['text', 'paragraph', 'short_text', 'long_text'])) {
-                $question['text_answers'] = $modeleReponse->getTextAnswers($qId, $startDate, $endDate);
+                $question['text_answers'] = $modeleReponse->getTextAnswers($qId, null, null);
                 $question['word_frequencies'] = $this->calculateWordFrequencies($question['text_answers']);
             }
         }

@@ -116,6 +116,11 @@ class Questionnaire
                 }
             }
 
+            // Tag année par défaut
+            $annee = date('Y');
+            $stmtTag = $this->conn->prepare("INSERT IGNORE INTO survey_tags (survey_id, tag) VALUES (:survey_id, :tag)");
+            $stmtTag->execute([':survey_id' => $surveyId, ':tag' => $annee]);
+
             $this->conn->commit();
             return $surveyId;
         } catch (PDOException $e) {
@@ -299,7 +304,7 @@ class Questionnaire
         return $req->fetch(PDO::FETCH_ASSOC);
     }
 
-    /** Récupère les questionnaires d'un utilisateur. */
+    /** Récupère les questionnaires d'un utilisateur avec leurs tags. */
     public function getSurveysByUserId($userId)
     {
         if ($this->conn === null) {
@@ -313,7 +318,51 @@ class Questionnaire
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $userId);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $surveys = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Récupérer les tags pour chaque questionnaire
+        foreach ($surveys as &$survey) {
+            $survey['tags'] = $this->getTagsBySurveyId($survey['id']);
+        }
+        unset($survey);
+
+        return $surveys;
+    }
+
+    /** Récupère les tags d'un questionnaire. */
+    public function getTagsBySurveyId($surveyId)
+    {
+        if ($this->conn === null) return [];
+        $stmt = $this->conn->prepare("SELECT tag FROM survey_tags WHERE survey_id = :survey_id ORDER BY tag ASC");
+        $stmt->bindParam(':survey_id', $surveyId);
+        $stmt->execute();
+        return array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'tag');
+    }
+
+    /** Ajoute un tag à un questionnaire. */
+    public function addTag($surveyId, $userId, $tag)
+    {
+        if ($this->conn === null) return false;
+        // Vérifier que l'utilisateur est propriétaire
+        $check = $this->conn->prepare("SELECT id FROM surveys WHERE id = :id AND user_id = :user_id");
+        $check->execute([':id' => $surveyId, ':user_id' => $userId]);
+        if (!$check->fetch()) return false;
+
+        $stmt = $this->conn->prepare("INSERT IGNORE INTO survey_tags (survey_id, tag) VALUES (:survey_id, :tag)");
+        return $stmt->execute([':survey_id' => $surveyId, ':tag' => $tag]);
+    }
+
+    /** Supprime un tag d'un questionnaire. */
+    public function removeTag($surveyId, $userId, $tag)
+    {
+        if ($this->conn === null) return false;
+        // Vérifier que l'utilisateur est propriétaire
+        $check = $this->conn->prepare("SELECT id FROM surveys WHERE id = :id AND user_id = :user_id");
+        $check->execute([':id' => $surveyId, ':user_id' => $userId]);
+        if (!$check->fetch()) return false;
+
+        $stmt = $this->conn->prepare("DELETE FROM survey_tags WHERE survey_id = :survey_id AND tag = :tag");
+        return $stmt->execute([':survey_id' => $surveyId, ':tag' => $tag]);
     }
 
     /** Liste toutes les questions et leurs options pour un questionnaire donné par son PIN. */

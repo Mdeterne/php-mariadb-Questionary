@@ -72,15 +72,15 @@
 .card-q {
     border: 1px solid var(--card-border);
     border-radius: 16px;
-    /* Modern radius */
     box-shadow: var(--shadow);
-    height: 120px;
-    padding: 0 25px;
+    min-height: 120px;
+    padding: 14px 0 0 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
     background-color: var(--card);
     transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
 }
 
 .card-q:hover {
@@ -91,37 +91,54 @@
 .card-q-title {
     font-weight: bold;
     font-size: 0.95rem;
-    flex: 1;
-    /* Take all available space */
-    /* Enable wrapping */
     white-space: normal;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    /* Limit to 2 lines max */
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    /* Truncate if too long */
-    margin-right: 15px;
-    /* Space between title and QR */
     line-height: 1.4;
-    max-width: 20ch;
-    /* Trigger wrap roughly after 15-20 chars as requested */
     color: var(--ink);
+    padding: 0 14px;
 }
 
 .card-q-qr {
-    font-size: 1.5rem;
-    /* Taille du QR Code */
+    font-size: 1.3rem;
     color: var(--ink);
-    flex-shrink: 0;
-    /* Prevent shrinking */
-    width: 40px;
-    /* Fixed width container */
     display: flex;
     justify-content: center;
-    margin-right: 5px;
-    /* Add spacing from trash icon */
+    align-items: center;
+    width: 36px;
+    height: 36px;
+}
+
+.card-q-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px 14px;
+}
+
+.card-q-action-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-q-action-btn:hover {
+    color: var(--red);
+    background-color: rgba(231, 76, 60, 0.1); /* var(--red) avec opacité */
 }
 
 

@@ -208,4 +208,61 @@ class ControleurTableauDeBord
         }
         exit;
     }
-}
+
+    /**
+     * Ajoute un tag BUT à un questionnaire (AJAX).
+     */
+    function addTag()
+    {
+        header('Content-Type: application/json');
+        $donnees = json_decode(file_get_contents('php://input'), true);
+
+        if (!$donnees || !isset($donnees['survey_id'], $donnees['tag'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Données invalides']);
+            exit;
+        }
+
+        $tagsAutorises = ['BUT1', 'BUT2', 'BUT3'];
+        $tag = trim($donnees['tag']);
+        if (!in_array($tag, $tagsAutorises)) {
+            echo json_encode(['status' => 'error', 'message' => 'Tag non autorisé']);
+            exit;
+        }
+
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Questionnaire.php';
+        $modele = new Questionnaire();
+        $idUtilisateur = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+
+        if ($modele->addTag($donnees['survey_id'], $idUtilisateur, $tag)) {
+            echo json_encode(['status' => 'success', 'tags' => $modele->getTagsBySurveyId($donnees['survey_id'])]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Impossible d\'ajouter le tag']);
+        }
+        exit;
+    }
+
+    /**
+     * Supprime un tag d'un questionnaire (AJAX).
+     */
+    function removeTag()
+    {
+        header('Content-Type: application/json');
+        $donnees = json_decode(file_get_contents('php://input'), true);
+
+        if (!$donnees || !isset($donnees['survey_id'], $donnees['tag'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Données invalides']);
+            exit;
+        }
+
+        require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Modeles' . DIRECTORY_SEPARATOR . 'Questionnaire.php';
+        $modele = new Questionnaire();
+        $idUtilisateur = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+
+        if ($modele->removeTag($donnees['survey_id'], $idUtilisateur, $donnees['tag'])) {
+            echo json_encode(['status' => 'success', 'tags' => $modele->getTagsBySurveyId($donnees['survey_id'])]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Impossible de supprimer le tag']);
+        }
+        exit;
+    }
+}

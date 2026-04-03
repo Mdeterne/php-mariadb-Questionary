@@ -50,9 +50,10 @@
                 <div class="search-bar-container">
                     <div class="search-wrapper">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" placeholder="Rechercher" class="search-input" v-model="termeRecherche">
+                        <input type="text" id="input-recherche" placeholder="Rechercher" class="search-input" v-model="termeRecherche">
                     </div>
                 </div>
+
 
                 <div class="user-profile" @click="toggleUserMenu" style="cursor: pointer; position: relative;">
                     <i class="fa-solid fa-circle-user"></i>
@@ -158,7 +159,30 @@
                 </div>
             </div>
 
-            <h2 class="section-title">Vos Questionnaires</h2>
+            <!-- En-tête de section avec filtres alignés -->
+            <div class="section-header-row" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:18px;">
+                <h2 class="section-title" style="margin:0;">Vos Questionnaires</h2>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <span style="font-size:0.8rem; color:var(--muted); font-weight:600;">Filtrer :</span>
+                    <select id="filtre-annee" v-model="filtreAnnee"
+                        style="padding:5px 12px; border-radius:20px; border:1.5px solid var(--ink); background:white; color:var(--ink); font-weight:700; font-size:0.78rem; cursor:pointer; outline:none;">
+                        <option value="">— Année —</option>
+                        <option v-for="a in anneesDisponibles" :key="a" :value="a">{{ a }}</option>
+                    </select>
+                    <select id="filtre-but" v-model="filtreBut"
+                        style="padding:5px 12px; border-radius:20px; border:1.5px solid var(--ink); background:white; color:var(--ink); font-weight:700; font-size:0.78rem; cursor:pointer; outline:none;">
+                        <option value="">— BUT —</option>
+                        <option value="BUT1">BUT1</option>
+                        <option value="BUT2">BUT2</option>
+                        <option value="BUT3">BUT3</option>
+                    </select>
+                    <button v-if="filtreAnnee || filtreBut" @click="filtreAnnee = ''; filtreBut = ''" id="btn-filtre-reset"
+                        style="background:transparent; border:1px dashed #ccc; color:#999; font-size:0.75rem; padding:5px 12px; border-radius:20px; cursor:pointer;">
+                        <i class="fa-solid fa-xmark"></i> Réinitialiser
+                    </button>
+                </div>
+            </div>
+
             <section class="questionnaire-grid">
 
                 <div v-if="!questionnairesFiltres || questionnairesFiltres.length === 0"
@@ -169,9 +193,25 @@
                 <div v-for="q in questionnairesFiltres" :key="q.id" style="position: relative;">
                     <a :href="'?c=createur&a=editer&id=' + q.id" style="text-decoration:none; color:inherit;">
                         <div class="card-q">
-                            <div class="card-q-title">{{ q.titre }}</div>
-                            <div class="card-q-qr" @click.prevent.stop="afficherQrCode(q.access_pin, q.titre, q.id)">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            <!-- Titre + badges -->
+                            <div style="padding: 14px 14px 8px;">
+                                <div class="card-q-title">{{ q.titre }}</div>
+                                <div class="card-q-tags" style="display:flex; flex-wrap:wrap; gap:4px; margin-top:8px;">
+                                    <span v-for="tag in q.tags" :key="tag"
+                                        :style="tagBadgeStyle(tag)"
+                                        style="font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">
+                                        {{ tag }}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Pied de carte : barre d'actions -->
+                            <div class="card-q-footer">
+                                <button @click.prevent.stop="ouvrirMenuTag(q)" class="card-q-action-btn" :id="'btn-tag-' + q.id">
+                                    <i class="fa-solid fa-tag"></i> Tags
+                                </button>
+                                <button @click.prevent.stop="afficherQrCode(q.access_pin, q.titre, q.id)" class="card-q-action-btn" :id="'btn-qr-' + q.id">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </button>
                             </div>
                         </div>
                     </a>
@@ -245,6 +285,44 @@
                     <div class="modal-actions">
                         <button class="btn-cancel" @click="annulerSuppression">Annuler</button>
                         <button class="btn-confirm btn-danger" @click="confirmerSuppression">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODALE DE GESTION DES TAGS -->
+            <div class="modal-blur-overlay" v-if="questionnairePourTags" @click.self="fermerMenuTag">
+                <div class="modal-card" style="max-width:380px;">
+                    <button class="modal-close-btn" @click="fermerMenuTag"><i class="fa-solid fa-xmark"></i></button>
+                    <h3 class="modal-title">Tags — {{ questionnairePourTags.titre }}</h3>
+                    <p class="modal-desc" style="margin-bottom:12px;">Associez des tags BUT à ce questionnaire.</p>
+
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div v-for="t in ['BUT1','BUT2','BUT3']" :key="t"
+                            style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:10px; border:1px solid #eee;">
+                            <span :style="tagBadgeStyle(t)" style="font-size:0.85rem; font-weight:700; padding:3px 12px; border-radius:14px;">{{ t }}</span>
+                            <button v-if="!questionnairePourTags.tags.includes(t)"
+                                @click="ajouterTag(questionnairePourTags.id, t)"
+                                :id="'btn-add-' + t"
+                                style="background:var(--accent,#e74c3c); color:white; border:none; border-radius:8px; padding:5px 14px; cursor:pointer; font-size:0.8rem;">
+                                <i class="fa-solid fa-plus"></i> Ajouter
+                            </button>
+                            <button v-else
+                                @click="supprimerTag(questionnairePourTags.id, t)"
+                                :id="'btn-remove-' + t"
+                                style="background:#eee; color:#555; border:none; border-radius:8px; padding:5px 14px; cursor:pointer; font-size:0.8rem;">
+                                <i class="fa-solid fa-minus"></i> Retirer
+                            </button>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:10px; border:1px solid #eee; background:#f8f8f8;">
+                            <span style="font-size:0.85rem; color:#888;"><i class="fa-solid fa-calendar"></i> Tag année (auto)</span>
+                            <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                                <span v-for="tag in questionnairePourTags.tags.filter(t => t.match(/^\d{4}$/))"
+                                    :key="tag" style="background:#e8eaf6; color:#3949ab; font-size:0.75rem; font-weight:700; padding:2px 10px; border-radius:12px;">{{ tag }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions" style="margin-top:16px;">
+                        <button class="btn-confirm" @click="fermerMenuTag">Fermer</button>
                     </div>
                 </div>
             </div>

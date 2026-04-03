@@ -107,8 +107,13 @@ switch ($controleur) {
         $tableauDeBordControlleur->marquerToutesNotificationsLues();
         break;
 
+      case 'addTag':
+        $tableauDeBordControlleur->addTag();
+        break;
 
-
+      case 'removeTag':
+        $tableauDeBordControlleur->removeTag();
+        break;
 
     }
     break;

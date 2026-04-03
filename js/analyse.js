@@ -292,7 +292,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const idCanvasNuage = `chart-wordcloud-${q.id}`;
             const canvasNuage = document.getElementById(idCanvasNuage);
-            if (q.text_answers && canvasNuage) {
+            if (q.word_frequencies && canvasNuage) {
+                // Utilise les fréquences sémantiques pré-calculées en PHP
+                const liste = q.word_frequencies.map(m => [m.etiquette, m.compte * 10]);
+                afficherNuageMots(canvasNuage, liste);
+            } else if (q.text_answers && canvasNuage) {
+                // Fallback classique
                 const topMots = calculerFrequenceMots(q.text_answers);
                 const liste = topMots.map(m => [m.etiquette, m.compte * 10]);
                 afficherNuageMots(canvasNuage, liste);

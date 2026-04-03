@@ -49,6 +49,7 @@ class ControleurAnalyse
                 $question['stats'] = $modeleReponse->getScaleStats($qId, $startDate, $endDate);
             } elseif (in_array($question['type'], ['text', 'paragraph', 'short_text', 'long_text'])) {
                 $question['text_answers'] = $modeleReponse->getTextAnswers($qId, $startDate, $endDate);
+                $question['word_frequencies'] = $this->calculateWordFrequencies($question['text_answers']);
             }
         }
 
@@ -63,5 +64,80 @@ class ControleurAnalyse
         }
 
         require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'analyse' . DIRECTORY_SEPARATOR . 'analyse.php');
+    }
+
+    /**
+     * Calcule la fréquence des mots sémantiquement pertinents (NLP / Stemming)
+     */
+    private function calculateWordFrequencies($answers)
+    {
+        if (empty($answers)) {
+            return [];
+        }
+
+        // Mots vides fréquents en français
+        $stopWords = ['le', 'la', 'les', 'de', 'du', 'des', 'un', 'une', 'et', 'à', 'en', 'ce', 'pour', 'que', 'qui', 'dans', 'sur', 'par', 'a', 'plus', 'est', 'sont', 'c\'est', 'j\'ai', 'je', 'mon', 'ma', 'mes', 'au', 'aux', 'ne', 'se', 'ce', 'ces', 'son', 'sa', 'ses', 'vos', 'votre', 'nous', 'vous', 'il', 'elle', 'ils', 'elles', 'on', 'mais', 'ou', 'où', 'donc', 'or', 'ni', 'car', 'tout', 'tous', 'toute', 'toutes', 'cela', 'ça', 'comme', 'si', 'y', 'sans', 'sous', 'vers', 'avec', 'rien', 'aucun', 'aucune', 'très', 'trop', 'peu', 'pas', 'assez', 'bien', 'mal', 'faire', 'fait', 'être', 'avoir', 'quand'];
+
+        try {
+            $stemmer = \Wamania\Snowball\StemmerFactory::create('fr');
+        } catch (\Exception $e) {
+            $stemmer = null; // Fallback sécurisé
+        }
+
+        $wordCounts = [];
+        $stemToOriginals = [];
+
+        foreach ($answers as $text) {
+            if (!$text || !is_string($text))
+                continue;
+
+            // Nettoyage : minuscules, suppression ponctuation
+            $text = mb_strtolower($text, 'UTF-8');
+            // Diviser par tout caractère qui n'est pas une lettre, chiffre ou accent
+            $words = preg_split('/[\p{P}\s]+/u', $text, -1, PREG_SPLIT_NO_EMPTY);
+
+            foreach ($words as $word) {
+                // Ignore petits mots et stopwords
+                if (mb_strlen($word, 'UTF-8') <= 2 || in_array($word, $stopWords)) {
+                    continue;
+                }
+
+                $stem = $stemmer ? $stemmer->stem($word) : $word;
+
+                if (!isset($wordCounts[$stem])) {
+                    $wordCounts[$stem] = 0;
+                    $stemToOriginals[$stem] = [];
+                }
+
+                $wordCounts[$stem]++;
+
+                // On garde trace de la forme originale pour l'affichage final
+                if (!isset($stemToOriginals[$stem][$word])) {
+                    $stemToOriginals[$stem][$word] = 0;
+                }
+                $stemToOriginals[$stem][$word]++;
+            }
+        }
+
+        // Préparer le format de sortie pour le frontend
+        $results = [];
+        foreach ($wordCounts as $stem => $count) {
+            // Trouver la forme originale la plus utilisée pour ce stem (ex: entre "voitures" (2) et "voiture" (1), on garde "voitures")
+            arsort($stemToOriginals[$stem]);
+            $mostFrequentOriginalWord = array_key_first($stemToOriginals[$stem]);
+
+            $results[] = [
+                'etiquette' => $mostFrequentOriginalWord,
+                'compte' => $count
+            ];
+        }
+
+        // Trier par les plus fréquents en premier
+        usort($results, function ($a, $b) {
+            return $b['compte'] <=> $a['compte'];
+        });
+
+        // Conserver le top 30
+        return array_slice($results, 0, 30);
     }
 }

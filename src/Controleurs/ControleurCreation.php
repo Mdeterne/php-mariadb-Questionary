@@ -107,12 +107,13 @@ class ControleurCreation
         $description = $_POST['description'];
         $idUtilisateur = $_SESSION['id'];
         $questions = isset($_POST['questions']) ? json_decode($_POST['questions'], true) : [];
+        $tags = isset($_POST['tags']) ? json_decode($_POST['tags'], true) : [];
 
         // Vérifie s'il s'agit d'une mise à jour
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $id = $_POST['id'];
             try {
-                $modeleQuestionnaire->updateSurvey($id, $idUtilisateur, $titre, $description, $questions);
+                $modeleQuestionnaire->updateSurvey($id, $idUtilisateur, $titre, $description, $questions, $tags);
                 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
             } catch (Exception $e) {
                 http_response_code(500);
@@ -131,7 +132,7 @@ class ControleurCreation
                 $codePinAcces = rand(100000, 999999);
             }
             try {
-                $modeleQuestionnaire->saveSurvey($idUtilisateur, $titre, $description, $codePinAcces, $jetonQrCode, $questions);
+                $modeleQuestionnaire->saveSurvey($idUtilisateur, $titre, $description, $codePinAcces, $jetonQrCode, $questions, $tags);
                 // Redirection ou confirmation (ici on inclut la vue, le JS recevra le HTML 200 OK)
                 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Creation' . DIRECTORY_SEPARATOR . 'creation_questionnaire.php';
             } catch (Exception $e) {

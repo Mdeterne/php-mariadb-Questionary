@@ -12,7 +12,7 @@ class Questionnaire
         $this->conn = $database->getConnection();
     }
 
-    public function saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token, $questions = [])
+    public function saveSurvey($user_id, $titre, $description, $access_pin, $qr_code_token, $questions = [], $tags = [])
     {
         $settings = json_encode([
             'description' => $description
@@ -116,9 +116,17 @@ class Questionnaire
                 }
             }
 
-            // Tag année par défaut
-            $annee = date('Y');
             $stmtTag = $this->conn->prepare("INSERT IGNORE INTO survey_tags (survey_id, tag) VALUES (:survey_id, :tag)");
+            
+            // Insertion des tags fournis (BUT1, BUT2, etc.)
+            if (!empty($tags)) {
+                foreach ($tags as $tag) {
+                    $stmtTag->execute([':survey_id' => $surveyId, ':tag' => trim($tag)]);
+                }
+            }
+
+            // Tag année par défaut (toujours présent)
+            $annee = date('Y');
             $stmtTag->execute([':survey_id' => $surveyId, ':tag' => $annee]);
 
             $this->conn->commit();
@@ -140,7 +148,7 @@ class Questionnaire
         return $stmt->execute();
     }
 
-    public function updateSurvey($id, $user_id, $titre, $description, $questions = [])
+    public function updateSurvey($id, $user_id, $titre, $description, $questions = [], $tags = [])
     {
         $settings = json_encode([
             'description' => $description
@@ -254,6 +262,24 @@ class Questionnaire
                     }
                 }
             }
+
+            // 4. Mise à jour des tags
+            // On supprime les tags existants et on ré-insère les nouveaux
+            $delTags = $this->conn->prepare("DELETE FROM survey_tags WHERE survey_id = :survey_id");
+            $delTags->execute([':survey_id' => $id]);
+
+            $insTag = $this->conn->prepare("INSERT IGNORE INTO survey_tags (survey_id, tag) VALUES (:survey_id, :tag)");
+            
+            // Insertion des nouveaux tags
+            if (!empty($tags)) {
+                foreach ($tags as $tag) {
+                    $insTag->execute([':survey_id' => $id, ':tag' => trim($tag)]);
+                }
+            }
+            
+            // On s'assure que l'année en cours est toujours présente
+            $annee = date('Y');
+            $insTag->execute([':survey_id' => $id, ':tag' => $annee]);
 
             $this->conn->commit();
         } catch (PDOException $e) {
@@ -506,6 +532,7 @@ class Questionnaire
         }
 
         $survey['questions'] = $questions;
+        $survey['tags'] = $this->getTagsBySurveyId($surveyId);
         return $survey;
     }
 

@@ -16,7 +16,9 @@ const app = createApp({
             ],
             indexQuestionActive: null,
             afficherModaleSauvegarde: false,
-            afficherModaleErreurTitre: false
+            afficherModaleErreurTitre: false,
+            tags: [],
+            nouveauTag: ''
         };
     },
     mounted() {
@@ -25,6 +27,7 @@ const app = createApp({
             this.idQuestionnaire = s.id;
             this.titreFormulaire = s.title;
             this.descriptionFormulaire = s.description;
+            this.tags = s.tags || [];
 
             // Initialisation de l'état du composant des questions pour le frontend
             if (s.questions && s.questions.length > 0) {
@@ -112,6 +115,7 @@ const app = createApp({
             donneesFormulaire.append('titre', this.titreFormulaire);
             donneesFormulaire.append('description', this.descriptionFormulaire);
             donneesFormulaire.append('questions', JSON.stringify(this.questions));
+            donneesFormulaire.append('tags', JSON.stringify(this.tags));
 
 
 
@@ -137,6 +141,18 @@ const app = createApp({
         fermerModaleSauvegarde() {
             this.afficherModaleSauvegarde = false;
             window.location.href = '?c=tableauDeBord';
+        },
+        ajouterTag(tag) {
+            if (!tag) return;
+            const t = tag.toString().trim();
+            if (t === '') return;
+            if (!this.tags.includes(t)) {
+                this.tags.push(t);
+            }
+            this.nouveauTag = '';
+        },
+        supprimerTag(index) {
+            this.tags.splice(index, 1);
         },
         definirActif(index) {
             this.indexQuestionActive = index;

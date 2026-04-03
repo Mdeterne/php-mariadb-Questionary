@@ -36,6 +36,34 @@
                     <i :class="['fa-solid', element.icon]"></i> {{ element.label }}
                 </div>
             </div>
+
+            <div class="sidebar-header-box" style="margin-top: 20px;">Gestion des Tags</div>
+            <div style="padding: 15px;">
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <input type="text" v-model="nouveauTag" placeholder="Nouveau tag..." class="input-field" 
+                        style="padding: 8px; font-size: 0.85rem;" @keyup.enter="ajouterTag(nouveauTag)">
+                    <button class="btn-icon" @click="ajouterTag(nouveauTag)" style="background: var(--red); color: white; border-radius: 6px; width: 35px;">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Suggestions rapides -->
+                <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 15px;">
+                    <span v-for="sug in ['BUT1', 'BUT2', 'BUT3', new Date().getFullYear()]" :key="sug"
+                        @click="ajouterTag(sug)" class="tag-badge" style="cursor: pointer; opacity: 0.8; font-size: 0.7rem;">
+                        + {{ sug }}
+                    </span>
+                </div>
+
+                <!-- Liste des tags actifs -->
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <div v-for="(tag, index) in tags" :key="index" class="tag-badge" 
+                        style="background: white; border: 1px solid var(--red); color: var(--ink); padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; display: flex; align-items: center; gap: 6px;">
+                        {{ tag }}
+                        <i class="fa-solid fa-xmark" @click="supprimerTag(index)" style="cursor: pointer; color: var(--red);"></i>
+                    </div>
+                </div>
+            </div>
         </aside>
 
         <main class="editor-workspace">
